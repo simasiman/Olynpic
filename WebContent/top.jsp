@@ -13,14 +13,14 @@ if (aryCookies != null)
 {
     for (int i = 0; i < aryCookies.length; i++)
     {
-        switch (aryCookies[i].getName())
+        String cookie = aryCookies[i].getName();
+        if (cookie.equals("key"))
         {
-            case "key":
-                key = aryCookies[i].getValue();
-                break;
-            case "name":
-                name = aryCookies[i].getValue();
-                break;
+            key = aryCookies[i].getValue();            
+        }
+        else if (cookie.equals("name"))
+        {
+            name = aryCookies[i].getValue();            
         }
     }
 }

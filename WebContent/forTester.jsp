@@ -6,14 +6,20 @@
 
 Cookie[] aryCookies = request.getCookies();
 String key = null;
+String name = null;
 
 if (aryCookies != null)
 {
     for (int i = 0; i < aryCookies.length; i++)
     {
-        if (aryCookies[i].getName().equals("key"))
+        String cookie = aryCookies[i].getName();
+        if (cookie.equals("key"))
         {
-            key = aryCookies[i].getValue();
+            key = aryCookies[i].getValue();            
+        }
+        else if (cookie.equals("name"))
+        {
+            name = aryCookies[i].getValue();            
         }
     }
 }
