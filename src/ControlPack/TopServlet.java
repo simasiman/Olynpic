@@ -8,8 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+@SuppressWarnings("serial")
 public class TopServlet extends HttpServlet
 {
     @Override
@@ -22,7 +22,7 @@ public class TopServlet extends HttpServlet
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         req.setCharacterEncoding("UTF-8");
-        HttpSession session = req.getSession();
+        // HttpSession session = req.getSession();
 
         try
         {

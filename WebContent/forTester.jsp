@@ -1,8 +1,11 @@
 <%@ page contentType="text/html; charset=Windows-31J"%>
 <%@ page import="modelPack.*"%>
+<%@ page import="Utility.*" %>
 <%@ page import="java.util.ArrayList"%>
 
 <%
+
+Match match = (Match)request.getAttribute("match");
 
 Cookie[] aryCookies = request.getCookies();
 String key = null;
@@ -22,6 +25,21 @@ if (aryCookies != null)
             name = aryCookies[i].getValue();            
         }
     }
+}
+
+//初回アクセス時の挙動については要修正
+if (key == null || key.isEmpty())
+{
+    Cookie cooKey = new Cookie("key", Utility.getKey());
+    response.addCookie(cooKey);
+    response.sendRedirect("index.jsp");
+    return;
+}
+
+if (name != null)
+{
+    Cookie cooName = new Cookie("name", name);
+    response.addCookie(cooName);
 }
 
 %>
@@ -104,6 +122,28 @@ if (aryCookies != null)
         </tr>
     <%}%>
 </table>
+
+<h1>終了後マッチングテーブル</h1>
+<table border="1">
+    <%for (Match m : FinishedMatchList.getMatchList()){ 
+          if (m.getPlayerCount() != 2)
+          {
+              continue;
+          }
+    %>
+        <tr>
+            <td><%=m.getMatchNo()%></td>
+            <%for (User u : m.getUserList()) {%>
+                <td><%=u.getKey()%></td>
+                <td><%=u.getName()%></td>
+            <% } %>
+            <td><%=m.getStartTime()%></td>
+            <td><%=m.getEndTime()%></td>
+            <td><%=m.getPanelList().size()%></td>
+        </tr>
+    <%}%>
+</table>
+
 
 <a href="top">トップへ戻る</a>
 

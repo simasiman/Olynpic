@@ -10,15 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import modelPack.FinishedMatchList;
 import modelPack.Match;
 import modelPack.MatchList;
-import modelPack.Panel;
 import modelPack.User;
-import modelPack.Word;
 
 @SuppressWarnings("serial")
-public class GameServlet extends HttpServlet
+public class MatchingServlet extends HttpServlet
 {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
@@ -32,7 +29,7 @@ public class GameServlet extends HttpServlet
         req.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession();
 
-        String urlPath = "/";
+        String urlPath = "/gameMatching.jsp";
 
         // TODO:重複したユーザのマッチング登録が発生しないかを確認
 
@@ -40,6 +37,8 @@ public class GameServlet extends HttpServlet
         {
             String key = (String) req.getParameter("key");
             String name = (String) req.getParameter("name");
+
+            String status = (String) req.getParameter("status");
 
             if (key == null || name == null)
             {
@@ -73,11 +72,11 @@ public class GameServlet extends HttpServlet
                 else if (gameMode2 != null)
                 {
                     // 初回ゲーム作成時
-                    // 待機状態のマッチが存在しないか探査
-                    m = MatchList.getMatchWaiting(key);
 
                     User user = new User(key, name);
 
+                    // 待機状態のマッチが存在しないか探査
+                    m = MatchList.getMatchWaiting(key);
                     if (m != null)
                     {
                         // 待機状態のマッチが存在すれば、そのマッチにユーザ登録
@@ -101,87 +100,28 @@ public class GameServlet extends HttpServlet
                 }
                 else
                 {
-                    FinishedMatchList.clean();
-                    m = FinishedMatchList.getMatch(key);
-
-                    if (m == null)
-                    {
-                        // マッチング列に存在しないユーザの場合、トップ画面に戻る
-                        req.setAttribute("match", null);
-                        resp.sendRedirect("top");
-                        return;
-                    }
+                    // マッチング列に存在しないユーザの場合、トップ画面に戻る
+                    req.setAttribute("match", null);
+                    resp.sendRedirect("top");
+                    return;
                 }
             }
-            else
+            else if (status.equals("dest"))
             {
-                // ゲーム継続時
-
-                // TODO:各取得パラメータによってマッチ状態(ゲーム進行)を更新
-
-                if (req.getParameter("selectedPanel") != null)
-                {
-                    int selected = Integer.parseInt(req.getParameter("selectedPanel"));
-
-                    String wH = m.getFirstWord();
-                    String wT = m.getLastWord();
-
-                    Panel selectedPanel = m.getPanelList().get(selected);
-
-                    if (!selectedPanel.isUsed())
-                    {
-                        int nextWordIndex = selectedPanel.isMatchWord(wH, wT);
-                        if (nextWordIndex < 0)
-                        {
-                            // 単語がミスしている場合
-                            m.addMissCount(key);
-
-                            req.setAttribute("miss", "ミス");
-                        }
-                        else
-                        {
-                            // 単語がマッチしている場合
-                            selectedPanel.setUsed(true);
-                            selectedPanel.setSelectedUserId(key);
-
-                            Word word = selectedPanel.getWordList().get(nextWordIndex);
-                            m.setWord(word);
-                            m.addSelectPanel(key, selectedPanel);
-                            m.addScore(key, word);
-
-                            m.setPlayerTurn((m.getPlayerTurn() + 1) % m.getPlayerCount());
-                        }
-                    }
-                }
-                else
-                {
-                    // ゲーム更新時
-                }
+                // 「破棄」の選択時、マッチングを破棄してトップ画面に戻る
+                MatchList.remove(m);
+                req.setAttribute("match", null);
+                resp.sendRedirect("top");
+                return;
             }
 
-            if (!m.isEnableContinue())
+            // マッチング開始状態であれば、gameへ遷移
+            if (m.isStart())
             {
-                m.finishMatch();
+                req.setAttribute("match", m);
+                resp.sendRedirect("game");
+                return;
             }
-
-            if (!m.isStart())
-            {
-                urlPath = "/gameMatching.jsp";
-            }
-            else if (m.isFinish())
-            {
-                urlPath = "/gameFinished.jsp";
-            }
-            else if (m.isHisTurn(key))
-            {
-                urlPath = "/gameMyTurn.jsp";
-            }
-            else
-            {
-                urlPath = "/gameNotMyTurn.jsp";
-            }
-
-            req.setAttribute("match", m);
         }
         catch (Exception e)
         {

@@ -15,6 +15,16 @@ version="2.5">
 </servlet-mapping>
 
 <servlet>
+    <servlet-name>matching</servlet-name>
+    <servlet-class>ControlPack.MatchingServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>matching</servlet-name>
+    <url-pattern>/matching</url-pattern>
+</servlet-mapping>
+
+
+<servlet>
     <servlet-name>game</servlet-name>
     <servlet-class>ControlPack.GameServlet</servlet-class>
 </servlet>

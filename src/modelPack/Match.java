@@ -10,6 +10,8 @@ public class Match
 
     private ArrayList<User> userList = new ArrayList<User>();
 
+    // private Map<String, User> userList = new HashMap<>();
+
     private ArrayList<Panel> panelList = new ArrayList<Panel>();
     private ArrayList<Integer> selectedPanelList = new ArrayList<Integer>();
 
@@ -45,14 +47,27 @@ public class Match
         return userList.size();
     }
 
+    public ArrayList<User> getUserList()
+    {
+        return this.userList;
+    }
+
     public void addUser(User u)
     {
         userList.add(u);
     }
 
-    public ArrayList<User> getUserList()
+    public User getUser(String key)
     {
-        return userList;
+        for (User user : userList)
+        {
+            if (user.getKey().equals(key))
+            {
+                return user;
+            }
+        }
+
+        return null;
     }
 
     public ArrayList<Panel> getPanelList()
@@ -148,6 +163,13 @@ public class Match
     public int getWinUser()
     {
         return winUser;
+    }
+
+    public void setWord(Word word)
+    {
+        setNowWord(word.getWord());
+        setFirstWord(word.getWordHead());
+        setLastWord(word.getWordTail());
     }
 
     public String getFirstWord()
@@ -280,6 +302,12 @@ public class Match
         setStartWord();
     }
 
+    public void startMatch()
+    {
+        startTime = new Date();
+        isStart = true;
+    }
+
     /**
      * マッチ終了時の各処理を行います
      */
@@ -287,6 +315,41 @@ public class Match
     {
         endTime = new Date();
         isFinish = true;
+
+        setWinLose();
+
+        FinishedMatchList.add(this);
+        MatchList.remove(this);
+    }
+
+    private void setWinLose()
+    {
+        if (userList.size() == 1)
+        {
+            userList.get(0).setWin(User.WIN);
+        }
+        else
+        {
+            // とりあえず二人用の対戦結果確認だけ判定
+            User user1 = userList.get(0);
+            User user2 = userList.get(1);
+
+            if (user1.getScore() > user1.getScore())
+            {
+                user1.setWin(User.WIN);
+                user2.setWin(User.LOSE);
+            }
+            else if (user1.getScore() < user2.getScore())
+            {
+                user1.setWin(User.LOSE);
+                user2.setWin(User.WIN);
+            }
+            else
+            {
+                user1.setWin(User.DRAW);
+                user2.setWin(User.DRAW);
+            }
+        }
     }
 
     public boolean isHisTurn(String key)
@@ -303,6 +366,26 @@ public class Match
         }
 
         return index == playerTurn;
+    }
+
+    public void addSelectPanel(String key, Panel panel)
+    {
+        getUser(key).addSelectedPanel(panel);
+    }
+
+    public void addMissCount(String key)
+    {
+        getUser(key).addMiss();
+    }
+
+    public void addScore(String key, Word word)
+    {
+        getUser(key).addScore(word.getScore());
+    }
+
+    public int getUserWin(String key)
+    {
+        return getUser(key).getWin();
     }
 
 }

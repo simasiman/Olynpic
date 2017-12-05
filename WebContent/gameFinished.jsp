@@ -27,11 +27,18 @@ if (aryCookies != null)
     }
 }
 
-//初回アクセス時の挙動については要修正
-if (name == null || name.isEmpty())
+if (key == null || key.isEmpty())
 {
-    Cookie cooKey = new Cookie("name", (String)session.getAttribute("name"));
+    Cookie cooKey = new Cookie("key", Utility.getKey());
     response.addCookie(cooKey);
+    response.sendRedirect("index.jsp");
+    return;
+}
+
+if (name == null || name .isEmpty())
+{
+    Cookie cooName = new Cookie("name", (String)session.getAttribute("name"));
+    response.addCookie(cooName);
 }
 
 %>
@@ -44,35 +51,32 @@ if (name == null || name.isEmpty())
     <title>ゲーム画面</title>
 </head>
 
+</head>
+
 <body>
 
-<%=key%>
-<%=name%>
-<%=match.getPlayerCount()%>
-<%=match.getPlayerTurn()%>
+<h1>※対戦が終了しました。</h1>
 
 <%
-if (!match.isStart())
-{ %>
-    <h3>マッチング中</h3>
-    <a href="game">更新</a>
-<%
-    return;
-}%>
+String result = "";
+int winLose = match.getUserWin(key);
+switch (winLose)
+{
+    case User.WIN:
+        result = "勝ちました。";
+        break;
+        
+    case User.LOSE:
+        result = "負けました。";
+        break;
+        
+    case User.DRAW:
+        result = "引き分けです。";
+        break;
+}
 
-<h1>ゲームで使用中のパネル</h1>
-<table>
-    <tr>
-        <td><%=match.getMatchNo()%></td>
-        <%for (User u : match.getUserList()) {%>
-            <td><%=u.getKey()%></td>
-            <td><%=u.getName()%></td>
-        <% } %>
-        <td><%=match.getStartTime()%></td>
-        <td><%=match.getEndTime()%></td>
-        <td><%=match.getPanelList().size()%></td>
-    </tr>
-</table>
+%>
+<h2><%=result%></h2>
 
 <table>
     <tr>
@@ -81,13 +85,7 @@ if (!match.isStart())
         %>
         <%for (int i = 0; i < panelList.size(); i++) {%>
             <td>
-                <%if (!match.isEnableContinue() || panelList.get(i).isUsed()) {%>
-                    <%=panelList.get(i).getBaseWord()%>
-                <%} else {%>
-                    <a href="game?selectedPanel=<%=i%>">
-                    <%=panelList.get(i).getBaseWord()%>
-                    </a>
-                <%}%>
+                <%=panelList.get(i).getBaseWord()%>
             </td>
             <%if (i != 0 && i % 3 == 2) {%>
                 </tr>
@@ -106,22 +104,22 @@ if (!match.isStart())
 <h2>選択した単語</h2>
     
     <%
-    for (int i = 0; i < match.getUserList().size(); i++)
+    for (User user : match.getUserList())
     {
-        User u = match.getUserList().get(i);
-        if (i == 0)
-        {%>
-            <h3><%=u.getName()%></h3>
-            <ul>
-        <%}
-        for (int j = 0; j < u.getSelectedPanel().size(); j++)
+        for (int j = 0; j < user.getSelectedPanel().size(); j++)
         {
-            Panel p = u.getSelectedPanel().get(j);
-        %>
+            if (j == 0)
+            {%>
+                <h3><%=user.getName()%></h3>
+                <h4><%=user.getScore()%></h4>
+                <ul>
+            <%}
+            Panel p = user.getSelectedPanel().get(j);
+            %>
             <li><%=p.getBaseWord()%>(<%=p.getSelectedWord().getWord()%>)
         <%}%>
+        </ul>
     <%}%>
-    </ul>
 
 <%if (!match.isFinish()) {%>
     <a href="game">更新</a>

@@ -19,7 +19,7 @@ public class SiritoriDao
         String database = "Olynpic";
         String user = "Mulder";
         String password = "TrustNo1";
-        String encoding = "MS932";
+        String encoding = "UTF-8";
 
         String strConn = "jdbc:mysql://" + server + "/" + database + "?user=" + user + "&password=" + password + "&useUnicode=true&characterEncoding=" + encoding;
 
@@ -106,24 +106,14 @@ public class SiritoriDao
         try
         {
             String sql = ""
-                    + " SELECT id, "
+                    + " SELECT ath_id, "
                     + "        name, "
                     + "        picture "
                     + "   FROM tbl_word_base "
-                    + "  ORDER BY RAND() "
+                    + "  ORDER BY ath_id "
                     + "  LIMIT 0, ?";
 
-            // TODO:テスト用SQL適用中
-            String sqlTest = ""
-                    + " SELECT id, "
-                    + "        name, "
-                    + "        picture "
-                    + "   FROM tbl_word_base "
-                    + "  WHERE id IN (1, 3, 4, 7, 10, 13, 16, 17, 29, 30)"
-                    + "  ORDER BY RAND() "
-                    + "  LIMIT 0, ?";
-
-            pstatement = connection.prepareStatement(sqlTest);
+            pstatement = connection.prepareStatement(sql);
             pstatement.setInt(1, panelCount);
             rs = pstatement.executeQuery();
             while (rs.next())
@@ -135,7 +125,7 @@ public class SiritoriDao
 
                 Panel p = new Panel();
 
-                p.setId(rs.getInt("id"));
+                p.setId(rs.getInt("ath_id"));
                 p.setBaseWord(rs.getString("name"));
                 p.setPicture(rs.getString("picture"));
 
@@ -143,14 +133,16 @@ public class SiritoriDao
                 ResultSet rs2 = null;
 
                 String sql2 = ""
-                        + "SELECT id, "
+                        + "SELECT word_id, "
+                        + "       word_disp, "
+                        + "       word_read, "
                         + "       level, "
-                        + "       word, "
-                        + "       wordRead, "
-                        + "       wordHead, "
-                        + "       wordTail "
+                        + "       LEFT(word_read, 1) AS word_head, "
+                        + "       IF(right(word_read, 1) != \"ー\", "
+                        + "                right(word_read, 1), "
+                        + "                left(right(word_read, 2), 1)) AS word_tail "
                         + "  FROM tbl_word_siritori "
-                        + " WHERE id = ?"
+                        + " WHERE ath_id = ? "
                         + " ORDER BY level ";
 
                 pStatement2 = connection.prepareStatement(sql2);
@@ -160,12 +152,12 @@ public class SiritoriDao
                 {
                     while (rs2.next())
                     {
-                        int id = rs2.getInt("id");
+                        int id = rs2.getInt("word_id");
                         int level = rs2.getInt("level");
-                        String word = rs2.getString("word");
-                        String wordRead = rs2.getString("wordRead");
-                        String wordHead = rs2.getString("wordHead");
-                        String wordTail = rs2.getString("wordTail");
+                        String word = rs2.getString("word_disp");
+                        String wordRead = rs2.getString("word_read");
+                        String wordHead = rs2.getString("word_head");
+                        String wordTail = rs2.getString("word_tail");
 
                         Word w = new Word(id, level, word, wordRead, wordHead, wordTail);
 

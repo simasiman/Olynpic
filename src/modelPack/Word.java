@@ -54,4 +54,8 @@ public class Word
         return wordTail;
     }
 
+    public int getScore()
+    {
+        return wordRead.length() + level;
+    }
 }

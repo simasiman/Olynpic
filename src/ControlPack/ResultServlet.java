@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import modelPack.FinishedMatchList;
+import modelPack.Match;
+
+@SuppressWarnings("serial")
 public class ResultServlet extends HttpServlet
 {
     @Override
@@ -26,9 +30,22 @@ public class ResultServlet extends HttpServlet
 
         try
         {
+            String key = (String) req.getParameter("key");
+            String name = (String) req.getParameter("name");
+
+            if (key == null || name == null)
+            {
+                key = (String) session.getAttribute("key");
+                name = (String) session.getAttribute("name");
+            }
+
+            Match match = FinishedMatchList.getMatch(key);
+
+            req.setAttribute("MatchResult", match);
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
 
         ServletContext context = getServletContext();

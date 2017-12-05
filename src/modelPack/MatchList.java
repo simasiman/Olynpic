@@ -36,16 +36,55 @@ public class MatchList
         matchList.add(m);
     }
 
-    public static Match getMatching()
+    public static Match getMatchWaiting(String key)
     {
         for (Match match : matchList)
         {
-            if (!match.isStart() && match.getPlayerCount() != 1)
+            if (!match.isStart() && match.getUser(key) == null && match.getPlayerCount() != 1)
             {
                 return match;
             }
         }
 
         return null;
+    }
+
+    public static Match getMatch(String key)
+    {
+        Match ret = null;
+
+        for (Match match : matchList)
+        {
+            if (!match.isFinish() && match.getUser(key) != null)
+            {
+                ret = match;
+                break;
+            }
+        }
+
+        return ret;
+    }
+
+    public static void remove(Match match)
+    {
+        matchList.remove(match);
+    }
+
+    public static Match getAndRemoveFinishedMatch(String key)
+    {
+        Match ret = null;
+
+        for (Match match : matchList)
+        {
+            if (match.isFinish() && match.getUser(key) != null)
+            {
+                ret = match;
+                matchList.remove(match);
+
+                break;
+            }
+        }
+
+        return ret;
     }
 }

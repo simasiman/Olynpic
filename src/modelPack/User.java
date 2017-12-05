@@ -7,11 +7,28 @@ public class User
     private String key;
     private String name;
 
-    private int highScore;
+    private int score;
+    private int miss;
     private int win;
+    private boolean isResultWatch;
 
     private ArrayList<Panel> selectedPanel = new ArrayList<Panel>();
     private ArrayList<String> selectedWord = new ArrayList<String>();
+
+    public static final int NONE = 0;
+    public static final int DRAW = -1;
+    public static final int WIN = 1;
+    public static final int LOSE = 2;
+
+    public User()
+    {
+        key = "";
+        name = "";
+        score = 0;
+        miss = 0;
+        win = -1;
+        isResultWatch = false;
+    }
 
     public User(String key, String name)
     {
@@ -39,14 +56,34 @@ public class User
         this.name = name;
     }
 
-    public int getHighScore()
+    public int getScore()
     {
-        return highScore;
+        return score;
     }
 
-    public void setHighScore(int highScore)
+    public void setScore(int score)
     {
-        this.highScore = highScore;
+        this.score = score;
+    }
+
+    public void addScore(int score)
+    {
+        this.score += score;
+    }
+
+    public int getMiss()
+    {
+        return miss;
+    }
+
+    public void setMiss(int miss)
+    {
+        this.miss = miss;
+    }
+
+    public void addMiss()
+    {
+        this.miss++;
     }
 
     public int getWin()
@@ -57,6 +94,16 @@ public class User
     public void setWin(int win)
     {
         this.win = win;
+    }
+
+    public boolean isResultWatch()
+    {
+        return isResultWatch;
+    }
+
+    public void setResultWatch(boolean isResultWatch)
+    {
+        this.isResultWatch = isResultWatch;
     }
 
     public ArrayList<Panel> getSelectedPanel()
