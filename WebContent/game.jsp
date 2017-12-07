@@ -1,10 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="modelPack.*"%>
-<%@ page import="Utility.Utility" %>
+<%@ page import="Utility.*" %>
 <%@ page import="java.util.ArrayList"%>
 <%
 // マッチング情報の取得
-Match match = (Match)request.getAttribute("matchResult");
+Match match = (Match)request.getAttribute("match");
 
 // マッチング情報が存在しなければ、トップ画面に遷移する
 if (match == null)
@@ -49,28 +49,40 @@ if (name == null || name .isEmpty())
     Cookie cooName = new Cookie("name", (String)session.getAttribute("name"));
     response.addCookie(cooName);
 }
+
 %>
 <!DOCTYPE html>
 <html>
 <head>
     <META charset="UTF-8">
-    <title>結果画面</title>
+    <title>ゲーム画面</title>
+    
+<style type="text/css">
+.selected {
+    border: 2px solid black;
+}
+.selected img{
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+.canSelect {
+    border: 2px solid blue;
+}
+.correct {
+    border: 2px solid red;
+}
+    </style>
+</head>
 </head>
 <body>
-    <h1>結果画面</h1>
-    <%User user = match.getUser(key);%>
-    選手名：<%=user.getName()%><br>
-    点数　：<%=user.getScore()%><br>
-    <a href="top">トップへ戻る</a>
-    <h2>選択した単語</h2>
-    <ul>
-    <%for (int j = 0; j < user.getSelectedPanel().size(); j++)
-    {
-        Panel p = user.getSelectedPanel().get(j);
-        Word word = p.getSelectedWord();
-        %>
-        <li><img class="mono" src="img/panel/<%=p.getPicture()%>" height="80"><%=p.getBaseWord()%>(<%=word.getWord()%>)[<%=word.getBaseScore()%>+<%=word.getBonusScore()%>]
-    <%}%>
-    </ul>
-    <a href="top">トップへ戻る</a>
+<!-- 各種ボタンの表示 -->
+<%=HtmlGame.makeGameReloadHtml(match, key)%>
+<!-- ゲーム状況の表示 -->
+<%=HtmlGame.makeGameMessageHtml(match, key)%>
+<!-- ゲーム選択パネルの表示 -->
+<%=HtmlGame.makeGamePanelHtml(match, key)%>
+<!-- 選択された単語、現在選択可能な文字の表示 -->
+<%=HtmlGame.makeUserSelectedHtml(match, key)%>
+<!-- 各種ボタンの表示 -->
+<%=HtmlGame.makeGameReloadHtml(match, key)%>
 </body>

@@ -31,7 +31,7 @@ public class MatchList
         return ret + 1;
     }
 
-    public static void addMatchList(Match m)
+    public static void add(Match m)
     {
         matchList.add(m);
     }

@@ -63,17 +63,20 @@ public class Panel
         wordList.add(w);
     }
 
-    public int isMatchWord(String wordHead, String wordTail)
+    public int isMatchWord(Word word)
     {
+        String tH = word.getWordHead();
+        String tT = word.getWordTail();
+
         for (int i = 0; i < wordList.size(); i++)
         {
             Word w = wordList.get(i);
-            String tH = w.getWordHead();
-            String tT = w.getWordTail();
+            String wH = w.getWordHead();
+            String wT = w.getWordTail();
 
-            if (wordHead.equals(tH) || wordHead.equals(tT) || wordTail.equals(tH) || wordTail.equals(tT))
+            if (tH.equals(wH) || tH.equals(wT) || tT.equals(wH) || tT.equals(wT))
             {
-                selectedWord = w;
+                // selectedWord = word;
                 return i;
             }
         }

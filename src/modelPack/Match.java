@@ -10,8 +10,6 @@ public class Match
 
     private ArrayList<User> userList = new ArrayList<User>();
 
-    // private Map<String, User> userList = new HashMap<>();
-
     private ArrayList<Panel> panelList = new ArrayList<Panel>();
     private ArrayList<Integer> selectedPanelList = new ArrayList<Integer>();
 
@@ -22,11 +20,10 @@ public class Match
     private int playerTurn = 0;
 
     private boolean isStart = false;
+    private boolean isFirstPick = true;
     private boolean isFinish = false;
 
-    private String nowWord;
-    private String firstWord;
-    private String lastWord;
+    private Word nowWord;
 
     private int winUser = 0;
 
@@ -135,6 +132,11 @@ public class Match
         this.playerTurn = playerTurn;
     }
 
+    public void setPlayerTurnNext()
+    {
+        setPlayerTurn((getPlayerTurn() + 1) % getPlayerCount());
+    }
+
     public boolean isStart()
     {
         return isStart;
@@ -143,6 +145,57 @@ public class Match
     public void setStart(boolean isStart)
     {
         this.isStart = isStart;
+    }
+
+    public boolean isFirstPick()
+    {
+        return isFirstPick;
+    }
+
+    public void setFirstPick(boolean isFirstPick)
+    {
+        this.isFirstPick = isFirstPick;
+    }
+
+    public void firstPick(String key, Panel panel)
+    {
+        isFirstPick = false;
+
+        Word firstWord = panel.getWordList().get(0);
+
+        panel.setSelectedUserId(key);
+        panel.setSelectedWord(firstWord);
+
+        setNowWord(firstWord);
+        addSelectPanel(key, panel);
+        // addScore(key, firstWord);
+
+        setPlayerTurnNext();
+    }
+
+    public boolean nextPick(String key, Panel panel)
+    {
+        int nextWordIndex = panel.isMatchWord(nowWord);
+        if (nextWordIndex < 0)
+        {
+            // 単語がミスしている場合
+            addMissCount(key);
+            return false;
+        }
+
+        // 単語がマッチしている場合
+        Word word = panel.getWordList().get(nextWordIndex);
+
+        panel.setSelectedUserId(key);
+        panel.setSelectedWord(word);
+
+        setNowWord(word);
+        addSelectPanel(key, panel);
+        addScore(key, word);
+
+        setPlayerTurnNext();
+
+        return true;
     }
 
     public boolean isFinish()
@@ -165,39 +218,12 @@ public class Match
         return winUser;
     }
 
-    public void setWord(Word word)
-    {
-        setNowWord(word.getWord());
-        setFirstWord(word.getWordHead());
-        setLastWord(word.getWordTail());
-    }
-
-    public String getFirstWord()
-    {
-        return firstWord;
-    }
-
-    public void setFirstWord(String firstWord)
-    {
-        this.firstWord = firstWord;
-    }
-
-    public String getLastWord()
-    {
-        return lastWord;
-    }
-
-    public void setLastWord(String lastWord)
-    {
-        this.lastWord = lastWord;
-    }
-
-    public String getNowWord()
+    public Word getNowWord()
     {
         return nowWord;
     }
 
-    public void setNowWord(String nowWord)
+    public void setNowWord(Word nowWord)
     {
         this.nowWord = nowWord;
     }
@@ -222,9 +248,6 @@ public class Match
         ArrayList<Word> wordList = panelList.get(new Random().nextInt(listCount)).getWordList();
 
         Word word = wordList.get(0);
-
-        this.firstWord = word.getWordHead();
-        this.lastWord = word.getWordTail();
     }
 
     /**
@@ -234,9 +257,14 @@ public class Match
      */
     public boolean isEnableContinue()
     {
+        if (isFirstPick)
+        {
+            return true;
+        }
+
         for (Panel p : panelList)
         {
-            if (!p.isUsed() && p.isMatchWord(firstWord, lastWord) >= 0)
+            if (!p.isUsed() && p.isMatchWord(nowWord) >= 0)
             {
                 return true;
             }
@@ -269,7 +297,10 @@ public class Match
             e.printStackTrace();
         }
 
-        setStartWord();
+        // マッチ管理用リストに追加
+        MatchList.add(this);
+
+        // setStartWord();
     }
 
     /**
@@ -299,7 +330,10 @@ public class Match
             e.printStackTrace();
         }
 
-        setStartWord();
+        // マッチ管理用リストに追加
+        MatchList.add(this);
+
+        // setStartWord();
     }
 
     public void startMatch()
@@ -371,6 +405,7 @@ public class Match
     public void addSelectPanel(String key, Panel panel)
     {
         getUser(key).addSelectedPanel(panel);
+        panel.setUsed(true);
     }
 
     public void addMissCount(String key)

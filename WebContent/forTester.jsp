@@ -5,8 +5,6 @@
 
 <%
 
-Match match = (Match)request.getAttribute("match");
-
 Cookie[] aryCookies = request.getCookies();
 String key = null;
 String name = null;
@@ -96,13 +94,13 @@ if (name != null)
 <table border="1">
     <tr>
         <th>マッチNo</th>
-            <th>ユーザキー</th>
-            <th>ユーザ名前</th>
-            <th>ユーザキー</th>
-            <th>ユーザ名前</th>
-            <th>開始時間</th>
-            <th>終了時間</th>
-            <th>パネル枚数</th>
+        <th>ユーザキー</th>
+        <th>ユーザ名前</th>
+        <th>ユーザキー</th>
+        <th>ユーザ名前</th>
+        <th>開始時間</th>
+        <th>終了時間</th>
+        <th>パネル枚数</th>
     </tr>
     <%for (Match m : MatchList.getMatchList()){ 
           if (m.getPlayerCount() != 2)
@@ -110,21 +108,58 @@ if (name != null)
               continue;
           }
     %>
-        <tr>
-            <td><%=m.getMatchNo()%></td>
-            <%for (User u : m.getUserList()) {%>
-                <td><%=u.getKey()%></td>
-                <td><%=u.getName()%></td>
-            <% } %>
-            <td><%=m.getStartTime()%></td>
-            <td><%=m.getEndTime()%></td>
-            <td><%=m.getPanelList().size()%></td>
-        </tr>
+    <tr>
+        <td><%=m.getMatchNo()%></td>
+        <%for (User u : m.getUserList()) {%>
+            <td><%=u.getKey()%></td>
+            <td><%=u.getName()%></td>
+        <% } %>
+        <td><%=m.getStartTime()%></td>
+        <td><%=m.getEndTime()%></td>
+        <td><%=m.getPanelList().size()%></td>
+    </tr>
     <%}%>
 </table>
 
 <h1>終了後マッチングテーブル</h1>
 <table border="1">
+    <tr>
+        <th>マッチNo</th>
+        <th>ユーザキー</th>
+        <th>ユーザ名前</th>
+        <th>開始時間</th>
+        <th>終了時間</th>
+        <th>パネル枚数</th>
+    </tr>
+    <%for (Match m : FinishedMatchList.getMatchList()){ 
+          if (m.getPlayerCount() != 1)
+          {
+              continue;
+          }
+    %>
+    <tr>
+        <td><%=m.getMatchNo()%></td>
+        <%for (User u : m.getUserList()) {%>
+            <td><%=u.getKey()%></td>
+            <td><%=u.getName()%></td>
+        <% } %>
+        <td><%=m.getStartTime()%></td>
+        <td><%=m.getEndTime()%></td>
+        <td><%=m.getPanelList().size()%></td>
+    </tr>
+    <%}%>
+</table>
+<table border="1">
+    <tr>
+        <th>マッチNo</th>
+        <th>ユーザキー</th>
+        <th>ユーザ名前</th>
+        <th>ユーザキー</th>
+        <th>ユーザ名前</th>
+        <th>開始時間</th>
+        <th>終了時間</th>
+        <th>パネル枚数</th>
+    </tr>
     <%for (Match m : FinishedMatchList.getMatchList()){ 
           if (m.getPlayerCount() != 2)
           {

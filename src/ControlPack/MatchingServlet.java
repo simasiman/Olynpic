@@ -29,7 +29,7 @@ public class MatchingServlet extends HttpServlet
         req.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession();
 
-        String urlPath = "/gameMatching.jsp";
+        String urlPath = "/matching.jsp";
 
         // TODO:重複したユーザのマッチング登録が発生しないかを確認
 
@@ -65,9 +65,6 @@ public class MatchingServlet extends HttpServlet
                     User user = new User(key, name);
                     m = new Match();
                     m.createMatch1(user);
-
-                    // マッチ管理用リストに追加
-                    MatchList.addMatchList(m);
                 }
                 else if (gameMode2 != null)
                 {
@@ -93,9 +90,6 @@ public class MatchingServlet extends HttpServlet
                         // 待機状態のマッチが存在しなければ新規マッチ登録
                         m = new Match();
                         m.createMatchMulti(user, 2);
-
-                        // マッチ管理用リストに追加
-                        MatchList.addMatchList(m);
                     }
                 }
                 else

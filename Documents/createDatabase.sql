@@ -26,30 +26,30 @@ CREATE TABLE tbl_word_siritori(
 );
 
 # 競技名単語テーブルにデータを挿入
-INSERT INTO tbl_word_base VALUES (1,"バスケットボール","");
-INSERT INTO tbl_word_base VALUES (2,"水泳","");
-INSERT INTO tbl_word_base VALUES (3,"柔道","");
-INSERT INTO tbl_word_base VALUES (4,"バレーボール","");
-INSERT INTO tbl_word_base VALUES (5,"フェンシング","");
-INSERT INTO tbl_word_base VALUES (6,"テニス","");
-INSERT INTO tbl_word_base VALUES (7,"カヌー","");
-INSERT INTO tbl_word_base VALUES (8,"ボクシング","");
-INSERT INTO tbl_word_base VALUES (9,"馬術","");
-INSERT INTO tbl_word_base VALUES (10,"ウェイトリフティング","");
-INSERT INTO tbl_word_base VALUES (11,"体操","");
-INSERT INTO tbl_word_base VALUES (12,"陸上","");
-INSERT INTO tbl_word_base VALUES (13,"レスリング","");
-INSERT INTO tbl_word_base VALUES (14,"バドミントン","");
-INSERT INTO tbl_word_base VALUES (15,"卓球","");
-INSERT INTO tbl_word_base VALUES (16,"野球","");
-INSERT INTO tbl_word_base VALUES (17,"アーチェリー","");
-INSERT INTO tbl_word_base VALUES (18,"ホッケー","");
-INSERT INTO tbl_word_base VALUES (19,"ゴルフ","");
-INSERT INTO tbl_word_base VALUES (20,"ハンドボール","");
-INSERT INTO tbl_word_base VALUES (21,"スケートボード","");
-INSERT INTO tbl_word_base VALUES (22,"サーフィン","");
-INSERT INTO tbl_word_base VALUES (23,"ラグビー","");
-INSERT INTO tbl_word_base VALUES (24,"空手","");
+INSERT INTO tbl_word_base VALUES(1,"バスケットボール","panel_basketball.png");
+INSERT INTO tbl_word_base VALUES(2,"水泳","panel_swimming.png");
+INSERT INTO tbl_word_base VALUES(3,"柔道","panel_judo.png");
+INSERT INTO tbl_word_base VALUES(4,"バレーボール","panel_volleyball.png");
+INSERT INTO tbl_word_base VALUES(5,"フェンシング","panel_fencing.png");
+INSERT INTO tbl_word_base VALUES(6,"テニス","panel_tennis.png");
+INSERT INTO tbl_word_base VALUES(7,"カヌー","panel_canoe.png");
+INSERT INTO tbl_word_base VALUES(8,"ボクシング","panel_boxing.png");
+INSERT INTO tbl_word_base VALUES(9,"馬術","panel_horsemanship.png");
+INSERT INTO tbl_word_base VALUES(10,"ウェイトリフティング","panel_weightlifting.png");
+INSERT INTO tbl_word_base VALUES(11,"体操","panel_gymnastics.png");
+INSERT INTO tbl_word_base VALUES(12,"陸上","panel_athletics.png");
+INSERT INTO tbl_word_base VALUES(13,"レスリング","panel_wrestling.png");
+INSERT INTO tbl_word_base VALUES(14,"バドミントン","panel_badminton.png");
+INSERT INTO tbl_word_base VALUES(15,"卓球","panel_tabletennis.png");
+INSERT INTO tbl_word_base VALUES(16,"野球","panel_baseball.png");
+INSERT INTO tbl_word_base VALUES(17,"アーチェリー","panel_archery.png");
+INSERT INTO tbl_word_base VALUES(18,"ホッケー","panel_hockey.png");
+INSERT INTO tbl_word_base VALUES(19,"ゴルフ","panel_golf.png");
+INSERT INTO tbl_word_base VALUES(20,"ハンドボール","panel_handball.png");
+INSERT INTO tbl_word_base VALUES(21,"スケートボード","panel_skateboard.png");
+INSERT INTO tbl_word_base VALUES(22,"サーフィン","panel_surfing.png");
+INSERT INTO tbl_word_base VALUES(23,"ラグビー","panel_rugby.png");
+INSERT INTO tbl_word_base VALUES(24,"空手","panel_karate.png");
 
 # しりとり単語テーブルにデータを挿入
 INSERT INTO tbl_word_siritori VALUES (1,1,"バスケットボール","はすけつとほーる",0);

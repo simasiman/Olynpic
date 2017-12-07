@@ -15,7 +15,6 @@ import modelPack.Match;
 import modelPack.MatchList;
 import modelPack.Panel;
 import modelPack.User;
-import modelPack.Word;
 
 @SuppressWarnings("serial")
 public class GameServlet extends HttpServlet
@@ -52,6 +51,10 @@ public class GameServlet extends HttpServlet
 
             // 既にマッチング済のユーザであれば、試合に戻らせる
             Match m = MatchList.getMatch(key);
+            if (m == null)
+            {
+                m = FinishedMatchList.getMatch(key);
+            }
 
             // ゲーム開始状態か判断する
             if (m == null)
@@ -66,9 +69,6 @@ public class GameServlet extends HttpServlet
                     User user = new User(key, name);
                     m = new Match();
                     m.createMatch1(user);
-
-                    // マッチ管理用リストに追加
-                    MatchList.addMatchList(m);
                 }
                 else if (gameMode2 != null)
                 {
@@ -78,7 +78,13 @@ public class GameServlet extends HttpServlet
 
                     User user = new User(key, name);
 
-                    if (m != null)
+                    if (m == null)
+                    {
+                        // 待機状態のマッチが存在しなければ新規マッチ登録
+                        m = new Match();
+                        m.createMatchMulti(user, 2);
+                    }
+                    else
                     {
                         // 待機状態のマッチが存在すれば、そのマッチにユーザ登録
                         m.addUser(user);
@@ -88,15 +94,6 @@ public class GameServlet extends HttpServlet
                         {
                             m.startMatch();
                         }
-                    }
-                    else
-                    {
-                        // 待機状態のマッチが存在しなければ新規マッチ登録
-                        m = new Match();
-                        m.createMatchMulti(user, 2);
-
-                        // マッチ管理用リストに追加
-                        MatchList.addMatchList(m);
                     }
                 }
                 else
@@ -116,40 +113,28 @@ public class GameServlet extends HttpServlet
             else
             {
                 // ゲーム継続時
-
-                // TODO:各取得パラメータによってマッチ状態(ゲーム進行)を更新
-
                 if (req.getParameter("selectedPanel") != null)
                 {
                     int selected = Integer.parseInt(req.getParameter("selectedPanel"));
-
-                    String wH = m.getFirstWord();
-                    String wT = m.getLastWord();
-
                     Panel selectedPanel = m.getPanelList().get(selected);
-
                     if (!selectedPanel.isUsed())
                     {
-                        int nextWordIndex = selectedPanel.isMatchWord(wH, wT);
-                        if (nextWordIndex < 0)
+                        // 使われていないパネルが選択された場合
+                        if (m.isFirstPick())
                         {
-                            // 単語がミスしている場合
-                            m.addMissCount(key);
-
-                            req.setAttribute("miss", "ミス");
+                            // 最初のパネル選択の場合
+                            m.firstPick(key, selectedPanel);
+                        }
+                        else if (m.nextPick(key, selectedPanel))
+                        {
+                            // 最初以降のパネル選択の場合
+                            // パネル選択可能の場合
                         }
                         else
                         {
-                            // 単語がマッチしている場合
-                            selectedPanel.setUsed(true);
-                            selectedPanel.setSelectedUserId(key);
-
-                            Word word = selectedPanel.getWordList().get(nextWordIndex);
-                            m.setWord(word);
-                            m.addSelectPanel(key, selectedPanel);
-                            m.addScore(key, word);
-
-                            m.setPlayerTurn((m.getPlayerTurn() + 1) % m.getPlayerCount());
+                            // 最初以降のパネル選択の場合
+                            // パネル選択不可能の場合
+                            req.setAttribute("message", "MISS");
                         }
                     }
                 }
@@ -159,26 +144,18 @@ public class GameServlet extends HttpServlet
                 }
             }
 
-            if (!m.isEnableContinue())
+            if (!m.isFinish() && !m.isEnableContinue())
             {
                 m.finishMatch();
             }
 
             if (!m.isStart())
             {
-                urlPath = "/gameMatching.jsp";
-            }
-            else if (m.isFinish())
-            {
-                urlPath = "/gameFinished.jsp";
-            }
-            else if (m.isHisTurn(key))
-            {
-                urlPath = "/gameMyTurn.jsp";
+                urlPath = "/matching.jsp";
             }
             else
             {
-                urlPath = "/gameNotMyTurn.jsp";
+                urlPath = "/game.jsp";
             }
 
             req.setAttribute("match", m);

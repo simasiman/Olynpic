@@ -56,6 +56,16 @@ public class Word
 
     public int getScore()
     {
-        return wordRead.length() + level;
+        return getBaseScore() + getBonusScore();
+    }
+
+    public int getBaseScore()
+    {
+        return wordRead.length();
+    }
+
+    public int getBonusScore()
+    {
+        return level;
     }
 }

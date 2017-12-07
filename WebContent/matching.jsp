@@ -1,10 +1,8 @@
-<%@ page import="Utility.Utility" %>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="modelPack.*"%>
+<%@ page import="Utility.Utility" %>
 <%@ page import="java.util.ArrayList"%>
-
 <%
-
 Match match = (Match)request.getAttribute("match");
 
 Cookie[] aryCookies = request.getCookies();
@@ -42,22 +40,16 @@ if (name == null || name .isEmpty())
 }
 
 %>
-
 <!DOCTYPE html>
 <html>
-
 <head>
     <META charset="UTF-8">
     <title>ゲーム画面</title>
 </head>
-
 </head>
-
 <body>
-
-<h3>マッチング中</h3>
-<a href="matching?status=reload">更新</a>
-<br>
-<a href="matching?status=dest">破棄</a>
-
+    <h3>マッチング中</h3>
+    <a href="matching?status=reload">更新</a>
+    <br>
+    <a href="matching?status=dest">破棄</a>
 </body>

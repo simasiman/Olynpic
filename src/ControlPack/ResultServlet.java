@@ -41,7 +41,7 @@ public class ResultServlet extends HttpServlet
 
             Match match = FinishedMatchList.getMatch(key);
 
-            req.setAttribute("MatchResult", match);
+            req.setAttribute("matchResult", match);
         }
         catch (Exception e)
         {

@@ -13,7 +13,6 @@ public class User
     private boolean isResultWatch;
 
     private ArrayList<Panel> selectedPanel = new ArrayList<Panel>();
-    private ArrayList<String> selectedWord = new ArrayList<String>();
 
     public static final int NONE = 0;
     public static final int DRAW = -1;
@@ -119,16 +118,6 @@ public class User
     public void addSelectedPanel(Panel panel)
     {
         selectedPanel.add(panel);
-    }
-
-    public ArrayList<String> getSelectedWord()
-    {
-        return selectedWord;
-    }
-
-    public void setSelectedWord(ArrayList<String> selectedWord)
-    {
-        this.selectedWord = selectedWord;
     }
 
 }
