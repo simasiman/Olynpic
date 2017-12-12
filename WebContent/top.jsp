@@ -40,7 +40,7 @@ if (name == null || name.isEmpty())
 }
 
 //終了済みのマッチングが存在しないかを確認
-Match match = FinishedMatchList.getMatch(key);
+Match match = MatchList.getMatchFinished(key);
 if (match != null)
 {
     // 終了済みのマッチングが存在すれば、リザルト画面へ遷移
