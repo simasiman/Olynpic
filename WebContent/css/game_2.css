@@ -1,0 +1,111 @@
+﻿/*2人用ゲーム画面のCSS*/
+/*大枠*/
+.wapper{
+	margin:3px auto;
+	width:990px;
+	background-color:#DDD;
+}
+
+/*プレイヤーごとの領域*/
+.player{
+	float:left;
+	box-sizing:border-box;
+	padding:6px;
+	width:220px;
+	min-height:600px;
+	background-color:#AAA;
+	font-size:15px;
+}
+.playerDistinction{/*プレイヤー1か2の箇所*/
+	margin-top:3px;
+	margin-bottom:2px;
+	font-size:17px;
+}
+.playerName{
+	margin-left:5px;
+	margin-bottom:7px;
+	line-height:1.2;
+}
+.notChoosing{/*選択中ではないプレイヤーに表示*/
+	margin-bottom:10px;
+	height:42px;
+	text-align:center;
+}
+#timer{ /*選択中のプレイヤーに表示*/
+	height:16px;
+	line-height:16px;
+}
+.nowChoosing{ /*選択中のプレイヤーに表示*/
+	margin-bottom:10px;
+	padding:3px;
+	background-color:#DDD;
+}
+.nowChoosing div{ /*選択中のプレイヤーに表示*/
+	height:20px;
+	line-height:20px;
+	text-align:center;
+	font-weight:bold;
+	-webkit-animation: switchtext 0.7s infinite alternate;
+	-moz-animation: switchtext 0.7s infinite alternate;
+	animation: switchtext 0.7s infinite alternate;
+}
+@-webkit-keyframes switchtext { /*選択中のプレイヤーに表示*/
+	from { opacity: 1.0; }
+	to { opacity: 0; }
+}
+@-moz-keyframes switchtext { /*選択中のプレイヤーに表示*/
+	from { opacity: 1.0; }
+	to { opacity: 0; }
+}
+@keyframes switchtext { /*選択中のプレイヤーに表示*/
+	from { opacity: 1.0; }
+	to { opacity: 0; }
+}
+a.reload{ /*プレイヤー自身にのみ表示*/
+	display: block;
+	margin:0 auto 7px auto;
+	width:70px;
+	height:30px;
+	border:solid 1px #FFF;
+	background-color:rgba(255,255,255,0.5);
+	color:#222;
+	line-height:30px;
+	text-align:center;
+	text-decoration:none;
+}
+a.reload:hover{ /*プレイヤー自身にのみ表示*/
+	background-color:rgba(255,255,255,1);
+	transition-duration:0.5s;
+}
+.score{
+	width:100px;
+	height:20px;
+	margin:0 auto 7px;
+	padding:3px;
+	background-color:#DDD;
+	text-align:center;
+	line-height:20px;
+	font-weight:bold;
+	font-size:17px;
+}
+.score span{
+	vertical-align:bottom;
+	font-size:14px;
+
+}
+div.getPanel{/*取得したパネル*/
+
+}
+div.getPanel + table{
+	margin:0 auto;
+}
+.getPanelLeft{
+	padding:2px 4px 2px 2px;
+}
+.getPanelRight{
+	padding:2px 2px 2px 4px;
+}
+td.getPanel img{
+	width:80px;
+}
+
