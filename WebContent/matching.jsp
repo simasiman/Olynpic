@@ -50,13 +50,21 @@ if (name == null || name.isEmpty())
 <!DOCTYPE html>
 <html>
 <head>
-    <META charset="UTF-8">
-    <title>マッチング画面</title>
-</head>
+<meta http-equiv="content-type" charset="utf-8">
+<link rel="stylesheet" href="css/reset.css" type="text/css">
+<link rel="stylesheet" href="css/matching.css" type="text/css">
+<title>[pane-tori] - マッチング</title>
 </head>
 <body>
-    <h3>マッチング中</h3>
-    <a href="matching?status=reload">更新</a>
-    <br>
-    <a href="matching?status=dest">破棄</a>
+<div class="page">
+	<header><img src="img/logo/pane-tori-logo_s.png" alt="ゲームのロゴ"></header>
+
+	<div class="nowMatching">只今マッチング中です</div>
+	<a href="javascript:location.reload()" class="reload">更新</a>
+	<div class="message">マッチングが完了すると、自動的にゲームが開始されます</div>
+	<a href="matching?status=dest" class="back">トップページに戻る</a>
+
+	<footer>&copy 2017&nbsp; ARAI CORPORATION.</footer>
+</div><!--pageここまで-->
 </body>
+</html>

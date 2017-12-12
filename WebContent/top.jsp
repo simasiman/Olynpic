@@ -1,10 +1,4 @@
-<%@page import="java.net.URLDecoder"%>
-<%@ page contentType="text/html; charset=UTF-8"%>
-<%@ page import="modelPack.*"%>
-<%@ page import="Utility.Utility"%>
-<%@ page import="java.net.*"%>
-<%@ page import="java.util.ArrayList"%>
-<%
+<%@ page contentType="text/html; charset=UTF-8"%><%@ page import="java.net.URLDecoder"%><%@ page import="modelPack.*"%><%@ page import="Utility.Utility"%><%@ page import="java.net.*"%><%@ page import="java.util.ArrayList"%><%
 Cookie[] aryCookies = request.getCookies();
 String key = null;
 String name = null;
@@ -48,20 +42,64 @@ if (match != null)
     return;
 }
 
-
-%>
-<!DOCTYPE html>
+%><!DOCTYPE html>
 <html>
 <head>
-    <META charset="UTF-8">
-    <title>トップ画面</title>
+<meta http-equiv="content-type" charset="utf-8">
+<link rel="stylesheet" href="css/reset.css" type="text/css">
+<link rel="stylesheet" href="css/top.css" type="text/css">
+<title>[pane-tori] - トップ</title>
 </head>
 <body>
-    <form name ="form" action="matching" method="post">
-        <input type="hidden" name="key" value="<%=key%>">   
-        <input type="text" name="name" value="<%=name%>">
-        <input type="submit" name="mode1" value="1人"/>
-        <input type="submit" name="mode2" value="2人"/>
-    </form>
-    <a href="forTester.jsp">テスター画面</a>
+<div class="page">
+	<div class="logo01"><img src="img/logo/arai_logo_s.png" width="124" height="124" alt="企業ロゴ"></div>
+	<div class="logo02"><img src="img/logo/olympic_logo.png" width="182" height="124" alt="大会ロゴ"></div>
+	<header>
+	<p>ARAIはTOKYO2020を応援しています</p>
+	</header>
+
+	<div class="wapper">
+		<div class="backImg">
+
+			<div class="contents clearfix">
+				<div class="gameLogo"><img src="img/logo/pane-tori-logo2.png" width="307" height="124"></div>
+
+				<div class="form">
+					<div class="formBlock">
+					<p class="setsumei">パネルを選んで言葉を繋げるゲームです。</p>
+
+					<div class="playStart">
+					    <form name ="form" action="matching" method="post">
+                            <input type="hidden" name="key" value="<%=key%>">   
+                            <input type="text" name="name" size="20" maxlength="20" value="<%=name%>">
+                            <input type="submit" name="mode1" value="1人プレイ"/>
+                            <input type="submit" name="mode2" value="2人プレイ"/>
+                            <input type="reset" value="名前のリセット">
+                        </form>
+                        
+						<table class="setsumei">
+						<tr>
+						<th>1人プレイ</th>
+						<td>1人でどれだけパネルを取れるかチャレンジするモードです。</td>
+						</tr>
+						<tr>
+						<th>2人プレイ</th>
+						<td>他のプレイヤー（オートマッチング）との対戦です</td>
+						</table>
+
+					</div>
+					
+					</div><!--formBlock終わり-->
+				</div><!--form終わり-->
+
+			</div><!--contents終わり-->
+
+		</div><!--backImg終わり-->
+	</div><!--wapper終わり-->
+
+	<footer><p>copy 2017&nbsp; ARAI CORPORATION.<br>
+	IEなど一部のブラウザでは、表示が一部制限されることがあります。</p></footer>
+</div><!--page終わり-->
+<a href="forTester.jsp">テスト用</a>
 </body>
+</html>

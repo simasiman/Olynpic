@@ -51,7 +51,10 @@ if (name == null || name.isEmpty())
 <html>
 <head>
     <META charset="UTF-8">
-    <title>ゲーム画面</title>
+    <title>[pane-tori] - ゲーム</title>
+    <link rel="stylesheet" href="css/reset.css" type="text/css">
+    <link rel="stylesheet" href="css/game_base.css" type="text/css">
+    <link rel="stylesheet" href="css/game_2.css" type="text/css"><!--1人用と2人用でcssを切り替えたい-->
 <style type="text/css">
 .selected {
     border: 2px solid black;

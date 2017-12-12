@@ -51,7 +51,7 @@ if (name == null || name.isEmpty())
 <html>
 <head>
     <META charset="UTF-8">
-    <title>結果画面</title>
+    <title>[pane-tori] - リザルト</title>
 </head>
 <body>
     <h1>結果画面</h1>

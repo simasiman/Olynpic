@@ -266,18 +266,6 @@ public class Match
     }
 
     /**
-     * マッチ最初に使用可能な語句を設定します
-     */
-    public void setStartWord()
-    {
-        int listCount = panelList.size();
-
-        ArrayList<Word> wordList = panelList.get(new Random().nextInt(listCount)).getWordList();
-
-        Word word = wordList.get(0);
-    }
-
-    /**
      * 現在マッチで選択されている単語に対して、選択可能なパネルが存在するかを判断します
      * 
      * @return マッチ継続の可否

@@ -34,7 +34,7 @@ public class ResultServlet extends HttpServlet
         try
         {
             String key = (String) session.getAttribute("key");
-            String name = (String) session.getAttribute("name");
+            // String name = (String) session.getAttribute("name");
 
             Match match = MatchList.getMatchFinished(key);
             User user = match.getUser(key);
