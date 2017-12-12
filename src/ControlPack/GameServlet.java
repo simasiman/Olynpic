@@ -14,7 +14,6 @@ import modelPack.FinishedMatchList;
 import modelPack.Match;
 import modelPack.MatchList;
 import modelPack.Panel;
-import modelPack.User;
 
 @SuppressWarnings("serial")
 public class GameServlet extends HttpServlet
@@ -53,71 +52,41 @@ public class GameServlet extends HttpServlet
             Match m = MatchList.getMatch(key);
             if (m == null)
             {
+                // 終了済みマッチングリストからもユーザを検索
                 m = FinishedMatchList.getMatch(key);
             }
 
-            // ゲーム開始状態か判断する
             if (m == null)
             {
-                String gameMode1 = (String) req.getParameter("mode1");
-                String gameMode2 = (String) req.getParameter("mode2");
+                // マッチング列に存在しないユーザの場合、トップ画面に戻る
+                req.setAttribute("match", null);
+                resp.sendRedirect("top");
 
-                if (gameMode1 != null)
-                {
-                    // 初回ゲーム作成時
-                    // 一人用であれば必ず新規マッチ作成
-                    User user = new User(key, name);
-                    m = new Match();
-                    m.createMatch1(user);
-                }
-                else if (gameMode2 != null)
-                {
-                    // 初回ゲーム作成時
-                    // 待機状態のマッチが存在しないか探査
-                    m = MatchList.getMatchWaiting(key);
-
-                    User user = new User(key, name);
-
-                    if (m == null)
-                    {
-                        // 待機状態のマッチが存在しなければ新規マッチ登録
-                        m = new Match();
-                        m.createMatchMulti(user, 2);
-                    }
-                    else
-                    {
-                        // 待機状態のマッチが存在すれば、そのマッチにユーザ登録
-                        m.addUser(user);
-
-                        // 参加人数を満たした場合、ゲームスタート
-                        if (m.getPlayerCount() == m.getUserCount())
-                        {
-                            m.startMatch();
-                        }
-                    }
-                }
-                else
-                {
-                    FinishedMatchList.clean();
-                    m = FinishedMatchList.getMatch(key);
-
-                    if (m == null)
-                    {
-                        // マッチング列に存在しないユーザの場合、トップ画面に戻る
-                        req.setAttribute("match", null);
-                        resp.sendRedirect("top");
-                        return;
-                    }
-                }
+                return;
             }
             else
             {
-                // ゲーム継続時
-                if (req.getParameter("selectedPanel") != null)
+                // TODO : デバッグモード有効状態
+                if (req.getParameter("debugEnd") != null)
                 {
+                    m.finishMatch();
+                }
+
+                if (!m.isFinish() && m.timeOutCheck())
+                {
+                    // 制限時間外の場合
+                    if (m.isTimeOutEnd())
+                    {
+                        m.finishMatch();
+                    }
+                }
+                else if (req.getParameter("selectedPanel") != null)
+                {
+                    // ゲーム継続時
                     int selected = Integer.parseInt(req.getParameter("selectedPanel"));
                     Panel selectedPanel = m.getPanelList().get(selected);
-                    if (!selectedPanel.isUsed())
+
+                    if (m.isPanelRange(selected) && !selectedPanel.isUsed())
                     {
                         // 使われていないパネルが選択された場合
                         if (m.isFirstPick())
@@ -169,4 +138,5 @@ public class GameServlet extends HttpServlet
         RequestDispatcher rd = context.getRequestDispatcher(urlPath);
         rd.forward(req, resp);
     }
+
 }

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import modelPack.FinishedMatchList;
 import modelPack.Match;
 import modelPack.MatchList;
 import modelPack.User;
@@ -35,14 +36,17 @@ public class MatchingServlet extends HttpServlet
 
         try
         {
+            String status = (String) req.getParameter("status");
+
             String key = (String) req.getParameter("key");
             String name = (String) req.getParameter("name");
 
-            String status = (String) req.getParameter("status");
-
-            if (key == null || name == null)
+            if (key == null || key.isEmpty())
             {
                 key = (String) session.getAttribute("key");
+            }
+            if (name == null || name.isEmpty())
+            {
                 name = (String) session.getAttribute("name");
             }
 
@@ -51,25 +55,30 @@ public class MatchingServlet extends HttpServlet
 
             // 既にマッチング済のユーザであれば、試合に戻らせる
             Match m = MatchList.getMatch(key);
-
-            // ゲーム開始状態か判断する
             if (m == null)
             {
+                // 終了済みマッチングリストからもユーザを検索
+                m = FinishedMatchList.getMatch(key);
+            }
+
+            if (m == null)
+            {
+                // マッチングが存在しない場合、マッチングを新規作成する
                 String gameMode1 = (String) req.getParameter("mode1");
                 String gameMode2 = (String) req.getParameter("mode2");
 
-                if (gameMode1 != null)
+                if (gameMode1 != null && !gameMode1.isEmpty())
                 {
                     // 初回ゲーム作成時
                     // 一人用であれば必ず新規マッチ作成
                     User user = new User(key, name);
                     m = new Match();
-                    m.createMatch1(user);
+                    m.createMatch(user, 1);
+                    m.startMatch();
                 }
-                else if (gameMode2 != null)
+                else if (gameMode2 != null && !gameMode2.isEmpty())
                 {
                     // 初回ゲーム作成時
-
                     User user = new User(key, name);
 
                     // 待機状態のマッチが存在しないか探査
@@ -80,7 +89,7 @@ public class MatchingServlet extends HttpServlet
                         m.addUser(user);
 
                         // 参加人数を満たした場合、ゲームスタート
-                        if (m.getPlayerCount() == m.getUserCount())
+                        if (m.isCanMatchStart())
                         {
                             m.startMatch();
                         }
@@ -89,16 +98,18 @@ public class MatchingServlet extends HttpServlet
                     {
                         // 待機状態のマッチが存在しなければ新規マッチ登録
                         m = new Match();
-                        m.createMatchMulti(user, 2);
+                        m.createMatch(user, 2);
                     }
                 }
                 else
                 {
-                    // マッチング列に存在しないユーザの場合、トップ画面に戻る
+                    // 正規ルートでのアクセスでないと判断し、トップに戻す
                     req.setAttribute("match", null);
                     resp.sendRedirect("top");
+
                     return;
                 }
+
             }
             else if (status.equals("dest"))
             {
@@ -106,16 +117,20 @@ public class MatchingServlet extends HttpServlet
                 MatchList.remove(m);
                 req.setAttribute("match", null);
                 resp.sendRedirect("top");
+
                 return;
             }
 
-            // マッチング開始状態であれば、gameへ遷移
-            if (m.isStart())
+            req.setAttribute("match", m);
+
+            if (m != null && m.isStart())
             {
-                req.setAttribute("match", m);
+                // マッチングが存在すれば、gameへ遷移
                 resp.sendRedirect("game");
+
                 return;
             }
+
         }
         catch (Exception e)
         {

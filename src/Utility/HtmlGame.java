@@ -9,6 +9,8 @@ import modelPack.Word;
 
 public class HtmlGame
 {
+    private static final boolean DEBUG = true;
+
     private static final int PANEL_HEIGHT = 80;
     private static final int PANEL_WIDTH = 120;
 
@@ -23,6 +25,11 @@ public class HtmlGame
         if (!match.isFinish())
         {
             ret.append(Utility.appendLineIndent(indentCount, "<a href=\"game\">更新</a>"));
+
+            if (DEBUG)
+            {
+                ret.append(Utility.appendLineIndent(indentCount, "<a href=\"game?debugEnd=1\">※ゲーム終了</a>"));
+            }
         }
         else
         {
@@ -37,6 +44,8 @@ public class HtmlGame
         StringBuilder ret = new StringBuilder();
 
         int indentCount = 0;
+
+        ret.append(Utility.appendLineIndent(indentCount, String.valueOf(match.getTimeDiff())));
 
         if (match.isFinish())
         {
@@ -105,7 +114,7 @@ public class HtmlGame
                     "\" width=\"" + PANEL_WIDTH + "\">";
 
             boolean isCanSelect = match.isHisTurn(key) && !match.isFinish() && match.isEnableContinue() && !panel.isUsed();
-            boolean isCorrectSelect = !match.isFirstPick() && panel.isMatchWord(match.getNowWord()) > 0;
+            boolean isCorrectSelect = !match.isFirstPick() && panel.isMatchWord(match.getNowWord(), match.getSelectedWordList()) >= 0;
             boolean isUsed = !match.isFirstPick() && panel.isUsed();
 
             // CSS用のクラス名の定義
@@ -122,9 +131,9 @@ public class HtmlGame
                 cssClass += "selected ";
             }
 
-            // 選択可能であれば<a>タグで囲う
             if (isCanSelect || isCorrectSelect)
             {
+                // 選択可能であれば<a>タグで囲う
                 panelHtml = "<a href=\"game?selectedPanel=" + i + "\">" + panelImage + "</a>";
             }
             else

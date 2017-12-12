@@ -1,6 +1,7 @@
 package modelPack;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 public class MatchList
 {
@@ -9,6 +10,17 @@ public class MatchList
     static
     {
         matchList = new ArrayList<Match>();
+
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(new MatchListTimer(), 1000, 1000);
+    }
+
+    public static void CheckTimer()
+    {
+        for (Match match : matchList)
+        {
+            match.timeOutCheck();
+        }
     }
 
     public static ArrayList<Match> getMatchList()

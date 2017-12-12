@@ -1,6 +1,8 @@
+<%@page import="java.net.URLDecoder"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="modelPack.*"%>
-<%@ page import="Utility.Utility" %>
+<%@ page import="Utility.Utility"%>
+<%@ page import="java.net.*"%>
 <%@ page import="java.util.ArrayList"%>
 <%
 Cookie[] aryCookies = request.getCookies();
@@ -18,19 +20,35 @@ if (aryCookies != null)
         }
         else if (cookie.equals("name"))
         {
-            name = aryCookies[i].getValue();            
+            name = URLDecoder.decode(aryCookies[i].getValue(), "UTF-8");
         }
     }
 }
 
-//初回アクセス時の挙動については要修正
 if (key == null || key.isEmpty())
 {
-    Cookie cooKey = new Cookie("key", Utility.getKey());
+    key = Utility.getDefaultKey();
+    Cookie cooKey = new Cookie("key", key);
     response.addCookie(cooKey);
-    response.sendRedirect("index.jsp");
+}
+
+if (name == null || name.isEmpty())
+{
+    name = Utility.getDefaultName();
+    Cookie cooKey = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
+    response.addCookie(cooKey);
+}
+
+//終了済みのマッチングが存在しないかを確認
+Match match = FinishedMatchList.getMatch(key);
+if (match != null)
+{
+    // 終了済みのマッチングが存在すれば、リザルト画面へ遷移
+    response.sendRedirect("result");
     return;
 }
+
+
 %>
 <!DOCTYPE html>
 <html>
@@ -42,8 +60,8 @@ if (key == null || key.isEmpty())
     <form name ="form" action="matching" method="post">
         <input type="hidden" name="key" value="<%=key%>">   
         <input type="text" name="name" value="<%=name%>">
-        <input type="submit" name="mode1" value="一人対戦"/>
-        <input type="submit" name="mode2" value="二人対戦"/>
+        <input type="submit" name="mode1" value="1人"/>
+        <input type="submit" name="mode2" value="2人"/>
     </form>
     <a href="forTester.jsp">テスター画面</a>
 </body>

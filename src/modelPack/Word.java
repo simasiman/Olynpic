@@ -2,16 +2,14 @@ package modelPack;
 
 public class Word
 {
-    private int id;
     private String word;
     private String wordRead;
     private String wordHead;
     private String wordTail;
     private int level;
 
-    public Word(int id, int level, String word, String wordRead, String wordHead, String wordTail)
+    public Word(int level, String word, String wordRead, String wordHead, String wordTail)
     {
-        this.id = id;
         this.level = level;
         this.word = word;
         this.wordRead = wordRead;

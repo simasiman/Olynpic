@@ -133,8 +133,7 @@ public class SiritoriDao
                 ResultSet rs2 = null;
 
                 String sql2 = ""
-                        + "SELECT word_id, "
-                        + "       word_disp, "
+                        + "SELECT word_disp, "
                         + "       word_read, "
                         + "       level, "
                         + "       LEFT(word_read, 1) AS word_head, "
@@ -152,14 +151,13 @@ public class SiritoriDao
                 {
                     while (rs2.next())
                     {
-                        int id = rs2.getInt("word_id");
                         int level = rs2.getInt("level");
                         String word = rs2.getString("word_disp");
                         String wordRead = rs2.getString("word_read");
                         String wordHead = rs2.getString("word_head");
                         String wordTail = rs2.getString("word_tail");
 
-                        Word w = new Word(id, level, word, wordRead, wordHead, wordTail);
+                        Word w = new Word(level, word, wordRead, wordHead, wordTail);
 
                         p.addWordList(w);
                     }

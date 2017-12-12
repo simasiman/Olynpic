@@ -1,11 +1,19 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="modelPack.*"%>
 <%@ page import="Utility.Utility" %>
+<%@ page import="java.net.*"%>
 <%@ page import="java.util.ArrayList"%>
 <%
 Match match = (Match)request.getAttribute("match");
 
+if (match == null)
+{
+    response.sendRedirect("index.jsp");
+    return;
+}
+
 Cookie[] aryCookies = request.getCookies();
+
 String key = null;
 String name = null;
 
@@ -16,27 +24,26 @@ if (aryCookies != null)
         String cookie = aryCookies[i].getName();
         if (cookie.equals("key"))
         {
-            key = aryCookies[i].getValue();            
+            key = aryCookies[i].getValue();
         }
         else if (cookie.equals("name"))
         {
-            name = aryCookies[i].getValue();            
+            name = URLDecoder.decode(aryCookies[i].getValue(), "UTF-8");
         }
     }
 }
 
 if (key == null || key.isEmpty())
 {
-    Cookie cooKey = new Cookie("key", Utility.getKey());
-    response.addCookie(cooKey);
-    response.sendRedirect("index.jsp");
+    response.sendRedirect("index");
     return;
 }
 
-if (name == null || name .isEmpty())
+if (name == null || name.isEmpty())
 {
-    Cookie cooName = new Cookie("name", (String)session.getAttribute("name"));
-    response.addCookie(cooName);
+    name = Utility.getDefaultName();
+    Cookie cooKey = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
+    response.addCookie(cooKey);
 }
 
 %>
@@ -44,7 +51,7 @@ if (name == null || name .isEmpty())
 <html>
 <head>
     <META charset="UTF-8">
-    <title>ゲーム画面</title>
+    <title>マッチング画面</title>
 </head>
 </head>
 <body>

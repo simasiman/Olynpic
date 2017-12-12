@@ -6,15 +6,19 @@ import java.util.Random;
 
 public class Match
 {
+    private final int MATCH_TIME = 15;
+
     private int matchNo = 0;
 
     private ArrayList<User> userList = new ArrayList<User>();
 
     private ArrayList<Panel> panelList = new ArrayList<Panel>();
     private ArrayList<Integer> selectedPanelList = new ArrayList<Integer>();
+    private ArrayList<Word> selectedWordList = new ArrayList<Word>();
 
     private Date startTime;
     private Date endTime;
+    private Date selectedTime;
 
     private int playerCount = 0;
     private int playerTurn = 0;
@@ -22,12 +26,12 @@ public class Match
     private boolean isStart = false;
     private boolean isFirstPick = true;
     private boolean isFinish = false;
+    private boolean isClean = false;
 
     private Word nowWord;
 
     private int winUser = 0;
-
-    private int score;
+    private int score = 0;
 
     public int getMatchNo()
     {
@@ -70,11 +74,6 @@ public class Match
     public ArrayList<Panel> getPanelList()
     {
         return panelList;
-    }
-
-    public void setPanelList(ArrayList<Panel> panelList)
-    {
-        this.panelList = panelList;
     }
 
     public void createPanelList()
@@ -161,41 +160,59 @@ public class Match
     {
         isFirstPick = false;
 
-        Word firstWord = panel.getWordList().get(0);
-
-        panel.setSelectedUserId(key);
-        panel.setSelectedWord(firstWord);
-
-        setNowWord(firstWord);
-        addSelectPanel(key, panel);
-        // addScore(key, firstWord);
+        Word word = panel.getWordList().get(0);
+        selectWord(true, key, word, panel);
 
         setPlayerTurnNext();
     }
 
     public boolean nextPick(String key, Panel panel)
     {
-        int nextWordIndex = panel.isMatchWord(nowWord);
+        // ユーザのTimeOutフラグを解除
+        for (User user : userList)
+        {
+            if (user.getKey().equals(key))
+            {
+                user.setTimeOut(false);
+            }
+        }
+
+        selectedTime = new Date();
+
+        int nextWordIndex = panel.isMatchWord(nowWord, selectedWordList);
         if (nextWordIndex < 0)
         {
             // 単語がミスしている場合
             addMissCount(key);
+            setPlayerTurnNext();
+
             return false;
         }
 
         // 単語がマッチしている場合
         Word word = panel.getWordList().get(nextWordIndex);
+        selectWord(false, key, word, panel);
+
+        return true;
+    }
+
+    private void selectWord(boolean isFirst, String key, Word word, Panel panel)
+    {
+        // 単語がマッチしている場合
+        selectedWordList.add(word);
 
         panel.setSelectedUserId(key);
         panel.setSelectedWord(word);
 
         setNowWord(word);
         addSelectPanel(key, panel);
-        addScore(key, word);
+
+        if (!isFirst)
+        {
+            addScore(key, word);
+        }
 
         setPlayerTurnNext();
-
-        return true;
     }
 
     public boolean isFinish()
@@ -206,6 +223,16 @@ public class Match
     public void setFinish(boolean isFinish)
     {
         this.isFinish = isFinish;
+    }
+
+    public boolean isClean()
+    {
+        return isClean;
+    }
+
+    public void setClean(boolean isClean)
+    {
+        this.isClean = isClean;
     }
 
     public void setWinUser(int winUser)
@@ -264,7 +291,7 @@ public class Match
 
         for (Panel p : panelList)
         {
-            if (!p.isUsed() && p.isMatchWord(nowWord) >= 0)
+            if (!p.isUsed() && p.isMatchWord(nowWord, selectedWordList) >= 0)
             {
                 return true;
             }
@@ -281,26 +308,23 @@ public class Match
      */
     public void createMatch1(User u)
     {
-        addUser(u);
-        setStart(true);
-        setStartTime(new Date());
-        setMatchNo(MatchList.getNextMatchNumber());
-        setPlayerCount(1);
-        setPlayerTurn(0);
+        this.userList.add(u);
+        this.matchNo = MatchList.getNextMatchNumber();
+        this.playerCount = 1;
+        this.playerTurn = 0;
 
         try
         {
-            setPanelList((new SiritoriDao()).getRandomPanel(24));
+            panelList = ((new SiritoriDao()).getRandomPanel(24));
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return;
         }
 
         // マッチ管理用リストに追加
         MatchList.add(this);
-
-        // setStartWord();
     }
 
     /**
@@ -312,34 +336,39 @@ public class Match
      *            プレイヤー人数
      * @return マッチング管理用インスタンス
      */
-    public void createMatchMulti(User u, int playerCount)
+    public void createMatch(User u, int playerCount)
     {
-        addUser(u);
-        // setStartTime(new Date());
-        setMatchNo(MatchList.getNextMatchNumber());
-        setPlayerCount(playerCount);
-        // 先行後攻をランダム付与
-        setPlayerTurn(new Random().nextInt(playerCount));
+        this.userList.add(u);
+        this.matchNo = MatchList.getNextMatchNumber();
+        this.playerCount = playerCount;
+
+        this.playerTurn = (playerCount == 1) ? 0 : new Random().nextInt(playerCount - 1);
 
         try
         {
-            setPanelList((new SiritoriDao()).getRandomPanel(24));
+            panelList = ((new SiritoriDao()).getRandomPanel(24));
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return;
         }
 
         // マッチ管理用リストに追加
         MatchList.add(this);
+    }
 
-        // setStartWord();
+    public boolean isCanMatchStart()
+    {
+        return getPlayerCount() == getUserCount();
     }
 
     public void startMatch()
     {
         startTime = new Date();
         isStart = true;
+
+        selectedTime = new Date();
     }
 
     /**
@@ -354,36 +383,6 @@ public class Match
 
         FinishedMatchList.add(this);
         MatchList.remove(this);
-    }
-
-    private void setWinLose()
-    {
-        if (userList.size() == 1)
-        {
-            userList.get(0).setWin(User.WIN);
-        }
-        else
-        {
-            // とりあえず二人用の対戦結果確認だけ判定
-            User user1 = userList.get(0);
-            User user2 = userList.get(1);
-
-            if (user1.getScore() > user1.getScore())
-            {
-                user1.setWin(User.WIN);
-                user2.setWin(User.LOSE);
-            }
-            else if (user1.getScore() < user2.getScore())
-            {
-                user1.setWin(User.LOSE);
-                user2.setWin(User.WIN);
-            }
-            else
-            {
-                user1.setWin(User.DRAW);
-                user2.setWin(User.DRAW);
-            }
-        }
     }
 
     public boolean isHisTurn(String key)
@@ -421,6 +420,110 @@ public class Match
     public int getUserWin(String key)
     {
         return getUser(key).getWin();
+    }
+
+    public ArrayList<Word> getSelectedWordList()
+    {
+        return selectedWordList;
+    }
+
+    public Date getSelectedTime()
+    {
+        return selectedTime;
+    }
+
+    public void setSelectedTime(Date selectedTime)
+    {
+        this.selectedTime = selectedTime;
+    }
+
+    // private method
+    private void setWinLose()
+    {
+        if (userList.size() == 1)
+        {
+            userList.get(0).setWin(User.WIN);
+        }
+        else
+        {
+            // とりあえず二人用の対戦結果確認だけ判定
+            User user1 = userList.get(0);
+            User user2 = userList.get(1);
+
+            if (user1.getScore() > user1.getScore())
+            {
+                user1.setWin(User.WIN);
+                user2.setWin(User.LOSE);
+            }
+            else if (user1.getScore() < user2.getScore())
+            {
+                user1.setWin(User.LOSE);
+                user2.setWin(User.WIN);
+            }
+            else
+            {
+                user1.setWin(User.DRAW);
+                user2.setWin(User.DRAW);
+            }
+        }
+    }
+
+    public int getTimeDiff()
+    {
+        return (int) (((new Date()).getTime() - selectedTime.getTime()) / 1000);
+    }
+
+    public boolean timeOutCheck()
+    {
+        if (!isStart && !isFinish)
+        {
+            return false;
+        }
+
+        // 制限時間外の場合
+        if (isTimeOutEnd())
+        {
+            finishMatch();
+        }
+
+        User user = userList.get(playerTurn);
+
+        if (getTimeDiff() >= MATCH_TIME)
+        {
+            user.setTimeOut(true);
+            setPlayerTurnNext();
+            setSelectedTime(new Date());
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isTimeOutEnd()
+    {
+        for (User user : userList)
+        {
+            if (!user.isTimeOut())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isPanelRange(int index)
+    {
+        try
+        {
+            panelList.get(index);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
 }

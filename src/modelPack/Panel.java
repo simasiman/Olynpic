@@ -76,8 +76,41 @@ public class Panel
 
             if (tH.equals(wH) || tH.equals(wT) || tT.equals(wH) || tT.equals(wT))
             {
-                // selectedWord = word;
                 return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public int isMatchWord(Word word, ArrayList<Word> selectedWordList)
+    {
+        String tH = word.getWordHead();
+        String tT = word.getWordTail();
+
+        for (int i = 0; i < wordList.size(); i++)
+        {
+            Word w = wordList.get(i);
+            String wH = w.getWordHead();
+            String wT = w.getWordTail();
+
+            if (tH.equals(wH) || tH.equals(wT) || tT.equals(wH) || tT.equals(wT))
+            {
+                // 既に使用された単語でないかを確認
+                boolean isHit = false;
+                for (int j = 0; j < selectedWordList.size(); j++)
+                {
+                    if (w.getWordRead().equals(selectedWordList.get(j).getWordRead()))
+                    {
+                        isHit = true;
+                        break;
+                    }
+                }
+                if (!isHit)
+                {
+                    // 使用単語リストに存在しなければTRUE
+                    return i;
+                }
             }
         }
 

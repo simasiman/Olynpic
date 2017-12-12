@@ -11,45 +11,18 @@ public class FinishedMatchList
         matchList.add(m);
     }
 
-    public static void clean()
-    {
-        for (Match match : matchList)
-        {
-            boolean isClean = true;
-
-            for (User user : match.getUserList())
-            {
-                if (!user.isResultWatch())
-                {
-                    isClean = false;
-                }
-            }
-
-            if (isClean)
-            {
-                matchList.remove(match);
-            }
-        }
-    }
-
     public static Match getMatch(String key)
     {
+        // 探査前にマッチングリストのクリーンを行う
+        clean();
+
         for (Match match : matchList)
         {
             User user = match.getUser(key);
-
-            if (user == null)
+            if (user != null && !user.isResultWatch())
             {
-                continue;
+                return match;
             }
-
-            if (user.isResultWatch())
-            {
-                continue;
-            }
-
-            user.setResultWatch(true);
-            return match;
         }
 
         return null;
@@ -59,4 +32,32 @@ public class FinishedMatchList
     {
         return matchList;
     }
+
+    private static void clean()
+    {
+        for (Match match : matchList)
+        {
+            match.setClean(true);
+
+            for (User user : match.getUserList())
+            {
+                if (!user.isResultWatch())
+                {
+                    // 未閲覧のユーザがいる限り削除を行わない
+                    match.setClean(false);
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i < matchList.size(); i++)
+        {
+            Match match = matchList.get(i);
+            if (match.isClean())
+            {
+                matchList.remove(match);
+            }
+        }
+    }
+
 }

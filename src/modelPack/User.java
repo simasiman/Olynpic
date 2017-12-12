@@ -10,7 +10,9 @@ public class User
     private int score;
     private int miss;
     private int win;
-    private boolean isResultWatch;
+
+    private boolean isTimeOut = false;
+    private boolean isResultWatch = false;
 
     private ArrayList<Panel> selectedPanel = new ArrayList<Panel>();
 
@@ -26,6 +28,7 @@ public class User
         score = 0;
         miss = 0;
         win = -1;
+        isResultWatch = false;
         isResultWatch = false;
     }
 
@@ -103,6 +106,16 @@ public class User
     public void setResultWatch(boolean isResultWatch)
     {
         this.isResultWatch = isResultWatch;
+    }
+
+    public boolean isTimeOut()
+    {
+        return isTimeOut;
+    }
+
+    public void setTimeOut(boolean isTimeOut)
+    {
+        this.isTimeOut = isTimeOut;
     }
 
     public ArrayList<Panel> getSelectedPanel()

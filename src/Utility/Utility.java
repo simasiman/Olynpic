@@ -2,31 +2,26 @@ package Utility;
 
 import java.util.Date;
 
-import modelPack.SiritoriDao;
-
 public class Utility
 {
     public static final int INDENT_SPACE = 4;
 
-    public static String getKey()
+    public static String getDefaultKey()
     {
         return (String.valueOf(new Date().getTime()));
     }
 
-    public static String getName(String key)
+    public static String getDefaultName()
     {
-        try
-        {
-            return (new SiritoriDao()).selectUserName(key);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        return "名もなきアスリート";
     }
 
-    public static String appendIndent(int indentCount)
+    public static String appendLineIndent(int indentCount, String line)
+    {
+        return appendIndent(indentCount) + appendLine(line);
+    }
+
+    private static String appendIndent(int indentCount)
     {
         String ret = "";
 
@@ -41,14 +36,9 @@ public class Utility
         return ret;
     }
 
-    public static String appendLine(String line)
+    private static String appendLine(String line)
     {
         return line + "\r\n";
-    }
-
-    public static String appendLineIndent(int indentCount, String line)
-    {
-        return appendIndent(indentCount) + appendLine(line);
     }
 
 }

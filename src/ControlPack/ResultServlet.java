@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import modelPack.FinishedMatchList;
 import modelPack.Match;
+import modelPack.User;
 
 @SuppressWarnings("serial")
 public class ResultServlet extends HttpServlet
@@ -30,16 +31,12 @@ public class ResultServlet extends HttpServlet
 
         try
         {
-            String key = (String) req.getParameter("key");
-            String name = (String) req.getParameter("name");
-
-            if (key == null || name == null)
-            {
-                key = (String) session.getAttribute("key");
-                name = (String) session.getAttribute("name");
-            }
+            String key = (String) session.getAttribute("key");
+            String name = (String) session.getAttribute("name");
 
             Match match = FinishedMatchList.getMatch(key);
+            User user = match.getUser(key);
+            user.setResultWatch(true);
 
             req.setAttribute("matchResult", match);
         }

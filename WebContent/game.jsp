@@ -1,20 +1,19 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="modelPack.*"%>
 <%@ page import="Utility.*" %>
+<%@ page import="java.net.*"%>
 <%@ page import="java.util.ArrayList"%>
 <%
-// マッチング情報の取得
 Match match = (Match)request.getAttribute("match");
 
-// マッチング情報が存在しなければ、トップ画面に遷移する
 if (match == null)
 {
-    response.sendRedirect("top");
+    response.sendRedirect("index.jsp");
     return;
 }
 
-// クッキーによる名前の取得と設定
 Cookie[] aryCookies = request.getCookies();
+
 String key = null;
 String name = null;
 
@@ -25,29 +24,26 @@ if (aryCookies != null)
         String cookie = aryCookies[i].getName();
         if (cookie.equals("key"))
         {
-            key = aryCookies[i].getValue();            
+            key = aryCookies[i].getValue();
         }
         else if (cookie.equals("name"))
         {
-            name = aryCookies[i].getValue();            
+            name = URLDecoder.decode(aryCookies[i].getValue(), "UTF-8");
         }
     }
 }
 
-// キーが未設定であればクッキーに設定
 if (key == null || key.isEmpty())
 {
-    Cookie cooKey = new Cookie("key", Utility.getKey());
-    response.addCookie(cooKey);
-    response.sendRedirect("index.jsp");
+    response.sendRedirect("index");
     return;
 }
 
-// 名前が未設定であればクッキーに設定
-if (name == null || name .isEmpty())
+if (name == null || name.isEmpty())
 {
-    Cookie cooName = new Cookie("name", (String)session.getAttribute("name"));
-    response.addCookie(cooName);
+    name = Utility.getDefaultName();
+    Cookie cooKey = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
+    response.addCookie(cooKey);
 }
 
 %>
@@ -56,7 +52,6 @@ if (name == null || name .isEmpty())
 <head>
     <META charset="UTF-8">
     <title>ゲーム画面</title>
-    
 <style type="text/css">
 .selected {
     border: 2px solid black;
@@ -75,6 +70,7 @@ if (name == null || name .isEmpty())
 </head>
 </head>
 <body>
+<!-- 各種メッセージの表示 -->
 <!-- 各種ボタンの表示 -->
 <%=HtmlGame.makeGameReloadHtml(match, key)%>
 <!-- ゲーム状況の表示 -->

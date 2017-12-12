@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=Windows-31J"%>
 <%@ page import="modelPack.*"%>
 <%@ page import="Utility.*" %>
+<%@ page import="java.net.*"%>
 <%@ page import="java.util.ArrayList"%>
 
 <%
@@ -20,24 +21,9 @@ if (aryCookies != null)
         }
         else if (cookie.equals("name"))
         {
-            name = aryCookies[i].getValue();            
+            name = URLDecoder.decode(aryCookies[i].getValue(), "UTF-8");
         }
     }
-}
-
-//初回アクセス時の挙動については要修正
-if (key == null || key.isEmpty())
-{
-    Cookie cooKey = new Cookie("key", Utility.getKey());
-    response.addCookie(cooKey);
-    response.sendRedirect("index.jsp");
-    return;
-}
-
-if (name != null)
-{
-    Cookie cooName = new Cookie("name", name);
-    response.addCookie(cooName);
 }
 
 %>
