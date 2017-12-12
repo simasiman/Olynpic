@@ -111,7 +111,7 @@ public class MatchingServlet extends HttpServlet
                 }
 
             }
-            else if (status.equals("dest"))
+            else if (status != null && status.equals("dest"))
             {
                 // 「破棄」の選択時、マッチングを破棄してトップ画面に戻る
                 MatchList.remove(m);
