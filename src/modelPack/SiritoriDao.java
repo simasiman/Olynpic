@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import Utility.GameSetting;
+
 public class SiritoriDao
 {
     private Connection connection;
@@ -15,11 +17,11 @@ public class SiritoriDao
     {
         Class.forName("com.mysql.jdbc.Driver");
 
-        String server = "localhost";
-        String database = "Olynpic";
-        String user = "Mulder";
-        String password = "TrustNo1";
-        String encoding = "UTF-8";
+        String server = GameSetting.DB_SERVER;
+        String database = GameSetting.DB_DATABASE;
+        String user = GameSetting.DB_USER;
+        String password = GameSetting.DB_PASS;
+        String encoding = GameSetting.DB_ENCOFING;
 
         String strConn = "jdbc:mysql://" + server + "/" + database + "?user=" + user + "&password=" + password + "&useUnicode=true&characterEncoding=" + encoding;
 

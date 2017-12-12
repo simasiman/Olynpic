@@ -27,11 +27,6 @@ public class Word
         return wordRead;
     }
 
-    public int getLevel()
-    {
-        return level;
-    }
-
     public String checkSiritori(String wordRead)
     {
         if (wordRead.endsWith(this.wordRead.substring(0, 1)))

@@ -58,7 +58,7 @@ if (aryCookies != null)
         <th>パネル枚数</th>
     </tr>
     <%for (Match m : MatchList.getMatchList()){ 
-          if (m.getPlayerCount() != 1)
+          if (m.isFinish() || m.getPlayerCount() != 1)
           {
               continue;
           }
@@ -89,7 +89,7 @@ if (aryCookies != null)
         <th>パネル枚数</th>
     </tr>
     <%for (Match m : MatchList.getMatchList()){ 
-          if (m.getPlayerCount() != 2)
+          if (m.isFinish() || m.getPlayerCount() != 2)
           {
               continue;
           }
@@ -117,8 +117,8 @@ if (aryCookies != null)
         <th>終了時間</th>
         <th>パネル枚数</th>
     </tr>
-    <%for (Match m : FinishedMatchList.getMatchList()){ 
-          if (m.getPlayerCount() != 1)
+    <%for (Match m : MatchList.getMatchList()){ 
+          if (!m.isFinish() || m.getPlayerCount() != 1)
           {
               continue;
           }
@@ -146,8 +146,8 @@ if (aryCookies != null)
         <th>終了時間</th>
         <th>パネル枚数</th>
     </tr>
-    <%for (Match m : FinishedMatchList.getMatchList()){ 
-          if (m.getPlayerCount() != 2)
+    <%for (Match m : MatchList.getMatchList()){ 
+          if (!m.isFinish() || m.getPlayerCount() != 2)
           {
               continue;
           }

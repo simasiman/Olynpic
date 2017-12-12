@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import Utility.GameSetting;
+
 public class Match
 {
-    private final int MATCH_TIME = 15;
-
     private int matchNo = 0;
 
     private ArrayList<User> userList = new ArrayList<User>();
@@ -380,9 +380,6 @@ public class Match
         isFinish = true;
 
         setWinLose();
-
-        FinishedMatchList.add(this);
-        MatchList.remove(this);
     }
 
     public boolean isHisTurn(String key)
@@ -475,7 +472,7 @@ public class Match
 
     public boolean timeOutCheck()
     {
-        if (!isStart && !isFinish)
+        if (!isStart || isFinish)
         {
             return false;
         }
@@ -488,7 +485,7 @@ public class Match
 
         User user = userList.get(playerTurn);
 
-        if (getTimeDiff() >= MATCH_TIME)
+        if (getTimeDiff() >= GameSetting.MATCH_TIME)
         {
             user.setTimeOut(true);
             setPlayerTurnNext();

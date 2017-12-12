@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import modelPack.FinishedMatchList;
 import modelPack.Match;
 import modelPack.MatchList;
 import modelPack.Panel;
@@ -32,8 +31,6 @@ public class GameServlet extends HttpServlet
 
         String urlPath = "/";
 
-        // TODO:重複したユーザのマッチング登録が発生しないかを確認
-
         try
         {
             String key = (String) req.getParameter("key");
@@ -53,7 +50,7 @@ public class GameServlet extends HttpServlet
             if (m == null)
             {
                 // 終了済みマッチングリストからもユーザを検索
-                m = FinishedMatchList.getMatch(key);
+                m = MatchList.getMatchFinished(key);
             }
 
             if (m == null)

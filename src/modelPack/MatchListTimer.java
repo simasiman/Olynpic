@@ -8,7 +8,7 @@ public class MatchListTimer extends TimerTask
     {
         try
         {
-            // MatchList.CheckTimer();
+            MatchList.CheckTimer();
         }
         catch (Exception e)
         {

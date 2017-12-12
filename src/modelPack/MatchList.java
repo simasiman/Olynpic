@@ -15,6 +15,38 @@ public class MatchList
         timer.scheduleAtFixedRate(new MatchListTimer(), 1000, 1000);
     }
 
+    public static void clean()
+    {
+        for (Match match : matchList)
+        {
+            if (!match.isFinish())
+            {
+                continue;
+            }
+
+            match.setClean(true);
+
+            for (User user : match.getUserList())
+            {
+                if (!user.isResultWatch())
+                {
+                    // 未閲覧のユーザがいる限り削除を行わない
+                    match.setClean(false);
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i < matchList.size(); i++)
+        {
+            Match match = matchList.get(i);
+            if (match.isClean())
+            {
+                matchList.remove(match);
+            }
+        }
+    }
+
     public static void CheckTimer()
     {
         for (Match match : matchList)
@@ -34,7 +66,7 @@ public class MatchList
 
         for (Match match : matchList)
         {
-            if (ret < match.getMatchNo())
+            if (ret <= match.getMatchNo())
             {
                 ret = match.getMatchNo();
             }
@@ -48,11 +80,31 @@ public class MatchList
         matchList.add(m);
     }
 
-    public static Match getMatchWaiting(String key)
+    public static Match getMatchFinished(String key)
     {
+        // 探査前にマッチングリストのクリーンを行う
+        clean();
+
         for (Match match : matchList)
         {
-            if (!match.isStart() && match.getUser(key) == null && match.getPlayerCount() != 1)
+            User user = match.getUser(key);
+            if (match.isFinish() && user != null && !user.isResultWatch())
+            {
+                return match;
+            }
+        }
+
+        return null;
+    }
+
+    public static Match getMatchWaiting(String key)
+    {
+        // 探査前にマッチングリストのクリーンを行う
+        clean();
+
+        for (Match match : matchList)
+        {
+            if (!match.isStart() && !match.isFinish() && match.getUser(key) == null && match.getPlayerCount() != 1)
             {
                 return match;
             }
@@ -63,18 +115,18 @@ public class MatchList
 
     public static Match getMatch(String key)
     {
-        Match ret = null;
+        // 探査前にマッチングリストのクリーンを行う
+        clean();
 
         for (Match match : matchList)
         {
             if (!match.isFinish() && match.getUser(key) != null)
             {
-                ret = match;
-                break;
+                return match;
             }
         }
 
-        return ret;
+        return null;
     }
 
     public static void remove(Match match)
@@ -82,21 +134,4 @@ public class MatchList
         matchList.remove(match);
     }
 
-    public static Match getAndRemoveFinishedMatch(String key)
-    {
-        Match ret = null;
-
-        for (Match match : matchList)
-        {
-            if (match.isFinish() && match.getUser(key) != null)
-            {
-                ret = match;
-                matchList.remove(match);
-
-                break;
-            }
-        }
-
-        return ret;
-    }
 }

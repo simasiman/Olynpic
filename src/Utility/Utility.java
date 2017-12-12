@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Utility
 {
-    public static final int INDENT_SPACE = 4;
+    private static final int INDENT_SPACE = 4;
 
     public static String getDefaultKey()
     {

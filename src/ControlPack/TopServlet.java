@@ -24,15 +24,10 @@ public class TopServlet extends HttpServlet
         req.setCharacterEncoding("UTF-8");
         // HttpSession session = req.getSession();
 
-        try
-        {
-        }
-        catch (Exception e)
-        {
-        }
+        String urlPath = "/top.jsp";
 
         ServletContext context = getServletContext();
-        RequestDispatcher rd = context.getRequestDispatcher("/top.jsp");
+        RequestDispatcher rd = context.getRequestDispatcher(urlPath);
         rd.forward(req, resp);
     }
 }
