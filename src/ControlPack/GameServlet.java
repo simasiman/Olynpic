@@ -69,9 +69,13 @@ public class GameServlet extends HttpServlet
                     m.finishMatch();
                 }
 
-                if (!m.isFinish() && m.timeOutCheck())
+                if (m.isFinish())
                 {
-                    // 制限時間外の場合
+                    // ゲーム終了時
+                }
+                else if (!m.isFinish() && m.timeOutCheck())
+                {
+                    // 制限時間外の場合(タイマー停止時はここに入る)
                     if (m.isTimeOutEnd())
                     {
                         m.finishMatch();
