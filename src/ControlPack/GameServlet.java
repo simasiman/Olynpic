@@ -29,7 +29,7 @@ public class GameServlet extends HttpServlet
         req.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession();
 
-        String urlPath = "/";
+        String urlPath = "/game.jsp";
 
         try
         {
@@ -61,30 +61,31 @@ public class GameServlet extends HttpServlet
 
                 return;
             }
-            else
-            {
-                // TODO : デバッグモード有効状態
-                if (req.getParameter("debugEnd") != null)
-                {
-                    m.finishMatch();
-                }
 
-                if (m.isFinish())
-                {
-                    // ゲーム終了時
-                }
-                else if (!m.isFinish() && m.timeOutCheck())
-                {
-                    // 制限時間外の場合(タイマー停止時はここに入る)
-                    if (m.isTimeOutEnd())
-                    {
-                        m.finishMatch();
-                    }
-                }
-                else if (req.getParameter("selectedPanel") != null)
+            if (!m.isStart())
+            {
+                // 開始されていない状態であれば、マッチング画面に戻る
+                req.setAttribute("match", m);
+                resp.sendRedirect("matching");
+
+                return;
+            }
+
+            // TODO : デバッグモード有効状態
+            if (req.getParameter("debugEnd") != null)
+            {
+                m.finishMatch();
+            }
+
+            // タイマーが意図せず停止している場合に備え、チェック処理を追加する
+            m.timeOutCheck();
+            if (!m.isFinish())
+            {
+                String paramSelectedPanel = (String) req.getParameter("selectedPanel");
+                if (paramSelectedPanel != null && !paramSelectedPanel.isEmpty())
                 {
                     // ゲーム継続時
-                    int selected = Integer.parseInt(req.getParameter("selectedPanel"));
+                    int selected = Integer.parseInt(paramSelectedPanel);
                     Panel selectedPanel = m.getPanelList().get(selected);
 
                     if (m.isPanelRange(selected) && !selectedPanel.isUsed())
@@ -104,28 +105,14 @@ public class GameServlet extends HttpServlet
                         {
                             // 最初以降のパネル選択の場合
                             // パネル選択不可能の場合
-                            req.setAttribute("message", "MISS");
                         }
                     }
                 }
-                else
+
+                if (!m.isEnableContinue())
                 {
-                    // ゲーム更新時
+                    m.finishMatch();
                 }
-            }
-
-            if (!m.isFinish() && !m.isEnableContinue())
-            {
-                m.finishMatch();
-            }
-
-            if (!m.isStart())
-            {
-                urlPath = "/matching.jsp";
-            }
-            else
-            {
-                urlPath = "/game.jsp";
             }
 
             req.setAttribute("match", m);

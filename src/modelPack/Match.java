@@ -196,7 +196,6 @@ public class Match
 
     private void selectWord(String key, Word word, Panel panel)
     {
-        // 単語がマッチしている場合
         selectedWordList.add(word);
 
         panel.setSelectedUserId(key);
@@ -453,11 +452,26 @@ public class Match
         return (int) (((new Date()).getTime() - selectedTime.getTime()) / 1000);
     }
 
-    public boolean timeOutCheck()
+    public void timeOutCheck()
     {
         if (!isStart || isFinish)
         {
-            return false;
+            return;
+        }
+
+        if (getTimeDiff() >= GameSetting.MATCH_TIME)
+        {
+            User user = userList.get(playerTurn);
+
+            if (user.isTimeOut())
+            {
+                // 既にタイムアウト状態の場合
+                finishMatch();
+            }
+
+            user.setTimeOut(true);
+            setPlayerTurnNext();
+            setSelectedTime(new Date());
         }
 
         // 制限時間外の場合
@@ -465,19 +479,6 @@ public class Match
         {
             finishMatch();
         }
-
-        User user = userList.get(playerTurn);
-
-        if (getTimeDiff() >= GameSetting.MATCH_TIME)
-        {
-            user.setTimeOut(true);
-            setPlayerTurnNext();
-            setSelectedTime(new Date());
-
-            return true;
-        }
-
-        return false;
     }
 
     public boolean isTimeOutEnd()
