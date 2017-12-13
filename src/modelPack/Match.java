@@ -134,6 +134,7 @@ public class Match
     public void setPlayerTurnNext()
     {
         setPlayerTurn((getPlayerTurn() + 1) % getPlayerCount());
+        setSelectedTime(new Date());
     }
 
     public boolean isStart()
@@ -167,13 +168,8 @@ public class Match
     public boolean nextPick(String key, Panel panel)
     {
         // ユーザのTimeOutフラグを解除
-        for (User user : userList)
-        {
-            if (user.getKey().equals(key))
-            {
-                user.setTimeOut(false);
-            }
-        }
+        User user = getUser(key);
+        user.setTimeOut(false);
 
         selectedTime = new Date();
 
@@ -471,7 +467,6 @@ public class Match
 
             user.setTimeOut(true);
             setPlayerTurnNext();
-            setSelectedTime(new Date());
         }
 
         // 制限時間外の場合
