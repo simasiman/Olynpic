@@ -11,7 +11,7 @@ public class User
     private int miss;
     private int win;
 
-    private boolean isTimeOut = false;
+    private int timeOutCnt = 0;
     private boolean isResultWatch = false;
 
     private ArrayList<Panel> selectedPanel = new ArrayList<Panel>();
@@ -110,12 +110,22 @@ public class User
 
     public boolean isTimeOut()
     {
-        return isTimeOut;
+        return timeOutCnt >= 1;
     }
 
-    public void setTimeOut(boolean isTimeOut)
+    public boolean isTimeOutTwice()
     {
-        this.isTimeOut = isTimeOut;
+        return timeOutCnt >= 2;
+    }
+
+    public void resetTimeOutCnt()
+    {
+        this.timeOutCnt = 0;
+    }
+
+    public void addTimeOutCnt()
+    {
+        timeOutCnt++;
     }
 
     public ArrayList<Panel> getSelectedPanel()

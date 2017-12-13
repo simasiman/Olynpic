@@ -169,7 +169,7 @@ public class Match
     {
         // ユーザのTimeOutフラグを解除
         User user = getUser(key);
-        user.setTimeOut(false);
+        user.resetTimeOutCnt();
 
         selectedTime = new Date();
 
@@ -425,7 +425,25 @@ public class Match
             User user1 = userList.get(0);
             User user2 = userList.get(1);
 
-            if (user1.getScore() > user1.getScore())
+            if (user1.isTimeOut() && user2.isTimeOut())
+            {
+                // 両者タイムアウトの場合
+                user1.setWin(User.DRAW);
+                user2.setWin(User.DRAW);
+            }
+            else if (user1.isTimeOutTwice())
+            {
+                // 片方が２連続タイムアウトである場合
+                user1.setWin(User.LOSE);
+                user2.setWin(User.WIN);
+            }
+            else if (user2.isTimeOutTwice())
+            {
+                // 片方が２連続タイムアウトである場合
+                user1.setWin(User.WIN);
+                user2.setWin(User.LOSE);
+            }
+            else if (user1.getScore() > user1.getScore())
             {
                 user1.setWin(User.WIN);
                 user2.setWin(User.LOSE);
@@ -458,14 +476,14 @@ public class Match
         if (getTimeDiff() >= GameSetting.MATCH_TIME)
         {
             User user = userList.get(playerTurn);
+            user.addTimeOutCnt();
 
-            if (user.isTimeOut())
+            if (user.isTimeOutTwice())
             {
                 // 既にタイムアウト状態の場合
                 finishMatch();
             }
 
-            user.setTimeOut(true);
             setPlayerTurnNext();
         }
 
