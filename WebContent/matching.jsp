@@ -64,7 +64,7 @@ if (name == null || name.isEmpty())
 	<div class="message">マッチングが完了すると、自動的にゲームが開始されます</div>
 	<a href="matching?status=dest" class="back">トップページに戻る</a>
 
-	<footer>&copy 2017&nbsp; ARAI CORPORATION.</footer>
+	<footer>copy 2017&nbsp; ARAI CORPORATION.</footer>
 </div><!--pageここまで-->
 </body>
 </html>

@@ -8,6 +8,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import modelPack.Match;
+import modelPack.MatchList;
 
 @SuppressWarnings("serial")
 public class TopServlet extends HttpServlet
@@ -22,9 +26,32 @@ public class TopServlet extends HttpServlet
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         req.setCharacterEncoding("UTF-8");
-        // HttpSession session = req.getSession();
+        HttpSession session = req.getSession();
 
         String urlPath = "/top.jsp";
+
+        try
+        {
+            String key = (String) session.getAttribute("key");
+
+            // 既にマッチングが作成され、未確定の場合、それを削除する
+            if (key != null && !key.isEmpty())
+            {
+                Match m = MatchList.getMatch(key);
+                if (m != null)
+                {
+                    if (!m.isStart())
+                    {
+                        MatchList.remove(m);
+                        req.setAttribute("match", null);
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         ServletContext context = getServletContext();
         RequestDispatcher rd = context.getRequestDispatcher(urlPath);

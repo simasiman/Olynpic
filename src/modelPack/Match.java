@@ -161,9 +161,7 @@ public class Match
         isFirstPick = false;
 
         Word word = panel.getWordList().get(0);
-        selectWord(true, key, word, panel);
-
-        setPlayerTurnNext();
+        selectWord(key, word, panel);
     }
 
     public boolean nextPick(String key, Panel panel)
@@ -191,12 +189,12 @@ public class Match
 
         // 単語がマッチしている場合
         Word word = panel.getWordList().get(nextWordIndex);
-        selectWord(false, key, word, panel);
+        selectWord(key, word, panel);
 
         return true;
     }
 
-    private void selectWord(boolean isFirst, String key, Word word, Panel panel)
+    private void selectWord(String key, Word word, Panel panel)
     {
         // 単語がマッチしている場合
         selectedWordList.add(word);
@@ -207,10 +205,7 @@ public class Match
         setNowWord(word);
         addSelectPanel(key, panel);
 
-        if (!isFirst)
-        {
-            addScore(key, word);
-        }
+        addScore(key, word);
 
         setPlayerTurnNext();
     }
