@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import Utility.Utility;
 import modelPack.Match;
 import modelPack.MatchList;
 import modelPack.User;
@@ -33,18 +34,24 @@ public class MatchingServlet extends HttpServlet
 
         try
         {
-            String status = (String) req.getParameter("status");
-
             String key = (String) req.getParameter("key");
-            String name = (String) req.getParameter("name");
-
             if (key == null || key.isEmpty())
             {
-                key = (String) session.getAttribute("key");
+                // 正規ルートでのアクセスでないと判断し、トップに戻す
+                req.setAttribute("match", null);
+                resp.sendRedirect("top");
+
+                return;
             }
+
+            String name = (String) req.getParameter("name");
             if (name == null || name.isEmpty())
             {
-                name = (String) session.getAttribute("name");
+                name = Utility.getDefaultName();
+            }
+            else
+            {
+                name = Utility.htmlEscape(name);
             }
 
             session.setAttribute("key", key);
@@ -106,16 +113,19 @@ public class MatchingServlet extends HttpServlet
 
                     return;
                 }
-
             }
-            else if (status != null && status.equals("dest"))
+            else
             {
-                // 「破棄」の選択時、マッチングを破棄してトップ画面に戻る
-                MatchList.remove(m);
-                req.setAttribute("match", null);
-                resp.sendRedirect("top");
+                String status = (String) req.getParameter("status");
+                if (status != null && status.equals("dest"))
+                {
+                    // 「破棄」の選択時、マッチングを破棄してトップ画面に戻る
+                    MatchList.remove(m);
+                    req.setAttribute("match", null);
+                    resp.sendRedirect("top");
 
-                return;
+                    return;
+                }
             }
 
             req.setAttribute("match", m);

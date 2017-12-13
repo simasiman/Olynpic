@@ -41,4 +41,9 @@ public class Utility
         return line + "\r\n";
     }
 
+    public static String htmlEscape(String target)
+    {
+        return target.trim().replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;");
+    }
+
 }

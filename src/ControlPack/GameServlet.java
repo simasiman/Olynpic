@@ -33,17 +33,15 @@ public class GameServlet extends HttpServlet
 
         try
         {
-            String key = (String) req.getParameter("key");
-            String name = (String) req.getParameter("name");
-
-            if (key == null || name == null)
+            String key = (String) session.getAttribute("key");
+            if (key == null || key.isEmpty())
             {
-                key = (String) session.getAttribute("key");
-                name = (String) session.getAttribute("name");
-            }
+                // 正規ルートでのアクセスでないと判断し、トップに戻す
+                req.setAttribute("match", null);
+                resp.sendRedirect("top");
 
-            session.setAttribute("key", key);
-            session.setAttribute("name", name);
+                return;
+            }
 
             // 既にマッチング済のユーザであれば、試合に戻らせる
             Match m = MatchList.getMatch(key);
