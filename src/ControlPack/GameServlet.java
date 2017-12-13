@@ -79,7 +79,7 @@ public class GameServlet extends HttpServlet
 
             // タイマーが意図せず停止している場合に備え、チェック処理を追加する
             m.timeOutCheck();
-            if (!m.isFinish())
+            if (!m.isFinish() && m.isHisTurn(key))
             {
                 String paramSelectedPanel = (String) req.getParameter("selectedPanel");
                 if (paramSelectedPanel != null && !paramSelectedPanel.isEmpty())
