@@ -131,7 +131,7 @@ public class HtmlGame
                 cssClass += "selected ";
             }
 
-            if (isCanSelect || isCorrectSelect)
+            if (isCanSelect)
             {
                 // 選択可能であれば<a>タグで囲う
                 panelHtml = "<a href=\"game?selectedPanel=" + i + "\">" + panelImage + "</a>";
