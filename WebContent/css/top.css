@@ -8,6 +8,11 @@ body{
 	background-color:#001F64;
 	font-family: "游ゴシック Medium", "游ゴシック体", "Yu Gothic Medium", YuGothic, "メイリオ", Meiryo, Lato, "Noto Sans JP", "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 }
+@media all and (-ms-high-contrast: none) {/*IEだと游ゴシックで下部に空白が発生するため、外している*/
+	body {
+	font-family: "Noto Sans JP", "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, Lato, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+	}
+}
 .page{
 	position:relative;
 }
