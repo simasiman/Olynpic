@@ -13,40 +13,42 @@ public class HtmlGame
 
     private static final int PANEL_COL = 4;
 
+    private static int indentCount = 0;
+
     public static String makeGameHtml(Match match, String key)
     {
         StringBuilder ret = new StringBuilder();
 
-        int indentCount = 0;
+        indentCount = 0;
 
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"page\">"));
         ret.append(Utility.appendLineIndent(indentCount, "<header><img src=\"img/logo/pane-tori-logo_s.png\" alt=\"ゲームのロゴ\"></header>"));
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"wapper wapper_" + match.getPlayerCount() + " clearfix\">"));
 
-        ret.append(Utility.appendLine(makeUserSelectedHtml(match, key, 1, indentCount)));
-        ret.append(Utility.appendLine(makeGamePanelHtml(match, key, indentCount)));
+        ret.append(Utility.appendLine(makeUserSelectedHtml(match, key, 1)));
+        ret.append(Utility.appendLine(makeGamePanelHtml(match, key)));
 
         if (match.getPlayerCount() == 2)
         {
-            ret.append(Utility.appendLine(makeUserSelectedHtml(match, key, 2, indentCount)));
+            ret.append(Utility.appendLine(makeUserSelectedHtml(match, key, 2)));
         }
 
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
+
         if (!match.isFinish() && DEBUG)
         {
             ret.append(Utility.appendLineIndent(indentCount, "<a href=\"game?debugEnd=1\">※ゲーム終了</a>"));
         }
+
         ret.append(Utility.appendLineIndent(indentCount, "<footer><p>&copy;&nbsp;2017 ARAI CORPORATION.</p></footer>"));
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
 
         return ret.toString();
     }
 
-    public static String makeGamePanelHtml(Match match, String key, int indent)
+    public static String makeGamePanelHtml(Match match, String key)
     {
         StringBuilder ret = new StringBuilder();
-
-        int indentCount = indent;
 
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"panelWapper\">"));
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"tableOuter\">"));
@@ -155,11 +157,9 @@ public class HtmlGame
         return ret.toString();
     }
 
-    public static String makeUserSelectedHtml(Match match, String key, int whichPlayer, int indent)
+    public static String makeUserSelectedHtml(Match match, String key, int whichPlayer)
     {
         StringBuilder ret = new StringBuilder();
-
-        int indentCount = indent;
 
         User userMe = match.getUser(key);
         User userTarget = match.getUserList().get(whichPlayer - 1);
@@ -213,8 +213,11 @@ public class HtmlGame
 
             if (match.isHisTurn(userTarget.getKey()))
             {
-                ret.append(Utility.appendLineIndent(indentCount, "<div id=\"timer\"></div>"));
-                ret.append(Utility.appendLineIndent(indentCount, "<div class=\"nowChoosing\">"));
+                if (!match.isFinish())
+                {
+                    ret.append(Utility.appendLineIndent(indentCount, "<div id=\"timer\"></div>"));
+                }
+                ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"nowChoosing\">"));
                 ret.append(Utility.appendLineIndent(indentCount++, "<div>"));
                 ret.append(Utility.appendLineIndent(indentCount++, "<span>"));
                 String message = "対戦相手のターンです";
@@ -232,6 +235,7 @@ public class HtmlGame
                 ret.append(Utility.appendLineIndent(indentCount, "<div class=\"notChoosing\"></div>"));
             }
         }
+
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"score " + cssClsPlayerScore + "\">"));
         ret.append(Utility.appendLineIndent(indentCount, "<span>score：</span>" + userTarget.getScore()));
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
