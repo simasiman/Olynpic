@@ -36,7 +36,7 @@ public class Utility
         return ret;
     }
 
-    private static String appendLine(String line)
+    public static String appendLine(String line)
     {
         return line + "\r\n";
     }

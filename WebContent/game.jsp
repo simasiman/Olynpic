@@ -50,38 +50,39 @@ if (name == null || name.isEmpty())
 <!DOCTYPE html>
 <html>
 <head>
-    <META charset="UTF-8">
-    <title>[pane-tori] - ゲーム</title>
-    <link rel="stylesheet" href="css/reset.css" type="text/css">
-    <link rel="stylesheet" href="css/game_base.css" type="text/css">
-    <link rel="stylesheet" href="css/game_2.css" type="text/css"><!--1人用と2人用でcssを切り替えたい-->
-<style type="text/css">
-.selected {
-    border: 2px solid black;
-}
-.selected img{
-    -webkit-filter: grayscale(100%);
-    filter: grayscale(100%);
-}
-.canSelect {
-    border: 2px solid blue;
-}
-.correct {
-    border: 2px solid red;
-}
-    </style>
-</head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/reset.css" type="text/css">
+<link rel="stylesheet" href="css/game_base.css" type="text/css">
+<link rel="stylesheet" href="css/game_2.css" type="text/css">
+<link rel="stylesheet" href="css/game_1.css" type="text/css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		countDown();
+	});
+	function countDown() {
+	var now = new Date(); //現在時刻
+<!--	var standardTime = new Date(1512978854142); //基準時刻（jsp(ミリ秒をlong型として)で取得）-->
+	var endTime = new Date(); //終了時刻（javaで基準時刻に15秒加算したものを(ミリ秒をlong型として)取得
+    endTime.setSecond(endTime.getSecond() + 15);
+	var restTime = endTime.getTime() - now.getTime(); //残り時間
+	var second = Math.floor(restTime/ 1000); //ミリ秒を秒に変換
+	var oneTenthSecond = Math.abs(Math.floor((restTime% 1000)/ 100)); //ミリ秒を0.1秒に変換
+
+	$("#timer").text("あと " + second +"."+ oneTenthSecond + '秒');
+		setTimeout('countDown()', 100); //0.1秒ごとに実行
+	}
+<!--何もしなくても15秒で自動更新（要らなかったら消してください）-->
+<!--	setTimeout("location.reload()",1000*15);-->
+</script>
+<title>[pane-tori] - ゲーム</title>
 </head>
 <body>
-<!-- 各種メッセージの表示 -->
+
+<!--  プレイヤー1の選択情況の表示 -->
+<%=HtmlGame.makeGameHtml(match,key)%>
+
 <!-- 各種ボタンの表示 -->
 <%=HtmlGame.makeGameReloadHtml(match, key)%>
-<!-- ゲーム状況の表示 -->
-<%=HtmlGame.makeGameMessageHtml(match, key)%>
-<!-- ゲーム選択パネルの表示 -->
-<%=HtmlGame.makeGamePanelHtml(match, key)%>
-<!-- 選択された単語、現在選択可能な文字の表示 -->
-<%=HtmlGame.makeUserSelectedHtml(match, key)%>
-<!-- 各種ボタンの表示 -->
-<%=HtmlGame.makeGameReloadHtml(match, key)%>
+
 </body>

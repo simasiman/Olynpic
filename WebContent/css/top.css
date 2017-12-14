@@ -9,13 +9,12 @@ body{
 	font-family: "游ゴシック Medium", "游ゴシック体", "Yu Gothic Medium", YuGothic, "メイリオ", Meiryo, Lato, "Noto Sans JP", "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 }
 .page{
-
-	position:relative;	
+	position:relative;
 }
 /*ヘッダー*/
 header{
 	z-index:1;
-	position:relative;	
+	position:relative;
 	height:60px;
 	background-color:#001F64;
 	color:#DDD;
@@ -64,7 +63,7 @@ header p{
 	width:100%;
 	height:600px;
 	margin:0 auto;
-	background-image:url("../img/top_background.jpg");
+	background-image:url("../img/background/top_background.jpg");
 	-webkit-animation: backgroundMove 25s linear infinite;
 }
 /*background-position には画像の横幅を指定*/
