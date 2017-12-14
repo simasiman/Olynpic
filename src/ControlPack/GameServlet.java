@@ -83,27 +83,38 @@ public class GameServlet extends HttpServlet
                 if (paramSelectedPanel != null && !paramSelectedPanel.isEmpty())
                 {
                     // ゲーム継続時
-                    int selected = Integer.parseInt(paramSelectedPanel);
-                    Panel selectedPanel = m.getPanelList().get(selected);
-
-                    if (m.isPanelRange(selected) && !selectedPanel.isUsed())
+                    try
                     {
-                        // 使われていないパネルが選択された場合
-                        if (m.isFirstPick())
+                        int selected = Integer.parseInt(paramSelectedPanel);
+                        Panel selectedPanel = m.getPanelList().get(selected);
+
+                        if (m.isPanelRange(selected) && !selectedPanel.isUsed())
                         {
-                            // 最初のパネル選択の場合
-                            m.firstPick(key, selectedPanel);
+                            // 使われていないパネルが選択された場合
+                            if (m.isFirstPick())
+                            {
+                                // 最初のパネル選択の場合
+                                m.firstPick(key, selectedPanel);
+                            }
+                            else if (m.nextPick(key, selectedPanel))
+                            {
+                                // 最初以降のパネル選択の場合
+                                // パネル選択可能の場合
+                            }
+                            else
+                            {
+                                // 最初以降のパネル選択の場合
+                                // パネル選択不可能の場合
+                            }
                         }
-                        else if (m.nextPick(key, selectedPanel))
-                        {
-                            // 最初以降のパネル選択の場合
-                            // パネル選択可能の場合
-                        }
-                        else
-                        {
-                            // 最初以降のパネル選択の場合
-                            // パネル選択不可能の場合
-                        }
+                    }
+                    catch (IndexOutOfBoundsException e)
+                    {
+                        System.out.println("範囲外のパネルが指定されました。");
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        System.out.println("パネルの指定で無効な数値が入力されました。");
                     }
                 }
 

@@ -7,7 +7,7 @@ public class GameSetting
     /**
      * ゲームにおける１ターンの制限秒数
      */
-    public static final int MATCH_TIME = 999;
+    public static final int MATCH_TIME = 99999;
 
     // サーバ接続情報一覧
     public static final String DB_SERVER = "localhost";
