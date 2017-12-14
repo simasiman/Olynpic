@@ -34,7 +34,11 @@ public class MatchingServlet extends HttpServlet
 
         try
         {
-            String key = (String) session.getAttribute("key");
+            String key = (String) req.getParameter("key");
+            if (key == null || key.isEmpty())
+            {
+                key = (String) session.getAttribute("key");
+            }
             if (key == null || key.isEmpty())
             {
                 // 正規ルートでのアクセスでないと判断し、トップに戻す
@@ -44,7 +48,11 @@ public class MatchingServlet extends HttpServlet
                 return;
             }
 
-            String name = (String) session.getAttribute("name");
+            String name = (String) req.getParameter("name");
+            if (name == null || name.isEmpty())
+            {
+                name = (String) session.getAttribute("name");
+            }
             if (name == null || name.isEmpty())
             {
                 name = Utility.getDefaultName();
