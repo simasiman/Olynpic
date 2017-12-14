@@ -6,6 +6,7 @@
 
 /*プレイヤーごとの領域*/
 .player_1{
+	padding-bottom: 3px;
 	width:280px;
 }
 .playerName_1{
