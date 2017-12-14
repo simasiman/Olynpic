@@ -103,7 +103,7 @@ if (match != null)
 
 		<footer>
 			<p>
-				copy 2017&nbsp; ARAI CORPORATION.<br>
+				&copy; 2017 ARAI CORPORATION.<br>
 				IEなど一部のブラウザでは、表示が一部制限されることがあります。
 			</p>
 		</footer>
