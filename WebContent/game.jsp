@@ -61,11 +61,5 @@ response.addCookie(cooName);
 <title>[pane-tori] - ゲーム</title>
 </head>
 <body>
-
-<!--  プレイヤー1の選択情況の表示 -->
 <%=HtmlGame.makeGameHtml(match,key)%>
-
-<!-- 各種ボタンの表示 -->
-<%=HtmlGame.makeGameReloadHtml(match, key)%>
-
 </body>
