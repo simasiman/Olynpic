@@ -1,46 +1,47 @@
 <%@ page contentType="text/html; charset=UTF-8"%><%@ page import="java.net.URLDecoder"%><%@ page import="modelPack.*"%><%@ page import="Utility.Utility"%><%@ page import="java.net.*"%><%@ page import="java.util.ArrayList"%><%
-    Cookie[] aryCookies = request.getCookies();
-    String key = null;
-    String name = null;
+Cookie[] aryCookies = request.getCookies();
 
-    if (aryCookies != null)
+String key = (String)session.getAttribute("key");
+String name = (String)session.getAttribute("name");
+
+if (aryCookies != null)
+{
+    for (int i = 0; i < aryCookies.length; i++)
     {
-        for (int i = 0; i < aryCookies.length; i++)
+        String cookie = aryCookies[i].getName();
+        if (cookie.equals("key") && (key == null || key.isEmpty()))
         {
-            String cookie = aryCookies[i].getName();
-            if (cookie.equals("key"))
-            {
-                key = aryCookies[i].getValue();
-            }
-            else if (cookie.equals("name"))
-            {
-                name = URLDecoder.decode(aryCookies[i].getValue(), "UTF-8");
-            }
+            key = aryCookies[i].getValue();
+        }
+        else if (cookie.equals("name") && (name == null || name.isEmpty()))
+        {
+            name = URLDecoder.decode(aryCookies[i].getValue(), "UTF-8");
         }
     }
+}
 
-    if (key == null || key.isEmpty())
-    {
-        key = Utility.getDefaultKey();
-        Cookie cooKey = new Cookie("key", key);
-        response.addCookie(cooKey);
-    }
+if (key == null || key.isEmpty())
+{
+    key = Utility.getDefaultKey();
+}
+if (name == null || name.isEmpty())
+{
+    name = Utility.getDefaultName();
+}
 
-    if (name == null || name.isEmpty())
-    {
-        name = Utility.getDefaultName();
-        Cookie cooKey = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
-        response.addCookie(cooKey);
-    }
+Cookie cooKey = new Cookie("key", key);
+response.addCookie(cooKey);
+Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
+response.addCookie(cooName);
 
-    //終了済みのマッチングが存在しないかを確認
-    Match match = MatchList.getMatchFinished(key);
-    if (match != null)
-    {
-        // 終了済みのマッチングが存在すれば、リザルト画面へ遷移
-        response.sendRedirect("result");
-        return;
-    }
+//終了済みのマッチングが存在しないかを確認
+Match match = MatchList.getMatchFinished(key);
+if (match != null)
+{
+    // 終了済みのマッチングが存在すれば、リザルト画面へ遷移
+    response.sendRedirect("result");
+    return;
+}
 %><!DOCTYPE html>
 <html>
 <head>

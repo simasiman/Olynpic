@@ -4,6 +4,7 @@
 <%@ page import="java.net.*"%>
 <%@ page import="java.util.ArrayList"%>
 <%
+
 Match match = (Match)request.getAttribute("match");
 
 if (match == null)
@@ -14,24 +15,8 @@ if (match == null)
 
 Cookie[] aryCookies = request.getCookies();
 
-String key = null;
-String name = null;
-
-if (aryCookies != null)
-{
-    for (int i = 0; i < aryCookies.length; i++)
-    {
-        String cookie = aryCookies[i].getName();
-        if (cookie.equals("key"))
-        {
-            key = aryCookies[i].getValue();
-        }
-        else if (cookie.equals("name"))
-        {
-            name = URLDecoder.decode(aryCookies[i].getValue(), "UTF-8");
-        }
-    }
-}
+String key = (String)session.getAttribute("key");
+String name = (String)session.getAttribute("name");
 
 if (key == null || key.isEmpty())
 {
@@ -39,12 +24,10 @@ if (key == null || key.isEmpty())
     return;
 }
 
-if (name == null || name.isEmpty())
-{
-    name = Utility.getDefaultName();
-    Cookie cooKey = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
-    response.addCookie(cooKey);
-}
+Cookie cooKey = new Cookie("key", key);
+response.addCookie(cooKey);
+Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
+response.addCookie(cooName);
 
 %>
 <!DOCTYPE html>
