@@ -65,8 +65,8 @@ a.reload{ /*プレイヤー自身にのみ表示*/
 	margin: 0 auto 10px auto;
 	width: 70px;
 	height: 30px;
-	border: solid 1px rgba(255,255,255,0.8);
 	background-color: rgba(255,255,255,0.5);
+	border: solid 1px rgba(255,255,255,0.8);
 	color: #222;
 	line-height: 30px;
 	text-align: center;
