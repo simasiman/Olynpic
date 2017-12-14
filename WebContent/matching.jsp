@@ -60,7 +60,7 @@ if (name == null || name.isEmpty())
 	<header><img src="img/logo/pane-tori-logo_s.png" alt="ゲームのロゴ"></header>
 
 	<div class="nowMatching">只今マッチング中です</div>
-	<a href="javascript:location.reload()" class="reload">更新</a>
+	<a href="matching" class="reload">更新</a>
 	<div class="message">マッチングが完了すると、自動的にゲームが開始されます</div>
 	<a href="matching?status=dest" class="back">トップページに戻る</a>
 

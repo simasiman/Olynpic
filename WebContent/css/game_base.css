@@ -142,7 +142,7 @@ td.panelImg{
 	border-radius: 5px;
 	line-height: 1.3;
 }
-.correspond{ /*該当する文字があるパネル*/
+.correct{ /*該当する文字があるパネル*/
 	margin: -3px;
 	border: solid 3px red;
 	overflow: hidden;

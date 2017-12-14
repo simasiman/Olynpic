@@ -51,8 +51,6 @@ public class HtmlGame
 
         if (!match.isFinish())
         {
-            ret.append(Utility.appendLineIndent(indentCount, "<a href=\"game\">更新</a>"));
-
             if (DEBUG)
             {
                 ret.append(Utility.appendLineIndent(indentCount, "<a href=\"game?debugEnd=1\">※ゲーム終了</a>"));
@@ -119,7 +117,7 @@ public class HtmlGame
 
         int indentCount = indent;
 
-        ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"panelWapper\"><!--パネル選択する領域-->"));
+        ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"panelWapper\">"));
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"tableOuter\">"));
         ret.append(Utility.appendLineIndent(indentCount++, "<table>"));
         ret.append(Utility.appendLineIndent(indentCount++, "<tr>"));
@@ -127,12 +125,6 @@ public class HtmlGame
         ArrayList<Panel> panelList = match.getPanelList();
         for (int i = 0; i < panelList.size(); i++)
         {
-            // ①現在自分のターンである
-            // ②ゲームが終了していない
-            // ③ゲームマッチが継続可能な状態である
-            // ④対象のパネルは未選択である
-            // 以上の条件を満たす場合のみ、パネルのリンクを有効にする
-
             Panel panel = panelList.get(i);
             String cssClass = "";
             String panelHtml = "";
@@ -148,6 +140,10 @@ public class HtmlGame
                 if (isCorrectSelect)
                 {
                     cssClass += "correct ";
+                }
+                else
+                {
+                    cssClass += "error ";
                 }
             }
             else if (isUsed)
@@ -186,23 +182,28 @@ public class HtmlGame
 
         ret.append(Utility.appendLineIndent(--indentCount, "</tr>"));
         ret.append(Utility.appendLineIndent(--indentCount, "</table>"));
-        ret.append(Utility.appendLineIndent(--indentCount, "</div><!--tableOuterここまで-->"));
+        ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
 
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"message\">"));
         ret.append(Utility.appendLineIndent(indentCount++, "<p>"));
-        // <!--プレイ中のメッセージを表示-->プレイヤー2が選んだパネルは「柔道」（しゅうとう）です。<br>
-        // プレイヤー1が使える文字は「し」「う」です。
+
         Word nowWord = match.getNowWord();
         if (nowWord != null)
         {
-            String comment = "<!--プレイ中のメッセージを表示-->";
-            String message1 = "対戦相手が選択したパネルは「" + nowWord.getWord() + "」です。";
+            String message1 = "選択されたパネルは「" + nowWord.getWord() + "」です。";
             String message2 = "使える文字は「" + nowWord.getWordHead() + "」「" + nowWord.getWordTail() + "」です。";
-            ret.append(Utility.appendLineIndent(indentCount, comment + message1 + "<br>" + message2));
+            ret.append(Utility.appendLineIndent(indentCount, message1 + "<br>" + message2));
         }
+        else
+        {
+            String message1 = "最初のターンはすべてのパネルを選択できます。";
+            String message2 = "好きなパネルを選択してください。";
+            ret.append(Utility.appendLineIndent(indentCount, message1 + "<br>" + message2));
+        }
+
         ret.append(Utility.appendLineIndent(--indentCount, "</p>"));
-        ret.append(Utility.appendLineIndent(--indentCount, "</div><!--messageここまで-->"));
-        ret.append(Utility.appendLineIndent(--indentCount, "</div><!--panelWapperここまで-->"));
+        ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
+        ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
 
         return ret.toString();
     }
@@ -267,7 +268,12 @@ public class HtmlGame
                 ret.append(Utility.appendLineIndent(indentCount, "<div id=\"timer\"></div>"));
                 ret.append(Utility.appendLineIndent(indentCount, "<div class=\"nowChoosing\"><div>"));
                 ret.append(Utility.appendLineIndent(indentCount++, "<span>"));
-                ret.append(Utility.appendLineIndent(indentCount, "パネルを選んでいます"));
+                String message = "対戦相手のターンです";
+                if (userTarget == userMe)
+                {
+                    message = "あなたのターンです";
+                }
+                ret.append(Utility.appendLineIndent(indentCount, message));
                 ret.append(Utility.appendLineIndent(--indentCount, "</span>"));
                 ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
                 ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
@@ -337,50 +343,4 @@ public class HtmlGame
         return ret.toString();
     }
 
-    public static String makeUserSelectedHtmlOld(Match match, String key)
-    {
-        StringBuilder ret = new StringBuilder();
-
-        int indentCount = 0;
-
-        // 選択指示の表示
-        if (match.isFirstPick())
-        {
-            ret.append(Utility.appendLineIndent(indentCount, "<h3>最初に使用するパネルを選択してください</h3>"));
-        }
-        else
-        {
-            String wordRead = match.getNowWord().getWord();
-            String wordHead = "「" + match.getNowWord().getWordHead() + "」";
-            String wordTail = "「" + match.getNowWord().getWordTail() + "」";
-
-            ret.append(Utility.appendLineIndent(indentCount, "<h3>" + wordHead + wordRead + wordTail + "</h3>"));
-        }
-
-        ret.append(Utility.appendLineIndent(indentCount, "<!-- ユーザ別に選択された単語の一覧の表示 -->"));
-        ret.append(Utility.appendLineIndent(indentCount, "<h2>選択した単語</h2>"));
-
-        for (User user : match.getUserList())
-        {
-            ret.append(Utility.appendLineIndent(indentCount, "<h3>" + user.getName() + "</h3>"));
-            ret.append(Utility.appendLineIndent(indentCount, "<h4>" + user.getScore() + "</h4>"));
-            ret.append(Utility.appendLineIndent(indentCount, "<ul>"));
-            indentCount++;
-
-            for (int j = 0; j < user.getSelectedPanel().size(); j++)
-            {
-                Panel p = user.getSelectedPanel().get(j);
-                Word word = p.getSelectedWord();
-
-                String scoreText = p.getBaseWord() + "(" + word.getWord() + ")[" + word.getBaseScore() + "+" + word.getBonusScore() + "]";
-
-                ret.append(Utility.appendLineIndent(indentCount, "<li>" + scoreText));
-            }
-
-            indentCount--;
-            ret.append(Utility.appendLineIndent(indentCount, "</ul>"));
-        }
-
-        return ret.toString();
-    }
 }
