@@ -126,6 +126,12 @@ public class MatchList
     public static void remove(Match match)
     {
         matchList.remove(match);
+
+        // 開始されていないマッチングが削除される場合、マッチング中のユーザに対してリダイレクトを行わせる
+        if (!match.isStart())
+        {
+            match.sendUserSessionMatchingDestruct();
+        }
     }
 
 }

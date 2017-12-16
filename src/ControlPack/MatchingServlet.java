@@ -15,6 +15,9 @@ import modelPack.Match;
 import modelPack.MatchList;
 import modelPack.User;
 
+/**
+ * URL:matchingに対するPost時の処理
+ */
 @SuppressWarnings("serial")
 public class MatchingServlet extends HttpServlet
 {
@@ -100,11 +103,12 @@ public class MatchingServlet extends HttpServlet
                         // 待機状態のマッチが存在すれば、そのマッチにユーザ登録
                         m.addUser(user);
 
+                        // ※以下、ゲーム開始等の処理をタイマー依存にした為、コメントアウト
                         // 参加人数を満たした場合、ゲームスタート
-                        if (m.isCanMatchStart())
-                        {
-                            // m.startMatch();
-                        }
+                        // if (m.isCanMatchStart())
+                        // {
+                        // m.startMatch();
+                        // }
                     }
                     else
                     {
@@ -128,7 +132,6 @@ public class MatchingServlet extends HttpServlet
                 if (status != null && status.equals("dest"))
                 {
                     // 「破棄」の選択時、マッチングを破棄してトップ画面に戻る
-                    m.sendUserSessionMatchingDestruct();
                     MatchList.remove(m);
                     req.setAttribute("match", null);
                     resp.sendRedirect("top");

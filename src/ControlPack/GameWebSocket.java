@@ -14,6 +14,9 @@ import modelPack.Match;
 import modelPack.MatchList;
 import modelPack.User;
 
+/**
+ * URL:gameにおけるWebSocket
+ */
 @ServerEndpoint(value = "/game")
 public class GameWebSocket
 {
@@ -22,36 +25,33 @@ public class GameWebSocket
     @OnOpen
     public void onOpen(Session session)
     {
-        System.out.println("onOpen : " + session);
         ses.add(session);
     }
 
     @OnMessage
     public void onMessage(String text, Session session)
     {
+        // ※不正な情報がWebSocket経由で送信された場合について対応していない
         String[] receive = text.split(",");
         String key = receive[0];
 
         Match match = MatchList.getMatch(key);
 
-        if (!match.isStart())
-        {
-            return;
-        }
-
         if (receive.length == 1)
         {
-            // 初回接続時
+            // 初回接続時の送信情報であれば、ユーザのセッション情報をセット
             User user = match.getUser(key);
             user.session = session;
 
             return;
         }
 
+        // 初回接続時以降であれば、パネルの選択処理を行う
         String selected = receive[1];
 
-        GameServlet.panelSelect(selected, match, key);
+        match.panelSelect(key, selected);
 
+        // マッチングに参加している各ユーザに対して、更新用HTMLの送信
         for (User user : match.getUserList())
         {
             if (ses.contains(user.session))
@@ -65,7 +65,6 @@ public class GameWebSocket
     @OnClose
     public void onClose(Session session)
     {
-        System.out.println("onClose : " + session);
         ses.remove(session);
     }
 }

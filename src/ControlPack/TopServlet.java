@@ -13,6 +13,9 @@ import javax.servlet.http.HttpSession;
 import modelPack.Match;
 import modelPack.MatchList;
 
+/**
+ * URL:topに対するPost時の処理
+ */
 @SuppressWarnings("serial")
 public class TopServlet extends HttpServlet
 {

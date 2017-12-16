@@ -161,54 +161,6 @@ public class Match
         this.isFirstPick = isFirstPick;
     }
 
-    public void firstPick(String key, Panel panel)
-    {
-        isFirstPick = false;
-
-        Word word = panel.getWordList().get(0);
-        selectWord(key, word, panel);
-    }
-
-    public boolean nextPick(String key, Panel panel)
-    {
-        // ユーザのTimeOutフラグを解除
-        User user = getUser(key);
-        user.resetTimeOutCnt();
-
-        selectedTime = new Date();
-
-        int nextWordIndex = panel.isMatchWord(nowWord, selectedWordList);
-        if (nextWordIndex < 0)
-        {
-            // 単語がミスしている場合
-            addMissCount(key);
-            setPlayerTurnNext();
-
-            return false;
-        }
-
-        // 単語がマッチしている場合
-        Word word = panel.getWordList().get(nextWordIndex);
-        selectWord(key, word, panel);
-
-        return true;
-    }
-
-    private void selectWord(String key, Word word, Panel panel)
-    {
-        selectedWordList.add(word);
-
-        panel.setSelectedUserId(key);
-        panel.setSelectedWord(word);
-
-        setNowWord(word);
-        addSelectPanel(key, panel);
-
-        addScore(key, word);
-
-        setPlayerTurnNext();
-    }
-
     public boolean isFinish()
     {
         return isFinish;
@@ -257,6 +209,139 @@ public class Match
     public void setScore(int score)
     {
         this.score = score;
+    }
+
+    public void addSelectPanel(String key, Panel panel)
+    {
+        getUser(key).addSelectedPanel(panel);
+        panel.setUsed(true);
+    }
+
+    public void addMissCount(String key)
+    {
+        getUser(key).addMiss();
+    }
+
+    public void addScore(String key, Word word)
+    {
+        getUser(key).addScore(word.getScore());
+    }
+
+    public int getUserWin(String key)
+    {
+        return getUser(key).getWin();
+    }
+
+    public ArrayList<Word> getSelectedWordList()
+    {
+        return selectedWordList;
+    }
+
+    public Date getSelectedTime()
+    {
+        return selectedTime;
+    }
+
+    public void setSelectedTime(Date selectedTime)
+    {
+        this.selectedTime = selectedTime;
+    }
+
+    public void firstPick(String key, Panel panel)
+    {
+        isFirstPick = false;
+
+        Word word = panel.getWordList().get(0);
+        selectWord(key, word, panel);
+    }
+
+    public boolean nextPick(String key, Panel panel)
+    {
+        // ユーザのTimeOutフラグを解除
+        User user = getUser(key);
+        user.resetTimeOutCnt();
+
+        selectedTime = new Date();
+
+        int nextWordIndex = panel.isMatchWord(nowWord, selectedWordList);
+        if (nextWordIndex < 0)
+        {
+            // 単語がミスしている場合
+            addMissCount(key);
+            setPlayerTurnNext();
+
+            return false;
+        }
+
+        // 単語がマッチしている場合
+        Word word = panel.getWordList().get(nextWordIndex);
+        selectWord(key, word, panel);
+
+        return true;
+    }
+
+    private void selectWord(String key, Word word, Panel panel)
+    {
+        selectedWordList.add(word);
+
+        panel.setSelectedUserId(key);
+        panel.setSelectedWord(word);
+
+        setNowWord(word);
+        addSelectPanel(key, panel);
+
+        addScore(key, word);
+
+        setPlayerTurnNext();
+    }
+
+    public void panelSelect(String key, String selectedIndex)
+    {
+        timeOutCheck();
+        if (!isFinish() && isHisTurn(key))
+        {
+            if (selectedIndex != null && !selectedIndex.isEmpty())
+            {
+                // ゲーム継続時
+                try
+                {
+                    int selected = Integer.parseInt(selectedIndex);
+                    Panel selectedPanel = panelList.get(selected);
+
+                    if (isPanelRange(selected) && !selectedPanel.isUsed())
+                    {
+                        // 使われていないパネルが選択された場合
+                        if (isFirstPick())
+                        {
+                            // 最初のパネル選択の場合
+                            firstPick(key, selectedPanel);
+                        }
+                        else if (nextPick(key, selectedPanel))
+                        {
+                            // 最初以降のパネル選択の場合
+                            // パネル選択可能の場合
+                        }
+                        else
+                        {
+                            // 最初以降のパネル選択の場合
+                            // パネル選択不可能の場合
+                        }
+                    }
+                }
+                catch (IndexOutOfBoundsException e)
+                {
+                    System.out.println("範囲外のパネルが指定されました。");
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println("パネルの指定で無効な数値が入力されました。");
+                }
+            }
+            if (!isEnableContinue())
+            {
+                finishMatch();
+            }
+        }
     }
 
     /**
@@ -378,42 +463,6 @@ public class Match
         }
 
         return index == playerTurn;
-    }
-
-    public void addSelectPanel(String key, Panel panel)
-    {
-        getUser(key).addSelectedPanel(panel);
-        panel.setUsed(true);
-    }
-
-    public void addMissCount(String key)
-    {
-        getUser(key).addMiss();
-    }
-
-    public void addScore(String key, Word word)
-    {
-        getUser(key).addScore(word.getScore());
-    }
-
-    public int getUserWin(String key)
-    {
-        return getUser(key).getWin();
-    }
-
-    public ArrayList<Word> getSelectedWordList()
-    {
-        return selectedWordList;
-    }
-
-    public Date getSelectedTime()
-    {
-        return selectedTime;
-    }
-
-    public void setSelectedTime(Date selectedTime)
-    {
-        this.selectedTime = selectedTime;
     }
 
     // private method

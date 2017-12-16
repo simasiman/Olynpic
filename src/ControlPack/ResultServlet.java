@@ -14,6 +14,9 @@ import modelPack.Match;
 import modelPack.MatchList;
 import modelPack.User;
 
+/**
+ * URL:resultに対するPost時の処理
+ */
 @SuppressWarnings("serial")
 public class ResultServlet extends HttpServlet
 {
@@ -34,9 +37,19 @@ public class ResultServlet extends HttpServlet
         try
         {
             String key = (String) session.getAttribute("key");
-            // String name = (String) session.getAttribute("name");
 
+            // 終了済のマッチングを検索
             Match match = MatchList.getMatchFinished(key);
+            if (match == null)
+            {
+                // 正規ルートでのアクセスでないと判断し、トップに戻す
+                req.setAttribute("match", null);
+                resp.sendRedirect("top");
+
+                return;
+            }
+
+            // 対象マッチングのユーザ閲覧フラグをONにする
             User user = match.getUser(key);
             user.setResultWatch(true);
 

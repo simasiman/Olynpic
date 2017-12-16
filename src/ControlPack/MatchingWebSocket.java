@@ -13,6 +13,9 @@ import modelPack.Match;
 import modelPack.MatchList;
 import modelPack.User;
 
+/**
+ * URL:matchingにおけるWebSocket
+ */
 @ServerEndpoint(value = "/matching")
 public class MatchingWebSocket
 {
@@ -35,7 +38,7 @@ public class MatchingWebSocket
 
         if (receive.length == 1)
         {
-            // 初回接続時
+            // 初回接続時の送信情報であれば、ユーザのセッション情報をセット
             User user = match.getUser(key);
             user.session = session;
         }

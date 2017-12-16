@@ -12,8 +12,10 @@ import javax.servlet.http.HttpSession;
 
 import modelPack.Match;
 import modelPack.MatchList;
-import modelPack.Panel;
 
+/**
+ * URL:gameに対するPost時の処理
+ */
 @SuppressWarnings("serial")
 public class GameServlet extends HttpServlet
 {
@@ -75,7 +77,7 @@ public class GameServlet extends HttpServlet
                 m.finishMatch();
             }
 
-            panelSelect((String) req.getParameter("selectedPanel"), m, key);
+            m.panelSelect(key, (String) req.getParameter("selectedPanel"));
 
             req.setAttribute("match", m);
         }
@@ -87,54 +89,5 @@ public class GameServlet extends HttpServlet
         ServletContext context = getServletContext();
         RequestDispatcher rd = context.getRequestDispatcher(urlPath);
         rd.forward(req, resp);
-    }
-
-    public static void panelSelect(String selectedIndex, Match match, String key)
-    {
-        match.timeOutCheck();
-        if (!match.isFinish() && match.isHisTurn(key))
-        {
-            if (selectedIndex != null && !selectedIndex.isEmpty())
-            {
-                // ゲーム継続時
-                try
-                {
-                    int selected = Integer.parseInt(selectedIndex);
-                    Panel selectedPanel = match.getPanelList().get(selected);
-
-                    if (match.isPanelRange(selected) && !selectedPanel.isUsed())
-                    {
-                        // 使われていないパネルが選択された場合
-                        if (match.isFirstPick())
-                        {
-                            // 最初のパネル選択の場合
-                            match.firstPick(key, selectedPanel);
-                        }
-                        else if (match.nextPick(key, selectedPanel))
-                        {
-                            // 最初以降のパネル選択の場合
-                            // パネル選択可能の場合
-                        }
-                        else
-                        {
-                            // 最初以降のパネル選択の場合
-                            // パネル選択不可能の場合
-                        }
-                    }
-                }
-                catch (IndexOutOfBoundsException e)
-                {
-                    System.out.println("範囲外のパネルが指定されました。");
-                }
-                catch (NumberFormatException e)
-                {
-                    System.out.println("パネルの指定で無効な数値が入力されました。");
-                }
-            }
-            if (!match.isEnableContinue())
-            {
-                match.finishMatch();
-            }
-        }
     }
 }
