@@ -2,6 +2,8 @@ package modelPack;
 
 import java.util.ArrayList;
 
+import javax.websocket.Session;
+
 public class User
 {
     private String key;
@@ -20,6 +22,8 @@ public class User
     public static final int DRAW = -1;
     public static final int WIN = 1;
     public static final int LOSE = 2;
+
+    public Session session = null;
 
     public User()
     {

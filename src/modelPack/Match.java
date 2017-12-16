@@ -1,10 +1,14 @@
 package modelPack;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import javax.websocket.Session;
+
 import Utility.GameSetting;
+import Utility.HtmlGame;
 
 public class Match
 {
@@ -320,7 +324,7 @@ public class Match
         this.matchNo = MatchList.getNextMatchNumber();
         this.playerCount = playerCount;
 
-        this.playerTurn = (playerCount == 1) ? 0 : new Random().nextInt(playerCount - 1);
+        this.playerTurn = (playerCount == 1) ? 0 : new Random().nextInt(playerCount);
 
         try
         {
@@ -466,6 +470,21 @@ public class Match
         return (int) (((new Date()).getTime() - selectedTime.getTime()) / 1000);
     }
 
+    public void matchingCheck()
+    {
+        if (isStart || isFinish)
+        {
+            return;
+        }
+
+        // 参加人数を満たした場合、ゲームスタート
+        if (isCanMatchStart())
+        {
+            startMatch();
+            sendUserSessionMatching();
+        }
+    }
+
     public void timeOutCheck()
     {
         if (!isStart || isFinish)
@@ -485,12 +504,16 @@ public class Match
             }
 
             setPlayerTurnNext();
+
+            sendUserSession();
         }
 
         // 制限時間外の場合
         if (isTimeOutEnd())
         {
             finishMatch();
+
+            sendUserSession();
         }
     }
 
@@ -505,6 +528,63 @@ public class Match
         }
 
         return true;
+    }
+
+    public void sendUserSessionMatching()
+    {
+        for (User user : userList)
+        {
+            String ret = "<!--complete-->";
+            user.session.getAsyncRemote().sendText(ret);
+        }
+    }
+
+    public void sendUserSessionMatchingDestruct()
+    {
+        for (User user : userList)
+        {
+            if (user.session == null || !user.session.isOpen())
+            {
+                return;
+            }
+
+            String ret = "<!--destruct-->";
+            user.session.getAsyncRemote().sendText(ret);
+        }
+    }
+
+    public void sendUserSession()
+    {
+        for (User user : userList)
+        {
+            if (user.session == null)
+            {
+                continue;
+            }
+
+            String ret = HtmlGame.makeGameHtml(this, user.getKey());
+            user.session.getAsyncRemote().sendText("<!--[correct]-->" + ret);
+        }
+    }
+
+    public void resetSession(Session session)
+    {
+        for (User user : userList)
+        {
+            if (session == user.session)
+            {
+                try
+                {
+                    user.session.close();
+                }
+                catch (IOException e)
+                {
+                    System.out.println("多分そんなに気にする必要のないユーザセッション開放時のエラー");
+                }
+
+                user.session = null;
+            }
+        }
     }
 
     public boolean isPanelRange(int index)

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="modelPack.*"%>
-<%@ page import="Utility.Utility" %>
+<%@ page import="Utility.*" %>
 <%@ page import="java.net.*"%>
 <%@ page import="java.util.ArrayList"%>
 <%
@@ -37,6 +37,36 @@ response.addCookie(cooName);
 <link rel="stylesheet" href="css/reset.css" type="text/css">
 <link rel="stylesheet" href="css/matching.css" type="text/css">
 <title>[pane-tori] - マッチング</title>
+<script type="text/javascript">
+WebSocketDemo = {};
+(function(d) {
+    function $(query) {
+        return document.querySelector(query);
+    }
+    d.connect = function() {
+        var ws = new WebSocket("ws://<%=GameSetting.DB_SERVER%>:8080/Olynpic/matching");
+        ws.onmessage = function(message) {
+            var text = message.data;
+            if (text.indexOf('<!--complete-->') == 0)
+            {
+            	location.reload();
+            }
+            else if (text.indexOf('<!--destruct-->') == 0)
+            {
+            	window.location.href = "top";
+            }
+        };
+        ws.onopen = function() {
+        	ws.send(<%=key%>);
+        }
+        d.webSocket = ws;
+    };
+}) (WebSocketDemo);
+
+window.onload = function() {
+	WebSocketDemo.connect();
+}
+</script>
 </head>
 <body>
 <div class="page">

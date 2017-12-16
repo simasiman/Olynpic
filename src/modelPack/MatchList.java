@@ -3,16 +3,19 @@ package modelPack;
 import java.util.ArrayList;
 import java.util.Timer;
 
+import Utility.GameSetting;
+
 public class MatchList
 {
     private static ArrayList<Match> matchList;
+    private static int matchNumber = 0;
 
     static
     {
         matchList = new ArrayList<Match>();
 
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(new MatchListTimer(), 1000, 1000);
+        timer.scheduleAtFixedRate(new MatchListTimer(), 1000, GameSetting.SERVER_TIMER_INTERVAL);
     }
 
     public static void clean()
@@ -51,6 +54,7 @@ public class MatchList
     {
         for (Match match : matchList)
         {
+            match.matchingCheck();
             match.timeOutCheck();
         }
     }
@@ -62,33 +66,17 @@ public class MatchList
 
     public static int getNextMatchNumber()
     {
-        int ret = 0;
-
-        for (Match match : matchList)
-        {
-            if (ret <= match.getMatchNo())
-            {
-                ret = match.getMatchNo();
-            }
-        }
-
-        return ret + 1;
+        return ++matchNumber;
     }
 
-    public static void add(Match m)
-    {
-        matchList.add(m);
-    }
-
-    public static Match getMatchFinished(String key)
+    public static Match getMatch(String key)
     {
         // 探査前にマッチングリストのクリーンを行う
         clean();
 
         for (Match match : matchList)
         {
-            User user = match.getUser(key);
-            if (match.isFinish() && user != null && !user.isResultWatch())
+            if (!match.isFinish() && match.getUser(key) != null)
             {
                 return match;
             }
@@ -113,20 +101,26 @@ public class MatchList
         return null;
     }
 
-    public static Match getMatch(String key)
+    public static Match getMatchFinished(String key)
     {
         // 探査前にマッチングリストのクリーンを行う
         clean();
 
         for (Match match : matchList)
         {
-            if (!match.isFinish() && match.getUser(key) != null)
+            User user = match.getUser(key);
+            if (match.isFinish() && user != null && !user.isResultWatch())
             {
                 return match;
             }
         }
 
         return null;
+    }
+
+    public static void add(Match m)
+    {
+        matchList.add(m);
     }
 
     public static void remove(Match match)

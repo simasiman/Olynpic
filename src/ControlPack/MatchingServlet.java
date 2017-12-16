@@ -103,7 +103,7 @@ public class MatchingServlet extends HttpServlet
                         // 参加人数を満たした場合、ゲームスタート
                         if (m.isCanMatchStart())
                         {
-                            m.startMatch();
+                            // m.startMatch();
                         }
                     }
                     else
@@ -128,6 +128,7 @@ public class MatchingServlet extends HttpServlet
                 if (status != null && status.equals("dest"))
                 {
                     // 「破棄」の選択時、マッチングを破棄してトップ画面に戻る
+                    m.sendUserSessionMatchingDestruct();
                     MatchList.remove(m);
                     req.setAttribute("match", null);
                     resp.sendRedirect("top");

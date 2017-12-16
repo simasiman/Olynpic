@@ -7,7 +7,12 @@ public class GameSetting
     /**
      * ゲームにおける１ターンの制限秒数
      */
-    public static final int MATCH_TIME = 15;
+    public static final int MATCH_TIME = 20;
+
+    /**
+     * マッチング監視用タイマーの更新間隔
+     */
+    public static final int SERVER_TIMER_INTERVAL = 1000;
 
     // サーバ接続情報一覧
     public static final String DB_SERVER = "localhost";

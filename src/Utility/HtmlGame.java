@@ -33,12 +33,12 @@ public class HtmlGame
             ret.append(Utility.appendLine(makeUserSelectedHtml(match, key, 2)));
         }
 
-        ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
-
         if (!match.isFinish() && DEBUG)
         {
             ret.append(Utility.appendLineIndent(indentCount, "<a href=\"game?debugEnd=1\">※ゲーム終了</a>"));
         }
+
+        ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
 
         ret.append(Utility.appendLineIndent(indentCount, "<footer><p>&copy;&nbsp;2017 ARAI CORPORATION.</p></footer>"));
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
@@ -93,7 +93,9 @@ public class HtmlGame
             if (isCanSelect)
             {
                 // 選択可能であれば<a>タグで囲う
-                panelHtml = "<a href=\"game?selectedPanel=" + i + "\">" + panelImage + "</a>";
+                // panelHtml = "<a href=\"game?selectedPanel=" + i + "\">" + panelImage +
+                // "</a>";
+                panelHtml = "<a href=\"javascript:void(0);\" onclick=\"WebSocketDemo.send('" + key + "," + i + "');\">" + panelImage + "</a>";
             }
             else
             {
@@ -233,6 +235,13 @@ public class HtmlGame
             else
             {
                 ret.append(Utility.appendLineIndent(indentCount, "<div class=\"notChoosing\"></div>"));
+            }
+        }
+        else
+        {
+            if (!match.isFinish())
+            {
+                ret.append(Utility.appendLineIndent(indentCount, "<div id=\"timer\"></div>"));
             }
         }
 
