@@ -3,6 +3,8 @@ package modelPack;
 import java.util.ArrayList;
 import java.util.Timer;
 
+import javax.websocket.Session;
+
 import Utility.GameSetting;
 
 public class MatchList
@@ -52,6 +54,11 @@ public class MatchList
 
     public static void CheckTimer()
     {
+        while (MatchUserList.isMatchable(2))
+        {
+            new Match().createMatch(2);
+        }
+
         for (Match match : matchList)
         {
             match.matchingCheck();
@@ -85,22 +92,6 @@ public class MatchList
         return null;
     }
 
-    public static Match getMatchWaiting(String key)
-    {
-        // 探査前にマッチングリストのクリーンを行う
-        clean();
-
-        for (Match match : matchList)
-        {
-            if (!match.isStart() && !match.isFinish() && match.getUser(key) == null && match.getPlayerCount() != 1)
-            {
-                return match;
-            }
-        }
-
-        return null;
-    }
-
     public static Match getMatchFinished(String key)
     {
         // 探査前にマッチングリストのクリーンを行う
@@ -118,6 +109,25 @@ public class MatchList
         return null;
     }
 
+    public static Match getMatch(Session session)
+    {
+        // 探査前にマッチングリストのクリーンを行う
+        clean();
+
+        for (Match match : matchList)
+        {
+            for (User user : match.getUserList())
+            {
+                if (user.session == session)
+                {
+                    return match;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static void add(Match m)
     {
         matchList.add(m);
@@ -126,12 +136,31 @@ public class MatchList
     public static void remove(Match match)
     {
         matchList.remove(match);
+    }
 
-        // 開始されていないマッチングが削除される場合、マッチング中のユーザに対してリダイレクトを行わせる
-        if (!match.isStart())
+    public static void setUserSession(String key, Session session)
+    {
+        for (Match match : matchList)
         {
-            match.sendUserSessionMatchingDestruct();
+            User user = match.getUser(key);
+            if (user != null)
+            {
+                user.session = session;
+            }
         }
     }
 
+    public static void setUserSessionNull(Session session)
+    {
+        for (Match match : matchList)
+        {
+            for (User user : match.getUserList())
+            {
+                if (user.session == session)
+                {
+                    user.session = null;
+                }
+            }
+        }
+    }
 }

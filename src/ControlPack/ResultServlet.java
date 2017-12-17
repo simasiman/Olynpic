@@ -43,9 +43,7 @@ public class ResultServlet extends HttpServlet
             if (match == null)
             {
                 // 正規ルートでのアクセスでないと判断し、トップに戻す
-                req.setAttribute("match", null);
                 resp.sendRedirect("top");
-
                 return;
             }
 

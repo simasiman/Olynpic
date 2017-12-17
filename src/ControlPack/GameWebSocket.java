@@ -9,10 +9,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import Utility.HtmlGame;
 import modelPack.Match;
 import modelPack.MatchList;
-import modelPack.User;
 
 /**
  * URL:gameにおけるWebSocket
@@ -40,8 +38,9 @@ public class GameWebSocket
         if (receive.length == 1)
         {
             // 初回接続時の送信情報であれば、ユーザのセッション情報をセット
-            User user = match.getUser(key);
-            user.session = session;
+            MatchList.setUserSession(key, session);
+
+            match.sendSessionGameReconnect();
 
             return;
         }
@@ -49,22 +48,29 @@ public class GameWebSocket
         // 初回接続時以降であれば、パネルの選択処理を行う
         String selected = receive[1];
 
-        match.panelSelect(key, selected);
+        if (receive[1].equals("gameEnd"))
+        {
+            match.finishMatch();
+        }
+        else
+        {
+            match.panelSelect(key, selected);
+        }
 
         // マッチングに参加している各ユーザに対して、更新用HTMLの送信
-        for (User user : match.getUserList())
-        {
-            if (ses.contains(user.session))
-            {
-                String ret = HtmlGame.makeGameHtml(match, user.getKey());
-                user.session.getAsyncRemote().sendText("<!--[correct]-->" + ret);
-            }
-        }
+        match.sendSessionGameUpdate();
     }
 
     @OnClose
     public void onClose(Session session)
     {
+        Match match = MatchList.getMatch(session);
+        if (match != null)
+        {
+            MatchList.setUserSessionNull(session);
+            match.sendSessionGameDisconnect(session);
+        }
         ses.remove(session);
     }
+
 }

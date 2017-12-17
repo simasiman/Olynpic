@@ -9,9 +9,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import modelPack.Match;
-import modelPack.MatchList;
-import modelPack.User;
+import modelPack.MatchUserList;
 
 /**
  * URL:matchingにおけるWebSocket
@@ -24,7 +22,6 @@ public class MatchingWebSocket
     @OnOpen
     public void onOpen(Session session)
     {
-        System.out.println("onOpen : " + session);
         ses.add(session);
     }
 
@@ -34,20 +31,18 @@ public class MatchingWebSocket
         String[] receive = text.split(",");
         String key = receive[0];
 
-        Match match = MatchList.getMatch(key);
-
         if (receive.length == 1)
         {
             // 初回接続時の送信情報であれば、ユーザのセッション情報をセット
-            User user = match.getUser(key);
-            user.session = session;
+            MatchUserList.setUserSession(key, session);
         }
     }
 
     @OnClose
     public void onClose(Session session)
     {
-        System.out.println("onClose : " + session);
+        MatchUserList.remove(session);
         ses.remove(session);
     }
+
 }

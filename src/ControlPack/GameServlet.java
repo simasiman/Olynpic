@@ -39,45 +39,26 @@ public class GameServlet extends HttpServlet
             if (key == null || key.isEmpty())
             {
                 // 正規ルートでのアクセスでないと判断し、トップに戻す
-                req.setAttribute("match", null);
                 resp.sendRedirect("top");
-
                 return;
             }
 
-            // 既にマッチング済のユーザであれば、試合に戻らせる
             Match m = MatchList.getMatch(key);
             if (m == null)
             {
                 // 終了済みマッチングリストからもユーザを検索
                 m = MatchList.getMatchFinished(key);
-            }
+                if (m != null)
+                {
+                    // 終了済のマッチングであれば、
+                    resp.sendRedirect("result");
+                    return;
+                }
 
-            if (m == null)
-            {
                 // マッチング列に存在しないユーザの場合、トップ画面に戻る
-                req.setAttribute("match", null);
                 resp.sendRedirect("top");
-
                 return;
             }
-
-            if (!m.isStart())
-            {
-                // 開始されていない状態であれば、マッチング画面に戻る
-                req.setAttribute("match", m);
-                resp.sendRedirect("matching");
-
-                return;
-            }
-
-            // TODO : デバッグモード有効状態
-            if (req.getParameter("debugEnd") != null)
-            {
-                m.finishMatch();
-            }
-
-            m.panelSelect(key, (String) req.getParameter("selectedPanel"));
 
             req.setAttribute("match", m);
         }

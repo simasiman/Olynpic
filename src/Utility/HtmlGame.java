@@ -35,7 +35,7 @@ public class HtmlGame
 
         if (!match.isFinish() && DEBUG)
         {
-            ret.append(Utility.appendLineIndent(indentCount, "<a href=\"game?debugEnd=1\">※ゲーム終了</a>"));
+            ret.append(Utility.appendLineIndent(indentCount, "<a href=\"javascript:void(0);\" onclick=\"WebSocketDemo.send('" + key + "," + "gameEnd" + "');\">※ゲーム終了</a>"));
         }
 
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
@@ -175,20 +175,27 @@ public class HtmlGame
         if (isPlayer1)
         {
             col = 3;
-            cssClsPlayer = "player_1";
+            cssClsPlayer = "player_1 ";
             cssClsPlayerName = "playerName_1";
             cssClsPlayerScore = "score_1";
         }
         else
         {
             col = 2;
-            cssClsPlayer = "player_2-" + whichPlayer;
+            cssClsPlayer = "player_2-" + whichPlayer + " ";
             cssClsPlayerName = "playerName_2";
             cssClsPlayerScore = "score_2";
         }
 
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"player " + cssClsPlayer + "\">"));
-        ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"playerTop\">"));
+
+        String cssClsPlayerTop = "playerTop ";
+        if (userTarget.session == null)
+        {
+            cssClsPlayerTop += "disconnect ";
+        }
+
+        ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"" + cssClsPlayerTop + "\">"));
         if (!isPlayer1)
         {
             ret.append(Utility.appendLineIndent(indentCount++, "<p class=\"playerDistinction\">"));
@@ -206,7 +213,7 @@ public class HtmlGame
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
         if (!isPlayer1)
         {
-            if (userTarget == userMe)
+            if (false && userTarget == userMe)
             {
                 ret.append(Utility.appendLineIndent(indentCount++, "<a href=\"game\" class=\"reload\">"));
                 ret.append(Utility.appendLineIndent(indentCount, "更新"));

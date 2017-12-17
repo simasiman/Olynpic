@@ -9,6 +9,8 @@ public class User
     private String key;
     private String name;
 
+    private int wishPlayerCount = 0;
+
     private int score;
     private int miss;
     private int win;
@@ -32,7 +34,6 @@ public class User
         score = 0;
         miss = 0;
         win = -1;
-        isResultWatch = false;
         isResultWatch = false;
     }
 
@@ -60,6 +61,16 @@ public class User
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public int getWishPlayerCount()
+    {
+        return wishPlayerCount;
+    }
+
+    public void setWishPlayerCount(int wishPlayerCount)
+    {
+        this.wishPlayerCount = wishPlayerCount;
     }
 
     public int getScore()

@@ -4,23 +4,15 @@
 <%@ page import="java.net.*"%>
 <%@ page import="java.util.ArrayList"%>
 <%
-
-Match match = (Match)request.getAttribute("match");
-
-if (match == null)
-{
-    response.sendRedirect("index.jsp");
-    return;
-}
-
 Cookie[] aryCookies = request.getCookies();
 
 String key = (String)session.getAttribute("key");
 String name = (String)session.getAttribute("name");
 
-if (key == null || key.isEmpty())
+User user = MatchUserList.get(key);
+if (key == null || key.isEmpty() || user == null)
 {
-    response.sendRedirect("index");
+    response.sendRedirect("top");
     return;
 }
 
@@ -28,6 +20,8 @@ Cookie cooKey = new Cookie("key", key);
 response.addCookie(cooKey);
 Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
 response.addCookie(cooName);
+
+
 
 %>
 <!DOCTYPE html>
@@ -44,7 +38,7 @@ WebSocketDemo = {};
         return document.querySelector(query);
     }
     d.connect = function() {
-        var ws = new WebSocket("ws://<%=GameSetting.DB_SERVER%>:8080/Olynpic/matching");
+        var ws = new WebSocket("ws://<%=GameSetting.SERVER_ADDRESS%>:8080/Olynpic/matching");
         ws.onmessage = function(message) {
             var text = message.data;
             if (text.indexOf('<!--complete-->') == 0)
@@ -73,9 +67,9 @@ window.onload = function() {
 	<header><img src="img/logo/pane-tori-logo_s.png" alt="ゲームのロゴ"></header>
 
 	<div class="nowMatching">只今マッチング中です</div>
-	<a href="matching" class="reload">更新</a>
+	<!-- a href="matching" class="reload">更新</a> -->
 	<div class="message">マッチングが完了すると、自動的にゲームが開始されます</div>
-	<a href="matching?status=dest" class="back">トップページに戻る</a>
+	<a href="top" class="back">トップページに戻る</a>
 
 	<footer>copy 2017&nbsp; ARAI CORPORATION.</footer>
 </div><!--pageここまで-->

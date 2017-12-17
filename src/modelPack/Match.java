@@ -1,6 +1,5 @@
 package modelPack;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -368,51 +367,23 @@ public class Match
     }
 
     /**
-     * 待機状態のマッチングを作成(一人対戦用)
-     * 
-     * @param u
-     *            ユーザ
-     */
-    public void createMatch1(User u)
-    {
-        this.userList.add(u);
-        this.matchNo = MatchList.getNextMatchNumber();
-        this.playerCount = 1;
-        this.playerTurn = 0;
-
-        try
-        {
-            panelList = ((new SiritoriDao()).getRandomPanel(24));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return;
-        }
-
-        // マッチ管理用リストに追加
-        MatchList.add(this);
-    }
-
-    /**
      * 待機状態のマッチングを作成(複数人対戦用)
      * 
-     * @param u
-     *            ユーザ
      * @param playerCount
      *            プレイヤー人数
-     * @return マッチング管理用インスタンス
      */
-    public void createMatch(User u, int playerCount)
+    public void createMatch(int playerCount)
     {
-        this.userList.add(u);
-        this.matchNo = MatchList.getNextMatchNumber();
-        this.playerCount = playerCount;
-
-        this.playerTurn = (playerCount == 1) ? 0 : new Random().nextInt(playerCount);
-
         try
         {
+            for (int i = 0; i < playerCount; i++)
+            {
+                this.userList.add(MatchUserList.pull(playerCount));
+            }
+            this.matchNo = MatchList.getNextMatchNumber();
+            this.playerCount = playerCount;
+            this.playerTurn = (playerCount == 1) ? 0 : new Random().nextInt(playerCount);
+
             panelList = ((new SiritoriDao()).getRandomPanel(24));
         }
         catch (Exception e)
@@ -434,7 +405,6 @@ public class Match
     {
         startTime = new Date();
         isStart = true;
-
         selectedTime = new Date();
     }
 
@@ -530,7 +500,7 @@ public class Match
         if (isCanMatchStart())
         {
             startMatch();
-            sendUserSessionMatching();
+            sendSessionMatchingComplete();
         }
     }
 
@@ -554,7 +524,7 @@ public class Match
 
             setPlayerTurnNext();
 
-            sendUserSession();
+            sendSessionGameUpdate();
         }
 
         // 制限時間外の場合
@@ -562,7 +532,7 @@ public class Match
         {
             finishMatch();
 
-            sendUserSession();
+            sendSessionGameUpdate();
         }
     }
 
@@ -579,59 +549,55 @@ public class Match
         return true;
     }
 
-    public void sendUserSessionMatching()
+    public void sendSessionMatchingComplete()
     {
-        for (User user : userList)
-        {
-            String ret = "<!--complete-->";
-            user.session.getAsyncRemote().sendText(ret);
-        }
-    }
+        String ret = "<!--complete-->";
 
-    public void sendUserSessionMatchingDestruct()
-    {
         for (User user : userList)
         {
-            if (user.session == null || !user.session.isOpen())
+            Session session = user.session;
+            if (session != null && session.isOpen())
             {
-                return;
+                session.getAsyncRemote().sendText(ret);
             }
-
-            String ret = "<!--destruct-->";
-            user.session.getAsyncRemote().sendText(ret);
         }
     }
 
-    public void sendUserSession()
+    public void sendSessionGameUpdate()
     {
         for (User user : userList)
         {
-            if (user.session == null)
+            Session session = user.session;
+            if (session != null && session.isOpen())
             {
-                continue;
+                String ret = HtmlGame.makeGameHtml(this, user.getKey());
+                session.getAsyncRemote().sendText("<!--[selected]-->" + ret);
             }
-
-            String ret = HtmlGame.makeGameHtml(this, user.getKey());
-            user.session.getAsyncRemote().sendText("<!--[correct]-->" + ret);
         }
     }
 
-    public void resetSession(Session session)
+    public void sendSessionGameReconnect()
     {
         for (User user : userList)
         {
-            if (session == user.session)
+            Session session = user.session;
+            if (session != null && session.isOpen())
             {
-                try
-                {
-                    user.session.close();
-                }
-                catch (IOException e)
-                {
-                    System.out.println("多分そんなに気にする必要のないユーザセッション開放時のエラー");
-                }
+                String ret = HtmlGame.makeGameHtml(this, user.getKey());
+                session.getAsyncRemote().sendText("<!--[reconnect]-->" + ret);
+            }
+        }
+    }
 
-                user.session = null;
+    public void sendSessionGameDisconnect(Session session)
+    {
+        for (User user : userList)
+        {
+            Session us = user.session;
+            if (us != session && us != null && us.isOpen())
+            {
+                String ret = HtmlGame.makeGameHtml(this, user.getKey());
+                us.getAsyncRemote().sendText("<!--[disconnect]-->" + ret);
             }
         }
     }

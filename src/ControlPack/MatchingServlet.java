@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import Utility.Utility;
 import modelPack.Match;
 import modelPack.MatchList;
+import modelPack.MatchUserList;
 import modelPack.User;
 
 /**
@@ -56,6 +57,7 @@ public class MatchingServlet extends HttpServlet
             {
                 name = (String) session.getAttribute("name");
             }
+
             if (name == null || name.isEmpty())
             {
                 name = Utility.getDefaultName();
@@ -70,86 +72,60 @@ public class MatchingServlet extends HttpServlet
 
             // 既にマッチング済のユーザであれば、試合に戻らせる
             Match m = MatchList.getMatch(key);
-            if (m == null)
-            {
-                // 終了済みマッチングリストからもユーザを検索
-                m = MatchList.getMatchFinished(key);
-            }
-
-            if (m == null)
-            {
-                // マッチングが存在しない場合、マッチングを新規作成する
-                String gameMode1 = (String) req.getParameter("mode1");
-                String gameMode2 = (String) req.getParameter("mode2");
-
-                if (gameMode1 != null && !gameMode1.isEmpty())
-                {
-                    // 初回ゲーム作成時
-                    // 一人用であれば必ず新規マッチ作成
-                    User user = new User(key, name);
-                    m = new Match();
-                    m.createMatch(user, 1);
-                    m.startMatch();
-                }
-                else if (gameMode2 != null && !gameMode2.isEmpty())
-                {
-                    // 初回ゲーム作成時
-                    User user = new User(key, name);
-
-                    // 待機状態のマッチが存在しないか探査
-                    m = MatchList.getMatchWaiting(key);
-                    if (m != null)
-                    {
-                        // 待機状態のマッチが存在すれば、そのマッチにユーザ登録
-                        m.addUser(user);
-
-                        // ※以下、ゲーム開始等の処理をタイマー依存にした為、コメントアウト
-                        // 参加人数を満たした場合、ゲームスタート
-                        // if (m.isCanMatchStart())
-                        // {
-                        // m.startMatch();
-                        // }
-                    }
-                    else
-                    {
-                        // 待機状態のマッチが存在しなければ新規マッチ登録
-                        m = new Match();
-                        m.createMatch(user, 2);
-                    }
-                }
-                else
-                {
-                    // 正規ルートでのアクセスでないと判断し、トップに戻す
-                    req.setAttribute("match", null);
-                    resp.sendRedirect("top");
-
-                    return;
-                }
-            }
-            else
-            {
-                String status = (String) req.getParameter("status");
-                if (status != null && status.equals("dest"))
-                {
-                    // 「破棄」の選択時、マッチングを破棄してトップ画面に戻る
-                    MatchList.remove(m);
-                    req.setAttribute("match", null);
-                    resp.sendRedirect("top");
-
-                    return;
-                }
-            }
-
-            req.setAttribute("match", m);
-
             if (m != null && m.isStart())
             {
                 // マッチングが存在すれば、gameへ遷移
                 resp.sendRedirect("game");
-
+                return;
+            }
+            // 終了済みマッチングリストからもユーザを検索
+            m = MatchList.getMatchFinished(key);
+            if (m != null)
+            {
+                // マッチングが完了し、未閲覧の場合、resultへ遷移
+                resp.sendRedirect("result");
                 return;
             }
 
+            // マッチングが存在しない場合、マッチングを新規作成する
+            String gameMode1 = (String) req.getParameter("mode1");
+            String gameMode2 = (String) req.getParameter("mode2");
+
+            int playerCount = 0;
+            if (gameMode1 != null && !gameMode1.isEmpty())
+            {
+                playerCount = 1;
+            }
+            else if (gameMode2 != null && !gameMode2.isEmpty())
+            {
+                playerCount = 2;
+            }
+            else
+            {
+                // 正規ルートでのアクセスでないと判断し、トップに戻す
+                resp.sendRedirect("top");
+                return;
+            }
+
+            // 初回ゲーム作成時
+            User user = MatchUserList.get(key);
+            if (user == null)
+            {
+                user = new User(key, name);
+                user.setWishPlayerCount(playerCount);
+                MatchUserList.add(user);
+
+                if (playerCount == 1)
+                {
+                    // 一人用であれば、即座にゲーム画面へと遷移
+                    Match match = new Match();
+                    match.createMatch(1);
+                    match.startMatch();
+
+                    resp.sendRedirect("game");
+                    return;
+                }
+            }
         }
         catch (Exception e)
         {

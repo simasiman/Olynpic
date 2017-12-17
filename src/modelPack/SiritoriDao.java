@@ -17,7 +17,7 @@ public class SiritoriDao
     {
         Class.forName("com.mysql.jdbc.Driver");
 
-        String server = GameSetting.DB_SERVER;
+        String server = GameSetting.SERVER_ADDRESS;
         String database = GameSetting.DB_DATABASE;
         String user = GameSetting.DB_USER;
         String password = GameSetting.DB_PASS;

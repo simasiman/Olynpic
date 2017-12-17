@@ -108,6 +108,5 @@ if (match != null)
 			</p>
 		</footer>
 	</div><!--page終わり-->
-	<a href="forTester.jsp">テスト用</a>
 </body>
 </html>
