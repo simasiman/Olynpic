@@ -90,8 +90,10 @@ public class MatchingServlet extends HttpServlet
             // マッチングが存在しない場合、マッチングを新規作成する
             String gameMode1 = (String) req.getParameter("mode1");
             String gameMode2 = (String) req.getParameter("mode2");
+            String difficulty1 = (String) req.getParameter("difficulty1");
 
             int playerCount = 0;
+            boolean isShowRedHint = false;
             if (gameMode1 != null && !gameMode1.isEmpty())
             {
                 playerCount = 1;
@@ -106,6 +108,10 @@ public class MatchingServlet extends HttpServlet
                 resp.sendRedirect("top");
                 return;
             }
+            if (difficulty1 != null)
+            {
+                isShowRedHint = !difficulty1.isEmpty();
+            }
 
             // 初回ゲーム作成時
             User user = MatchUserList.get(key);
@@ -113,6 +119,7 @@ public class MatchingServlet extends HttpServlet
             {
                 user = new User(key, name);
                 user.setWishPlayerCount(playerCount);
+                user.setShowHint(isShowRedHint);
                 MatchUserList.add(user);
 
                 if (playerCount == 1)

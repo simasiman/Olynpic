@@ -146,11 +146,7 @@ td.getPanel img{
 }
 
 .selected{ /*選択済のパネル*/
-	-webkit-filter: grayscale(100%) brightness(0.4);
-	-moz-filter: grayscale(100%) brightness(0.4);
-	-o-filter: grayscale(100%) brightness(0.4);
-	-ms-filter: grayscale(100%) brightness(0.4);
-	filter: grayscale(100%) brightness(0.4);
+	opacity: 0.0;
 }
 
 .lastCorrect { /*直前に選択された正解のパネル*/
@@ -160,7 +156,8 @@ td.getPanel img{
 }
 
 @-webkit-keyframes rotatePanelCorrect {
-    0% {
+    0%
+    {
         transform: rotateX( 0deg ) ;
     }
     50%

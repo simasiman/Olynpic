@@ -33,24 +33,103 @@ response.addCookie(cooName);
 <!DOCTYPE html>
 <html>
 <head>
-    <META charset="UTF-8">
-    <title>[pane-tori] - リザルト</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/reset.css" type="text/css">
+<link rel="stylesheet" href="css/result.css" type="text/css">
+<title>リザルト画面</title>
 </head>
 <body>
-    <h1>結果画面</h1>
-    <%User user = match.getUser(key);%>
+<div class="page">
+<header><img src="img/logo/pane-tori-logo_s.png" alt="ゲームのロゴ"></header>
+
+<%User user = match.getUser(key);%>
     選手名：<%=user.getName()%><br>
-    点数　：<%=user.getScore()%><br>
-    <a href="top">トップへ戻る</a>
-    <h2>選択した単語</h2>
-    <ul>
-    <%for (int j = 0; j < user.getSelectedPanel().size(); j++)
-    {
+    点数　：<%=user.getScoreExam()%><br>
+    ミス　：<%=user.getMiss()%><br>
+
+<div class="wapper">
+	<div class="rank">
+		<div class=""><!-- 1位と2位でクラス名か画像を変える -->
+			<img src="" alt="結果">
+		</div>
+	</div><!--rankここまで-->
+
+	<div class="toTop"><a href="">トップページに戻る</a></div>
+
+	<div class="contents clearfix">
+	<div class="getPanel">
+		<p>詳細結果</p>
+		<ol>
+		<li class="clearfix">
+			<div>獲得したパネル</div>
+			<div class="resultBlock first">
+				<div class="score first">score + <span>bonus</span></div>
+				<div class="getWord first">獲得した言葉</div>
+			</div>
+		</li>
+		<%for (int j = 0; j < user.getSelectedPanel().size(); j++)
+        {
         Panel p = user.getSelectedPanel().get(j);
         Word word = p.getSelectedWord();
         %>
-        <li><img class="mono" src="img/panel/<%=p.getPicture()%>" height="80"><%=p.getBaseWord()%>(<%=word.getWord()%>)[<%=word.getBaseScore()%>+<%=word.getBonusScore()%>]
-    <%}%>
-    </ul>
-    <a href="top">トップへ戻る</a>
+		<li class="getPanelList clearfix">
+			<img src="img/panel/<%=p.getPicture()%>" alt="<%=p.getBaseWord()%>" title="<%=p.getBaseWord()%>">
+			<div class="resultBlock">
+				<div class="score"><span><%=word.getBaseScore()%></span> ＋ <span><%=word.getBonusScore()%></span></div>
+				<div class="getWord"><span>「<%=word.getWord()%>」</span></div>
+			</div>
+		</li>
+		<%}%>
+		</ol>
+	</div><!--getPanelここまで-->
+	
+	<!--右側のカラム-->
+	<div class="right">
+
+		<div class="highScore">
+			<div>ハイスコア（プレイヤー名）</div>
+			<ol>
+			<li>1.125</li>
+			<li>2.122</li>
+			<li>3.100</li>
+			</ol>
+		</div>
+		
+		<div class="rankingWapper">
+			<div>ランキング（全体）</div>
+			<div class="ranking">
+				<div>ハイスコア</div>
+				<ol>
+				<li>1.ななしさん 125</li>
+				<li>2.ナナチ 122</li>
+				<li>3.名もなきアスリート 100</li>
+				</ol>
+			</div>
+			<div class="ranking">
+				<div>勝敗数</div>
+				<ol>
+				<li>1.ななしさん 125</li>
+				<li>2.ナナチ 122</li>
+				<li>3.名もなきアスリート 100</li>
+				</ol>
+			</div>
+		<div class="ranking">
+			<div>総スコア</div>
+				<ol>
+				<li>1.ななしさん 125</li>
+				<li>2.ナナチ 122</li>
+				<li>3.名もなきアスリート 100</li>
+				</ol></div>
+		</div>
+	
+	</div><!--rightここまで-->
+	
+</div><!--contentsここまで-->
+	<div class="toTop"><a href="">トップページに戻る</a></div>
+	<div class="logo"><img src="img/logo/arai_logo_s.png" alt="企業ロゴ"><img src="img/logo/olympic_logo.png" alt="大会ロゴ"></div>
+	<div>ARAIはTOKYO2020を応援しています</div>
+</div><!--wapperここまで-->
+<footer><p>&copy; 2017 ARAI CORPORATION.</p></footer>
+</div>
 </body>
+</html>

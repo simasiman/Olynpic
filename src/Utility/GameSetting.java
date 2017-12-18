@@ -17,17 +17,21 @@ public class GameSetting
     /**
      * マッチング監視用タイマーの更新間隔
      */
-    public static final int SERVER_TIMER_INTERVAL = 1000;
+    public static final int SERVER_TIMER_INTERVAL = 100;
 
     // サーバ接続情報一覧
     public static String SERVER_ADDRESS = "localhost";
-    public static final String DB_DATABASE = "Olynpic";
+    public static final String DB_DATABASE = "PaneTori";
     public static final String DB_USER = "Mulder";
     public static final String DB_PASS = "TrustNo1";
     public static final String DB_ENCOFING = "UTF-8";
 
+    // プロジェクト名
+    public static String PROJECT_NAME = "PaneTori";
+
     static
     {
+        // サーバのIPアドレスを自動取得
         try
         {
             for (NetworkInterface n : Collections.list(NetworkInterface.getNetworkInterfaces()))

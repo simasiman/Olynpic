@@ -82,7 +82,8 @@ if (match != null)
 									<input type="text" name="name" size="20" maxlength="20" value="<%=name%>"><br>
 									<input type="submit" name="mode1" value="1人プレイ" />
 									<input type="submit" name="mode2" value="2人プレイ" />
-									<input type="reset" value="名前のリセット">
+									<input type="reset" value="名前のリセット"><br>
+									<input type="checkbox" name = "difficulty1" value="1" checked="checked">ヒント機能(外すと得点1.2倍)
 								</form>
 
 								<table class="setsumei">

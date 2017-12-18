@@ -55,6 +55,8 @@ public class HtmlGame
         ret.append(Utility.appendLineIndent(indentCount++, "<table>"));
         ret.append(Utility.appendLineIndent(indentCount++, "<tr>"));
 
+        User userMe = match.getUser(key);
+
         ArrayList<Panel> panelList = match.getPanelList();
         for (int i = 0; i < panelList.size(); i++)
         {
@@ -83,13 +85,16 @@ public class HtmlGame
             if (isCanSelect)
             {
                 cssClass += "canChoose ";
-                if (isCorrectSelect)
+                if (userMe.isShowHint())
                 {
-                    cssClass += "correct ";
-                }
-                else
-                {
-                    cssClass += "error ";
+                    if (isCorrectSelect)
+                    {
+                        cssClass += "correct ";
+                    }
+                    else
+                    {
+                        cssClass += "error ";
+                    }
                 }
             }
             else if (!isLastSelected && isUsed)

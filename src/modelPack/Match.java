@@ -192,11 +192,6 @@ public class Match
         getUser(key).addMiss();
     }
 
-    public void addScore(String key, Word word)
-    {
-        getUser(key).addScore(word.getScore());
-    }
-
     public int getUserWin(String key)
     {
         return getUser(key).getWin();
@@ -271,8 +266,6 @@ public class Match
         isMiss = false;
         nowWord = word;
         addSelectPanel(key, panel);
-
-        addScore(key, word);
 
         setPlayerTurnNext();
     }

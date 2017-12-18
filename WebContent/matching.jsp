@@ -38,7 +38,7 @@ WebSocketDemo = {};
         return document.querySelector(query);
     }
     d.connect = function() {
-        var ws = new WebSocket("ws://<%=GameSetting.SERVER_ADDRESS%>:8080/Olynpic/matching");
+        var ws = new WebSocket("ws://<%=GameSetting.SERVER_ADDRESS%>:8080/<%=GameSetting.PROJECT_NAME%>/matching");
         ws.onmessage = function(message) {
             var text = message.data;
             if (text.indexOf('<!--complete-->') == 0)

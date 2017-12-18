@@ -1,61 +1,262 @@
-﻿/*ヘッダー*/
+﻿@import url(https://fonts.googleapis.com/css?family=Lato:400,700);
+
+/*全体*/
+.clearfix:after {
+	content: " ";
+	display: block;
+	clear: both;
+}
+html,body{
+	box-sizing: border-box;
+	height: 100%;
+}
+body{
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: right bottom;
+	background-image: url("../img/background/game_background.png");
+	font-size: 16px;
+	font-family: "游ゴシック Medium", "游ゴシック体", "Yu Gothic Medium", YuGothic, "メイリオ", Meiryo, Lato, "Noto Sans JP", "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+@media all and (-ms-high-contrast: none) {/*IEだと游ゴシックで下部に空白が発生するため、外している*/
+	body {
+	font-family: "Noto Sans JP", "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, Lato, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+	}
+}
+.page{
+	box-sizing: border-box;
+	position: relative;
+	padding-bottom: 30px;
+	min-height: 100%;
+	background-color: rgba(255,255,255,0.5);
+}
+
+/*ヘッダー*/
 header{
-	height:30px;
-	background-color:#001F64;
-	color:#DDD;
+	height: 36px;
+	background-color: #001F64;
+	color: #DDD;
 }
-header p{
-	line-height:30px;
-}
-header img{/*ゲームのロゴ(小)を入れる予定*/
+header img{
+	vertical-align: middle;
+	margin: 2px 10px;
 }
 
 /*大枠*/
-div.wapper{
-	margin:0 auto;
-	width:600px;
+.wapper{
+	margin: 0 auto;
+	width: ;/*あとで入れる*/
 }
 
 /*勝敗*/
-div.rank{
-	margin:2px auto 0;
-	width:100%;
-	background:#AAA;
+.rank{
+	margin: 2px auto 0;
+	width: 100%;
+	height: 200px;
+	background: #AAA;
 }
-div.rankImg1{/*1位と2位で切り替える*/
-	position:relative;
+.rankImg1{/*1位と2位で切り替える*/
+	position: relative;
 }
-div.rankImg1 img{
-	position:absolute;
+.rankImg1 img{
+	position: absolute;
 	clip: rect(0px,158px,212px,0px);
 }
-div.rankimg2 img{/*1位と2位で切り替える*/
+.rankimg2 img{/*1位と2位で切り替える*/
 
 }
+
 /*トップページに戻る*/
-div.toTop{
-	margin:5px;
-	text-align:center;
-	font-size:15px;
+.toTop{
+	margin: 15px;
+	text-align: center;
+	font-size: 15px;
+	font-weight: bold;
+}
+.toTop a{
+	color: #001F63;
 }
 /*獲得したパネル*/
-div.getPanel{
+.getPanel{
+	float:left;
+	margin-right: 10px;
+	padding: 6px 4px 4px 4px;
+	background-color: rgba(0,57,179,0.8);
+}
+.getPanel>p{
+	margin: 5px;
+	font-size: 17px;
 }
 ol{
-	list-style:none;
+	list-style: none;
+	counter-reset: count;
 }
-li.getList{
-	background-color:#DDD;
+/*獲得したパネルのリスト*/
+.getPanelList{
+	position: relative;
+	padding: 5px 0 5px 5px;
+	background-color: rgba(194,202,232,0.85);
+	border-bottom: solid 1px #555;
 }
-li.getList img{
-	height:120px;
+.getPanelList:last-of-type{
+	border-style: none;
 }
-li.getList span{
-vertical-align:middle;
+.getPanelList:before{/*獲得した順番*/
+	float: left;
+	margin: 2px 5px;
+	width: 20px;
+	height: 20px;
+	counter-increment: count;
+	content: counter(count);
+	text-align: center;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+/*獲得したパネルのリストの見出し*/
+.getPanel li:first-of-type>div:first-of-type{/*項目見出し（獲得したパネル）*/
+	float: left;
+	margin-left: 35px;
+	padding: 0;
+	width: 120px;
+	height: 41px;
+	text-align: center;
+	line-height: 40px;
+	background-color: #92c0ff;
+}
+.resultBlock.first{
+	float: left;
+	width: 437px;
+	border-left: solid 1px #666;
+}
+.score.first{
+	padding: 2px 5px;
+	font-weight: bold;
+	background-color: #92c0ff;
+}
+.getWord.first{
+	padding: 2px 5px;
+	background-color: #92c0ff;
+}
+
+/*獲得したパネルのリストの中身*/
+.getPanelList img{
+	float: left;
+	width: 120px;
+	height: 90px;
+}
+.getPanel div{
+	box-sizing: border-box;
+}
+.resultBlock:not(.first){
+	position: absolute;
+	top: 50%;
+	left: 158px;
+	transform: translateY(-50%);
+	-webkit- transform: translateY(-50%);
+	width: 400px;
+	font-size: 17px;
+}
+.score{
+	vertical-align: bottom;
+	border-bottom: solid 1px #666;
+}
+.score.first>span{
+	color:red;
+}
+.score:not(.first){
+	padding: 5px 5px 5px 10px;
+	display: table-cell;
+	width: 435px;
+	height: 45px;
+}
+.score:not(.first)>span:nth-child(1){
+
+	font-size: 20px;
+	font-weight: bold;
+}
+.score>span:nth-child(2){
+	color:red;
+}
+.getWord:not(.first){
+	padding: 5px;
+	height: 45px;
+	font-weight: bold;
+}
+
+/*ランキング、ハイスコア*/
+.right{
+	float: right;
+	background-color: #AAA;
+}
+.highScore{
+	margin-bottom: 20px;
+	background-color: #DDD;
+}
+.highScore>div{
+	font-weight: bold;
+}
+.highScore li{
+	margin-left: 5px;
+}
+.rankingWapper{
+	padding-top: 5px;
+	background-color: #CCC;
+}
+.rankingWapper>div:not(.ranking) {
+	font-size: 17px;
+	font-weight: bold;
+}
+.highScore,
+.ranking{
+	padding: 5px 0;
+}
+
+.ranking{
+	margin: 0 0 5px 5px;
+	background-color: #DDD;
+}
+
+.ranking>div{
+	padding: 2px 2px 2px 0;
+	font-weight: bold;
+	background-color: #999;
+}
+.highScore li,
+.ranking li{
+	margin: 0 7px 2px 7px;
+	padding: 2px 0;
+	border-bottom: solid 1px #666;
+	line-height: 1.2;
+}
+.ranking li:last-of-type{
+	margin-bottom: 0;
+}
+.ranking:last-of-type{
+	margin-bottom: 0;
+}
+/*ロゴ*/
+.logo{
+	margin: 30px auto 5px auto;
+	width: 306px;
+	height: 124px;
+	border: solid 1px #AAA;
+}
+.logo+div{
+	margin-bottom: 30px;
+	text-align: center;
+	font-size: 14px;
 }
 
 /*フッター*/
 footer{
-}
-footer p{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 30px;
+	text-align: center;
+	background-color: #001F64;
+	line-height: 30px;
+	color: #AAA;
+	font-size: 12px;
 }

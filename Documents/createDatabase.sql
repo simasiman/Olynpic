@@ -3,11 +3,11 @@
 ############################################
 
 # データベースの削除と作成(再作成)
-DROP DATABASE Olynpic IF EXISTS;
-CREATE DATABASE Olynpic;
+DROP DATABASE PaneTori IF EXISTS;
+CREATE DATABASE PaneTori;
 
 # データベースの選択
-USE Olynpic;
+USE PaneTori;
 
 # 競技名単語テーブルの作成
 CREATE TABLE tbl_word_base(

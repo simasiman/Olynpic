@@ -11,12 +11,13 @@ public class User
 
     private int wishPlayerCount = 0;
 
-    private int score;
     private int miss;
     private int win;
 
     private int timeOutCnt = 0;
     private boolean isResultWatch = false;
+
+    private boolean isShowHint = false;
 
     private ArrayList<Panel> selectedPanel = new ArrayList<Panel>();
 
@@ -27,11 +28,53 @@ public class User
 
     public Session session = null;
 
+    public int getTotalScoreBase()
+    {
+        int scoreBase = 0;
+
+        for (Panel panel : selectedPanel)
+        {
+            Word word = panel.getSelectedWord();
+            scoreBase += word.getBaseScore();
+        }
+
+        return scoreBase;
+    }
+
+    public int getTotalScoreBonus()
+    {
+        int scoreBonus = 0;
+
+        for (Panel panel : selectedPanel)
+        {
+            Word word = panel.getSelectedWord();
+            scoreBonus += word.getBonusScore();
+        }
+
+        return scoreBonus;
+    }
+
+    public double getScoreMultiple()
+    {
+        double scoreMulti = 1.0;
+
+        if (!isShowHint)
+        {
+            scoreMulti *= 1.2;
+        }
+
+        return scoreMulti;
+    }
+
+    public String getScoreExam()
+    {
+        return getTotalScoreBase() + " + [" + getTotalScoreBonus() + "] * " + getScoreMultiple() + " = " + getScore();
+    }
+
     public User()
     {
         key = "";
         name = "";
-        score = 0;
         miss = 0;
         win = -1;
         isResultWatch = false;
@@ -75,17 +118,7 @@ public class User
 
     public int getScore()
     {
-        return score;
-    }
-
-    public void setScore(int score)
-    {
-        this.score = score;
-    }
-
-    public void addScore(int score)
-    {
-        this.score += score;
+        return (int) ((getTotalScoreBase() + getTotalScoreBonus()) * getScoreMultiple());
     }
 
     public int getMiss()
@@ -121,6 +154,16 @@ public class User
     public void setResultWatch(boolean isResultWatch)
     {
         this.isResultWatch = isResultWatch;
+    }
+
+    public boolean isShowHint()
+    {
+        return isShowHint;
+    }
+
+    public void setShowHint(boolean isShowHint)
+    {
+        this.isShowHint = isShowHint;
     }
 
     public boolean isTimeOut()
