@@ -1,6 +1,9 @@
 package Utility;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Collections;
 
 public class GameSetting
 {
@@ -27,7 +30,16 @@ public class GameSetting
     {
         try
         {
-            SERVER_ADDRESS = InetAddress.getLocalHost().getHostAddress();
+            for (NetworkInterface n : Collections.list(NetworkInterface.getNetworkInterfaces()))
+            {
+                for (InetAddress addr : Collections.list(n.getInetAddresses()))
+                {
+                    if (addr instanceof Inet4Address && !addr.isLoopbackAddress())
+                    {
+                        SERVER_ADDRESS = addr.getHostAddress();
+                    }
+                }
+            }
         }
         catch (Exception e)
         {

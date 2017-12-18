@@ -67,7 +67,6 @@ window.onload = function() {
 	<header><img src="img/logo/pane-tori-logo_s.png" alt="ゲームのロゴ"></header>
 
 	<div class="nowMatching">只今マッチング中です</div>
-	<!-- a href="matching" class="reload">更新</a> -->
 	<div class="message">マッチングが完了すると、自動的にゲームが開始されます</div>
 	<a href="top" class="back">トップページに戻る</a>
 

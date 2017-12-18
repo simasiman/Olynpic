@@ -79,8 +79,3 @@ a.reload:hover{ /*プレイヤー自身にのみ表示*/
 .score_2{
 	width: 100px;
 }
-
-/*下河辺追加分-テスト-*/
-.disconnect{
-	color: red;
-}

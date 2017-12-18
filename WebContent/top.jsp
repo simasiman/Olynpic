@@ -39,6 +39,7 @@ Match match = MatchList.getMatchFinished(key);
 if (match != null)
 {
     // 終了済みのマッチングが存在すれば、リザルト画面へ遷移
+    session.setAttribute("key", key);
     response.sendRedirect("result");
     return;
 }

@@ -14,10 +14,10 @@ public class Match
     private int matchNo = 0;
 
     private ArrayList<User> userList = new ArrayList<User>();
-
     private ArrayList<Panel> panelList = new ArrayList<Panel>();
-    private ArrayList<Integer> selectedPanelList = new ArrayList<Integer>();
     private ArrayList<Word> selectedWordList = new ArrayList<Word>();
+
+    private Panel lastSelectedPanel;
 
     private Date startTime;
     private Date endTime;
@@ -28,6 +28,7 @@ public class Match
 
     private boolean isStart = false;
     private boolean isFirstPick = true;
+    private boolean isMiss = false;
     private boolean isFinish = false;
     private boolean isClean = false;
 
@@ -77,21 +78,6 @@ public class Match
     public ArrayList<Panel> getPanelList()
     {
         return panelList;
-    }
-
-    public void createPanelList()
-    {
-        this.panelList = new ArrayList<Panel>();
-    }
-
-    public ArrayList<Integer> getSelectedPanelList()
-    {
-        return selectedPanelList;
-    }
-
-    public void setSelectedPanelList(ArrayList<Integer> selectedPanelList)
-    {
-        this.selectedPanelList = selectedPanelList;
     }
 
     public Date getStartTime()
@@ -145,29 +131,19 @@ public class Match
         return isStart;
     }
 
-    public void setStart(boolean isStart)
-    {
-        this.isStart = isStart;
-    }
-
     public boolean isFirstPick()
     {
         return isFirstPick;
     }
 
-    public void setFirstPick(boolean isFirstPick)
+    public boolean isMiss()
     {
-        this.isFirstPick = isFirstPick;
+        return isMiss;
     }
 
     public boolean isFinish()
     {
         return isFinish;
-    }
-
-    public void setFinish(boolean isFinish)
-    {
-        this.isFinish = isFinish;
     }
 
     public boolean isClean()
@@ -193,11 +169,6 @@ public class Match
     public Word getNowWord()
     {
         return nowWord;
-    }
-
-    public void setNowWord(Word nowWord)
-    {
-        this.nowWord = nowWord;
     }
 
     public int getScore()
@@ -246,9 +217,17 @@ public class Match
         this.selectedTime = selectedTime;
     }
 
+    public Panel getLastSelectedPanel()
+    {
+        return lastSelectedPanel;
+    }
+
     public void firstPick(String key, Panel panel)
     {
         isFirstPick = false;
+        isMiss = false;
+
+        lastSelectedPanel = panel;
 
         Word word = panel.getWordList().get(0);
         selectWord(key, word, panel);
@@ -262,10 +241,13 @@ public class Match
 
         selectedTime = new Date();
 
+        lastSelectedPanel = panel;
+
         int nextWordIndex = panel.isMatchWord(nowWord, selectedWordList);
         if (nextWordIndex < 0)
         {
             // 単語がミスしている場合
+            isMiss = true;
             addMissCount(key);
             setPlayerTurnNext();
 
@@ -286,7 +268,8 @@ public class Match
         panel.setSelectedUserId(key);
         panel.setSelectedWord(word);
 
-        setNowWord(word);
+        isMiss = false;
+        nowWord = word;
         addSelectPanel(key, panel);
 
         addScore(key, word);

@@ -65,8 +65,21 @@ public class HtmlGame
             boolean isCanSelect = match.isHisTurn(key) && !match.isFinish() && match.isEnableContinue() && !panel.isUsed();
             boolean isCorrectSelect = !match.isFirstPick() && panel.isMatchWord(match.getNowWord(), match.getSelectedWordList()) >= 0;
             boolean isUsed = !match.isFirstPick() && panel.isUsed();
+            boolean isLastSelected = panel == match.getLastSelectedPanel();
 
             // CSS用のクラス名の定義
+            if (isLastSelected)
+            {
+                if (match.isMiss())
+                {
+                    cssClass += "lastMiss ";
+                }
+                else
+                {
+                    cssClass += "lastCorrect ";
+                }
+            }
+
             if (isCanSelect)
             {
                 cssClass += "canChoose ";
@@ -79,7 +92,7 @@ public class HtmlGame
                     cssClass += "error ";
                 }
             }
-            else if (isUsed)
+            else if (!isLastSelected && isUsed)
             {
                 cssClass += "selected ";
             }
@@ -92,9 +105,6 @@ public class HtmlGame
 
             if (isCanSelect)
             {
-                // 選択可能であれば<a>タグで囲う
-                // panelHtml = "<a href=\"game?selectedPanel=" + i + "\">" + panelImage +
-                // "</a>";
                 panelHtml = "<a href=\"javascript:void(0);\" onclick=\"WebSocketDemo.send('" + key + "," + i + "');\">" + panelImage + "</a>";
             }
             else
@@ -135,6 +145,17 @@ public class HtmlGame
 
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
 
+        ret.append(Utility.appendLineIndent(indentCount, makeMessageHtml(match, key)));
+
+        ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
+
+        return ret.toString();
+    }
+
+    public static String makeMessageHtml(Match match, String key)
+    {
+        StringBuilder ret = new StringBuilder();
+
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"message\">"));
         ret.append(Utility.appendLineIndent(indentCount++, "<p>"));
 
@@ -153,7 +174,6 @@ public class HtmlGame
         }
 
         ret.append(Utility.appendLineIndent(--indentCount, "</p>"));
-        ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
 
         return ret.toString();
@@ -213,13 +233,6 @@ public class HtmlGame
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));
         if (!isPlayer1)
         {
-            if (false && userTarget == userMe)
-            {
-                ret.append(Utility.appendLineIndent(indentCount++, "<a href=\"game\" class=\"reload\">"));
-                ret.append(Utility.appendLineIndent(indentCount, "更新"));
-                ret.append(Utility.appendLineIndent(--indentCount, "</a>"));
-            }
-
             if (match.isHisTurn(userTarget.getKey()))
             {
                 if (!match.isFinish())
