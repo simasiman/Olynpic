@@ -28,14 +28,19 @@ public class Match
 
     private boolean isStart = false;
     private boolean isFirstPick = true;
-    private boolean isMiss = false;
     private boolean isFinish = false;
     private boolean isClean = false;
+
+    private int lastAction = -1;
 
     private Word nowWord;
 
     private int winUser = 0;
     private int score = 0;
+
+    public static final int ACTION_CORRECT = 1;
+    public static final int ACTION_MISS = 2;
+    public static final int ACTION_TIMEOUT = 3;
 
     public int getMatchNo()
     {
@@ -136,9 +141,24 @@ public class Match
         return isFirstPick;
     }
 
-    public boolean isMiss()
+    public int getLastAction()
     {
-        return isMiss;
+        return lastAction;
+    }
+
+    public boolean isLACorrect()
+    {
+        return lastAction == ACTION_CORRECT;
+    }
+
+    public boolean isLAMiss()
+    {
+        return lastAction == ACTION_MISS;
+    }
+
+    public boolean isLATimeOut()
+    {
+        return lastAction == ACTION_MISS;
     }
 
     public boolean isFinish()
@@ -220,7 +240,6 @@ public class Match
     public void firstPick(String key, Panel panel)
     {
         isFirstPick = false;
-        isMiss = false;
 
         lastSelectedPanel = panel;
 
@@ -242,7 +261,7 @@ public class Match
         if (nextWordIndex < 0)
         {
             // 単語がミスしている場合
-            isMiss = true;
+            lastAction = ACTION_MISS;
             addMissCount(key);
             setPlayerTurnNext();
 
@@ -258,12 +277,13 @@ public class Match
 
     private void selectWord(String key, Word word, Panel panel)
     {
+        lastAction = ACTION_CORRECT;
+
         selectedWordList.add(word);
 
         panel.setSelectedUserId(key);
         panel.setSelectedWord(word);
 
-        isMiss = false;
         nowWord = word;
         addSelectPanel(key, panel);
 
@@ -424,21 +444,21 @@ public class Match
             User user1 = userList.get(0);
             User user2 = userList.get(1);
 
-            if (user1.isTimeOut() && user2.isTimeOut())
+            if ((user1.session == null && user2.session == null) || user1.isTimeOut() && user2.isTimeOut())
             {
                 // 両者タイムアウトの場合
                 user1.setWin(User.DRAW);
                 user2.setWin(User.DRAW);
             }
-            else if (user1.isTimeOutTwice())
+            else if (user1.session == null || user1.isTimeOutTwice())
             {
-                // 片方が２連続タイムアウトである場合
+                // 片方がセッション喪失、あるいは２連続タイムアウトである場合
                 user1.setWin(User.LOSE);
                 user2.setWin(User.WIN);
             }
-            else if (user2.isTimeOutTwice())
+            else if (user2.session == null || user2.isTimeOutTwice())
             {
-                // 片方が２連続タイムアウトである場合
+                // 片方がセッション喪失、あるいは２連続タイムアウトである場合
                 user1.setWin(User.WIN);
                 user2.setWin(User.LOSE);
             }
@@ -492,7 +512,7 @@ public class Match
             User user = userList.get(playerTurn);
             user.addTimeOutCnt();
 
-            if (user.isTimeOutTwice())
+            if (user.session == null || user.isTimeOutTwice())
             {
                 // 既にタイムアウト状態の場合
                 finishMatch();

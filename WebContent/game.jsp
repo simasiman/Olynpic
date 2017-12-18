@@ -24,8 +24,10 @@ if (key == null || key.isEmpty())
 }
 
 Cookie cooKey = new Cookie("key", key);
+cooKey.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooKey);
 Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
+cooName.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooName);
 
 long baseTime = match.getSelectedTime().getTime() + (GameSetting.MATCH_TIME * 1000);

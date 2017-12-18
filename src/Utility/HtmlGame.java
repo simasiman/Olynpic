@@ -72,7 +72,7 @@ public class HtmlGame
             // CSS用のクラス名の定義
             if (isLastSelected)
             {
-                if (match.isMiss())
+                if (match.isLAMiss())
                 {
                     cssClass += "lastMiss ";
                 }
@@ -164,18 +164,26 @@ public class HtmlGame
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"message\">"));
         ret.append(Utility.appendLineIndent(indentCount++, "<p>"));
 
-        Word nowWord = match.getNowWord();
-        if (nowWord != null)
+        if (match.isStart())
         {
-            String message1 = "選択されたパネルは「" + nowWord.getWord() + "」です。";
-            String message2 = "使える文字は「" + nowWord.getWordHead() + "」「" + nowWord.getWordTail() + "」です。";
-            ret.append(Utility.appendLineIndent(indentCount, message1 + "<br>" + message2));
+            Word nowWord = match.getNowWord();
+            if (nowWord != null)
+            {
+                String message1 = "選択されたパネルは「" + nowWord.getWord() + "」です。";
+                String message2 = "使える文字は「" + nowWord.getWordHead() + "」「" + nowWord.getWordTail() + "」です。";
+                ret.append(Utility.appendLineIndent(indentCount, message1 + "<br>" + message2));
+            }
+            else
+            {
+                String message1 = "最初のターンはすべてのパネルを選択できます。";
+                String message2 = "好きなパネルを選択してください。";
+                ret.append(Utility.appendLineIndent(indentCount, message1 + "<br>" + message2));
+            }
         }
         else
         {
-            String message1 = "最初のターンはすべてのパネルを選択できます。";
-            String message2 = "好きなパネルを選択してください。";
-            ret.append(Utility.appendLineIndent(indentCount, message1 + "<br>" + message2));
+            String message1 = "Game Set!!";
+            ret.append(Utility.appendLineIndent(indentCount, message1));
         }
 
         ret.append(Utility.appendLineIndent(--indentCount, "</p>"));

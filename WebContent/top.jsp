@@ -6,16 +6,16 @@ String name = (String)session.getAttribute("name");
 
 if (aryCookies != null)
 {
-    for (int i = 0; i < aryCookies.length; i++)
+    for (Cookie cookie : aryCookies)
     {
-        String cookie = aryCookies[i].getName();
-        if (cookie.equals("key") && (key == null || key.isEmpty()))
+        String ckName = cookie.getName();
+        if (ckName.equals("key") && (key == null || key.isEmpty()))
         {
-            key = aryCookies[i].getValue();
+            key = cookie.getValue();
         }
-        else if (cookie.equals("name") && (name == null || name.isEmpty()))
+        else if (ckName.equals("name") && (name == null || name.isEmpty()))
         {
-            name = URLDecoder.decode(aryCookies[i].getValue(), "UTF-8");
+            name = URLDecoder.decode(cookie.getValue(), "UTF-8");
         }
     }
 }
@@ -30,8 +30,10 @@ if (name == null || name.isEmpty())
 }
 
 Cookie cooKey = new Cookie("key", key);
+cooKey.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooKey);
 Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
+cooName.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooName);
 
 //終了済みのマッチングが存在しないかを確認

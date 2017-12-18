@@ -4,9 +4,7 @@
 <%@ page import="java.net.*"%>
 <%@ page import="java.util.ArrayList"%>
 <%
-
 Match match = (Match)request.getAttribute("matchResult");
-
 if (match == null)
 {
     response.sendRedirect("index.jsp");
@@ -18,6 +16,22 @@ Cookie[] aryCookies = request.getCookies();
 String key = (String)session.getAttribute("key");
 String name = (String)session.getAttribute("name");
 
+if (aryCookies != null)
+{
+    for (Cookie cookie : aryCookies)
+    {
+        String ckName = cookie.getName();
+        if (ckName.equals("key") && (key == null || key.isEmpty()))
+        {
+            key = cookie.getValue();
+        }
+        else if (ckName.equals("name") && (name == null || name.isEmpty()))
+        {
+            name = URLDecoder.decode(cookie.getValue(), "UTF-8");
+        }
+    }
+}
+
 if (key == null || key.isEmpty())
 {
     response.sendRedirect("index");
@@ -25,10 +39,11 @@ if (key == null || key.isEmpty())
 }
 
 Cookie cooKey = new Cookie("key", key);
+cooKey.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooKey);
 Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
+cooName.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooName);
-
 %>
 <!DOCTYPE html>
 <html>

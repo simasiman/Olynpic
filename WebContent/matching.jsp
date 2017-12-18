@@ -17,12 +17,11 @@ if (key == null || key.isEmpty() || user == null)
 }
 
 Cookie cooKey = new Cookie("key", key);
+cooKey.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooKey);
 Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
+cooName.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooName);
-
-
-
 %>
 <!DOCTYPE html>
 <html>
