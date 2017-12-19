@@ -68,7 +68,10 @@ public class GameWebSocket
         if (match != null)
         {
             MatchList.setUserSessionNull(session);
-            match.sendSessionGameDisconnect(session);
+            if (!match.isFinish())
+            {
+                match.sendSessionGameDisconnect(session);
+            }
         }
         ses.remove(session);
     }

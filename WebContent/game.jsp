@@ -30,7 +30,15 @@ Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
 cooName.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooName);
 
-long baseTime = match.getSelectedTime().getTime() + (GameSetting.MATCH_TIME * 1000);
+long baseTime;
+if (match.getSelectedTime() == null)
+{
+    baseTime = 0;
+}
+else
+{
+    baseTime = match.getSelectedTime().getTime() + (GameSetting.MATCH_TIME * 1000);    
+}
 
 %>
 <!DOCTYPE html>
@@ -50,6 +58,12 @@ $(function() {
 	countDown();
 });
 function countDown() {
+	if (baseTime == 0)
+	{
+		$("#timer").text("");
+		return;
+	}
+	
     var now = new Date();
     var endTime = new Date(baseTime);
     var restTime = endTime.getTime() - now.getTime();

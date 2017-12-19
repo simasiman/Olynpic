@@ -495,8 +495,20 @@ public class Match
         // 参加人数を満たした場合、ゲームスタート
         if (isCanMatchStart())
         {
+            while (sendSessionMatchingComplete())
+            {
+                // 対戦相手同士のセッションが確認できるまで繰り返し処理
+                try
+                {
+                    Thread.sleep(200);
+                }
+                catch (Exception e)
+                {
+                    System.out.println("matchingCheck error");
+                }
+            }
+
             startMatch();
-            sendSessionMatchingComplete();
         }
     }
 
@@ -545,9 +557,18 @@ public class Match
         return true;
     }
 
-    public void sendSessionMatchingComplete()
+    public boolean sendSessionMatchingComplete()
     {
         String ret = "<!--complete-->";
+
+        for (User user : userList)
+        {
+            Session session = user.session;
+            if (session == null || !session.isOpen())
+            {
+                return false;
+            }
+        }
 
         for (User user : userList)
         {
@@ -557,6 +578,8 @@ public class Match
                 session.getAsyncRemote().sendText(ret);
             }
         }
+
+        return true;
     }
 
     public void sendSessionGameUpdate()

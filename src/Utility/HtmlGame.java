@@ -164,27 +164,84 @@ public class HtmlGame
         ret.append(Utility.appendLineIndent(indentCount++, "<div class=\"message\">"));
         ret.append(Utility.appendLineIndent(indentCount++, "<p>"));
 
-        if (match.isStart())
+        // タグを予め作成し、@を対象に文字の置換えを行う
+        String partLeft = "<div class=\"partLeft\">#</div>";
+        String partRight = "<div class=\"partRight\">#</div>";
+        String partCenter = "<div class=\"partCenter\">#</div>";
+
+        String messageWord = "";
+        String messageArrow = "";
+        String messageAction = "";
+
+        // TODO:ゲーム開始直後のメッセージに対応できるマッチング状態の作成
+        if (match.isFinish())
         {
-            Word nowWord = match.getNowWord();
-            if (nowWord != null)
+            // ゲーム終了時
+            messageArrow = "Game Set!!";
+        }
+        else if (match.isStart())
+        {
+            // ゲーム開始時
+
+            String cssImageArrow = "";
+
+            if (match.getPlayerCount() == 1)
             {
-                String message1 = "選択されたパネルは「" + nowWord.getWord() + "」です。";
-                String message2 = "使える文字は「" + nowWord.getWordHead() + "」「" + nowWord.getWordTail() + "」です。";
-                ret.append(Utility.appendLineIndent(indentCount, message1 + "<br>" + message2));
+                cssImageArrow = "rightArrow ";
+            }
+            else if (match.getPlayerTurn() == 0)
+            {
+                cssImageArrow = "leftArrow animation ";
             }
             else
             {
-                String message1 = "最初のターンはすべてのパネルを選択できます。";
-                String message2 = "好きなパネルを選択してください。";
-                ret.append(Utility.appendLineIndent(indentCount, message1 + "<br>" + message2));
+                cssImageArrow = "rightArrow animation ";
             }
+
+            Word nowWord = match.getNowWord();
+
+            if (nowWord == null)
+            {
+                // 初回選択時
+                messageWord = "";
+                partLeft = partLeft.replace("#", "FREE CHOICE");
+
+            }
+            else
+            {
+                // 二回目以降選択時
+                messageWord = "<span class=\"wordHead\">" + nowWord.getWordHead() + "</span>「" + nowWord.getWord() + "」<span class=\"wordTail\">" + nowWord.getWordTail() + "</span>";
+
+                if (match.isLACorrect())
+                {
+                    messageAction = "？？";
+                }
+                else if (match.isLAMiss())
+                {
+                    messageAction = "MISS";
+                }
+                else if (match.isLATimeOut())
+                {
+                    messageAction = "TIME UP";
+                }
+            }
+
+            messageArrow = "<img class=\"" + cssImageArrow + "\" src=\"img/message/arrow.jpg\" width=\"100\">";
+        }
+
+        if (match.getPlayerTurn() == 0)
+        {
+            partLeft = partLeft.replace("#", messageAction);
+            partRight = partRight.replace("#", messageWord);
         }
         else
         {
-            String message1 = "Game Set!!";
-            ret.append(Utility.appendLineIndent(indentCount, message1));
+            partLeft = partLeft.replace("#", messageWord);
+            partRight = partRight.replace("#", messageAction);
         }
+        partCenter = partCenter.replace("#", messageArrow);
+
+        ret.append(Utility.appendLineIndent(indentCount, partLeft + partCenter + partRight));
 
         ret.append(Utility.appendLineIndent(--indentCount, "</p>"));
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));

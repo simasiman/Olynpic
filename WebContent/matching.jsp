@@ -42,7 +42,7 @@ WebSocketDemo = {};
             var text = message.data;
             if (text.indexOf('<!--complete-->') == 0)
             {
-            	location.reload();
+            	window.location.href = "game";
             }
             else if (text.indexOf('<!--destruct-->') == 0)
             {

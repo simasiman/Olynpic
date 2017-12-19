@@ -17,7 +17,7 @@ public class GameSetting
     /**
      * マッチング監視用タイマーの更新間隔
      */
-    public static final int SERVER_TIMER_INTERVAL = 100;
+    public static final int SERVER_TIMER_INTERVAL = 500;
 
     // サーバ接続情報一覧
     public static String SERVER_ADDRESS = "localhost";

@@ -61,8 +61,8 @@ public class MatchList
 
         for (Match match : matchList)
         {
-            match.matchingCheck();
             match.timeOutCheck();
+            match.matchingCheck();
         }
     }
 
