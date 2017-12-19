@@ -14,6 +14,12 @@ public class User
     private int miss;
     private int win;
 
+    private int winCount;
+    private int loseCount;
+    private int drawCount;
+
+    private int highScore;
+
     private int timeOutCnt = 0;
     private boolean isResultWatch = false;
 
@@ -144,6 +150,46 @@ public class User
     public void setWin(int win)
     {
         this.win = win;
+    }
+
+    public int getWinCount()
+    {
+        return winCount;
+    }
+
+    public void setWinCount(int winCount)
+    {
+        this.winCount = winCount;
+    }
+
+    public int getLoseCount()
+    {
+        return loseCount;
+    }
+
+    public void setLoseCount(int loseCount)
+    {
+        this.loseCount = loseCount;
+    }
+
+    public int getDrawCount()
+    {
+        return drawCount;
+    }
+
+    public void setDrawCount(int drawCount)
+    {
+        this.drawCount = drawCount;
+    }
+
+    public int getHighScore()
+    {
+        return highScore;
+    }
+
+    public void setHighScore(int highScore)
+    {
+        this.highScore = highScore;
     }
 
     public boolean isResultWatch()

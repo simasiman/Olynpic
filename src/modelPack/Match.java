@@ -11,8 +11,6 @@ import Utility.HtmlGame;
 
 public class Match
 {
-    private int matchNo = 0;
-
     private ArrayList<User> userList = new ArrayList<User>();
     private ArrayList<Panel> panelList = new ArrayList<Panel>();
     private ArrayList<Word> selectedWordList = new ArrayList<Word>();
@@ -29,6 +27,7 @@ public class Match
     private boolean isStart = false;
     private boolean isFirstPick = true;
     private boolean isFinish = false;
+    private boolean isUpload = false;
     private boolean isClean = false;
 
     private int lastAction = -1;
@@ -41,16 +40,6 @@ public class Match
     public static final int ACTION_CORRECT = 1;
     public static final int ACTION_MISS = 2;
     public static final int ACTION_TIMEOUT = 3;
-
-    public int getMatchNo()
-    {
-        return matchNo;
-    }
-
-    public void setMatchNo(int matchNo)
-    {
-        this.matchNo = matchNo;
-    }
 
     public int getUserCount()
     {
@@ -376,7 +365,6 @@ public class Match
             {
                 this.userList.add(MatchUserList.pull(playerCount));
             }
-            this.matchNo = MatchList.getNextMatchNumber();
             this.playerCount = playerCount;
             this.playerTurn = (playerCount == 1) ? 0 : new Random().nextInt(playerCount);
 
@@ -413,6 +401,14 @@ public class Match
         isFinish = true;
 
         setWinLose();
+
+        if (!isUpload)
+        {
+            isUpload = true;
+
+            updateUser();
+            insertPlayResult();
+        }
     }
 
     public boolean isHisTurn(String key)
@@ -431,7 +427,6 @@ public class Match
         return index == playerTurn;
     }
 
-    // private method
     private void setWinLose()
     {
         if (userList.size() == 1)
@@ -500,7 +495,7 @@ public class Match
                 // 対戦相手同士のセッションが確認できるまで繰り返し処理
                 try
                 {
-                    Thread.sleep(200);
+                    System.out.println("a");
                 }
                 catch (Exception e)
                 {
@@ -632,6 +627,61 @@ public class Match
         {
             return false;
         }
+    }
+
+    public boolean updateUser()
+    {
+        try
+        {
+            SiritoriDao dao = new SiritoriDao();
+            for (User user : userList)
+            {
+                User target = dao.selectUser(user.getKey());
+                if (target == null)
+                {
+                    // 新規ユーザであれば登録
+                    dao.insertUser(user);
+                }
+                else if (!target.getName().equals(user.getName()))
+                {
+                    // 旧来ユーザで名前が異なれば更新
+                    dao.updateUser(user);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean insertPlayResult()
+    {
+        try
+        {
+            for (User user : userList)
+            {
+                PlayResult result = new PlayResult();
+
+                result.setKey(user.getKey());
+                result.setPlayerCount(playerCount);
+                result.setPlayDate(new Date());
+                result.setScore(user.getScore());
+                result.setWinLose(user.getWin());
+
+                (new SiritoriDao()).insertPlayResult(result);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
 }

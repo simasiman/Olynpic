@@ -10,7 +10,6 @@ import Utility.GameSetting;
 public class MatchList
 {
     private static ArrayList<Match> matchList;
-    private static int matchNumber = 0;
 
     static
     {
@@ -47,7 +46,7 @@ public class MatchList
             Match match = matchList.get(i);
             if (match.isClean())
             {
-                matchList.remove(match);
+                // matchList.remove(match);
             }
         }
     }
@@ -69,11 +68,6 @@ public class MatchList
     public static ArrayList<Match> getMatchList()
     {
         return matchList;
-    }
-
-    public static int getNextMatchNumber()
-    {
-        return ++matchNumber;
     }
 
     public static Match getMatch(String key)

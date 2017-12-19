@@ -25,6 +25,22 @@ CREATE TABLE tbl_word_siritori(
     level     INT
 );
 
+# ユーザテーブルの作成
+CREATE TABLE tbl_user(
+    user_key  TEXT ,
+    name      TEXT
+);
+
+# マッチングテーブルの作成
+CREATE TABLE tbl_play_result(
+    id          INT  ,
+    user_key    TEXT ,
+    playdate    DATE ,
+    winlose     INT  ,
+    score       INT  ,
+    playerCount INT
+);
+
 # 競技名単語テーブルにデータを挿入
 INSERT INTO tbl_word_base VALUES(1,"バスケットボール","panel_basketball.png");
 INSERT INTO tbl_word_base VALUES(2,"水泳","panel_swimming.png");

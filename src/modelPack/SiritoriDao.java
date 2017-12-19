@@ -43,25 +43,23 @@ public class SiritoriDao
         }
     }
 
-    public String selectUserName(String key) throws SQLException
+    public int getNextMatchNumber() throws SQLException
     {
         PreparedStatement pstatement = null;
         ResultSet rs = null;
-        String ret = null;
+        int ret = 0;
 
         try
         {
             String sql = ""
-                    + " SELECT name "
-                    + "   FROM tbl_user "
-                    + "  WHERE key = ? ";
+                    + " SELECT MAX(id) + 1 as max"
+                    + "   FROM tbl_play_result ";
 
             pstatement = connection.prepareStatement(sql);
-            pstatement.setString(1, key);
             rs = pstatement.executeQuery();
             if (rs.next())
             {
-                ret = rs.getString("key");
+                ret = rs.getInt("max");
             }
 
             rs.close();
@@ -74,7 +72,39 @@ public class SiritoriDao
         return ret;
     }
 
-    public boolean insertUser(String key, String name) throws SQLException
+    public User selectUser(String key) throws SQLException
+    {
+        PreparedStatement pstatement = null;
+        ResultSet rs = null;
+        User ret = null;
+
+        try
+        {
+            String sql = ""
+                    + " SELECT user_key, "
+                    + "        name "
+                    + "   FROM tbl_user "
+                    + "  WHERE user_key = ? ";
+
+            pstatement = connection.prepareStatement(sql);
+            pstatement.setString(1, key);
+            rs = pstatement.executeQuery();
+            if (rs.next())
+            {
+                ret = new User(rs.getString("user_key"), rs.getString("name"));
+            }
+
+            rs.close();
+        }
+        finally
+        {
+            pstatement.close();
+        }
+
+        return ret;
+    }
+
+    public boolean insertUser(User user) throws SQLException
     {
         PreparedStatement pstatement = null;
         boolean ret = false;
@@ -83,12 +113,37 @@ public class SiritoriDao
         {
             String sql = ""
                     + " INSERT INTO tbl_user "
-                    + "             (key, name) "
+                    + "             (user_key, name) "
                     + "      VALUES (?, ?) ";
 
             pstatement = connection.prepareStatement(sql);
-            pstatement.setString(1, key);
-            pstatement.setString(2, name);
+            pstatement.setString(1, user.getKey());
+            pstatement.setString(2, user.getName());
+            ret = pstatement.execute();
+        }
+        finally
+        {
+            pstatement.close();
+        }
+
+        return ret;
+    }
+
+    public boolean updateUser(User user) throws SQLException
+    {
+        PreparedStatement pstatement = null;
+        boolean ret = false;
+
+        try
+        {
+            String sql = ""
+                    + " UPDATE tbl_user "
+                    + "    SET name = ? "
+                    + "  WHERE user_key  = ? ";
+
+            pstatement = connection.prepareStatement(sql);
+            pstatement.setString(1, user.getName());
+            pstatement.setString(2, user.getKey());
             ret = pstatement.execute();
         }
         finally
@@ -112,7 +167,8 @@ public class SiritoriDao
                     + "        name, "
                     + "        picture "
                     + "   FROM tbl_word_base "
-                    + "  ORDER BY ath_id "
+                    // + " ORDER BY ath_id "
+                    + "  ORDER BY RAND() "
                     + "  LIMIT 0, ?";
 
             pstatement = connection.prepareStatement(sql);
@@ -172,6 +228,236 @@ public class SiritoriDao
                 }
 
                 ret.add(p);
+            }
+
+            rs.close();
+        }
+        finally
+        {
+            pstatement.close();
+        }
+
+        return ret;
+    }
+
+    public boolean insertPlayResult(PlayResult result) throws SQLException
+    {
+        PreparedStatement pstatement = null;
+        boolean ret = false;
+
+        try
+        {
+            String sql = ""
+                    + " INSERT INTO tbl_play_result "
+                    + "             (id, user_key, playdate, winlose, score, playerCount) "
+                    + "      VALUES (?, ?, ?, ?, ?, ?) ";
+
+            pstatement = connection.prepareStatement(sql);
+
+            pstatement.setInt(1, getNextMatchNumber());
+            pstatement.setString(2, result.getKey());
+            pstatement.setDate(3, new java.sql.Date(result.getPlayDate().getTime()));
+            pstatement.setInt(4, result.getWinLose());
+            pstatement.setInt(5, result.getScore());
+            pstatement.setInt(6, result.getPlayerCount());
+
+            ret = pstatement.execute();
+        }
+        finally
+        {
+            pstatement.close();
+        }
+
+        return ret;
+    }
+
+    public ArrayList<User> getHighScoreRanking(int playerCount) throws SQLException
+    {
+        PreparedStatement pstatement = null;
+        ResultSet rs = null;
+        ArrayList<User> ret = null;
+
+        try
+        {
+            String sql = ""
+                    + " SELECT user_key, "
+                    + "       (SELECT name FROM tbl_user WHERE user_key = base.user_key) AS name, "
+                    + "       MAX(score) as highScore "
+                    + "  FROM tbl_play_result AS base "
+                    + " WHERE playerCount = ? "
+                    + " GROUP by user_key; ";
+
+            pstatement = connection.prepareStatement(sql);
+            pstatement.setInt(1, playerCount);
+            rs = pstatement.executeQuery();
+            while (rs.next())
+            {
+                if (ret == null)
+                {
+                    ret = new ArrayList<User>();
+                }
+
+                User user = new User();
+
+                user.setKey(rs.getString("user_key"));
+                user.setName(rs.getString("name"));
+                user.setHighScore(rs.getInt("highScore"));
+
+                ret.add(user);
+            }
+
+            rs.close();
+        }
+        finally
+        {
+            pstatement.close();
+        }
+
+        return ret;
+    }
+
+    public ArrayList<User> getHighScoreRanking(String key, int playerCount) throws SQLException
+    {
+        PreparedStatement pstatement = null;
+        ResultSet rs = null;
+        ArrayList<User> ret = null;
+
+        try
+        {
+            String sql = ""
+                    + " SELECT user_key, "
+                    + "       (SELECT name FROM tbl_user WHERE user_key = base.user_key) AS name, "
+                    + "       MAX(score) as highScore "
+                    + "  FROM tbl_play_result AS base "
+                    + " WHERE playerCount = ? "
+                    + "   AND user_key = ? "
+                    + " GROUP by user_key; ";
+
+            pstatement = connection.prepareStatement(sql);
+            pstatement.setInt(1, playerCount);
+            pstatement.setString(2, key);
+            rs = pstatement.executeQuery();
+            while (rs.next())
+            {
+                if (ret == null)
+                {
+                    ret = new ArrayList<User>();
+                }
+
+                User user = new User();
+
+                user.setKey(rs.getString("user_key"));
+                user.setName(rs.getString("name"));
+                user.setHighScore(rs.getInt("highScore"));
+
+                ret.add(user);
+            }
+
+            rs.close();
+        }
+        finally
+        {
+            pstatement.close();
+        }
+
+        return ret;
+    }
+
+    public ArrayList<User> getWinLoseRanking(int playerCount) throws SQLException
+    {
+        PreparedStatement pstatement = null;
+        ResultSet rs = null;
+        ArrayList<User> ret = null;
+
+        try
+        {
+            String sql = "" +
+                    " SELECT user_key, " +
+                    "       (SELECT name FROM tbl_user WHERE user_key = base.user_key) AS name, " +
+                    "       (SELECT COUNT(user_key) FROM tbl_play_result WHERE user_key = base.user_key AND playerCount = ? AND winLose = 1) AS win, " +
+                    "       (SELECT COUNT(user_key) FROM tbl_play_result WHERE user_key = base.user_key AND playerCount = ? AND winLose = 2) AS lose, " +
+                    "       (SELECT COUNT(user_key) FROM tbl_play_result WHERE user_key = base.user_key AND playerCount = ? AND winLose = -1) AS draw " +
+                    "  FROM tbl_play_result AS base " +
+                    " GROUP BY user_key " +
+                    " ORDER BY win desc, draw, lose desc ";
+
+            pstatement = connection.prepareStatement(sql);
+
+            pstatement.setInt(1, playerCount);
+            pstatement.setInt(2, playerCount);
+            pstatement.setInt(3, playerCount);
+
+            rs = pstatement.executeQuery();
+            while (rs.next())
+            {
+                if (ret == null)
+                {
+                    ret = new ArrayList<User>();
+                }
+
+                User user = new User();
+
+                user.setKey(rs.getString("user_key"));
+                user.setName(rs.getString("name"));
+                user.setWinCount(rs.getInt("win"));
+                user.setLoseCount(rs.getInt("lose"));
+                user.setDrawCount(rs.getInt("draw"));
+
+                ret.add(user);
+            }
+
+            rs.close();
+        }
+        finally
+        {
+            pstatement.close();
+        }
+
+        return ret;
+    }
+
+    public ArrayList<User> getWinLoseRanking(String key, int playerCount) throws SQLException
+    {
+        PreparedStatement pstatement = null;
+        ResultSet rs = null;
+        ArrayList<User> ret = null;
+
+        try
+        {
+            String sql = ""
+                    + " SELECT user_key, " +
+                    "       (SELECT name FROM tbl_user WHERE user_key = base.user_key) AS name, " +
+                    "       (SELECT COUNT(user_key) FROM tbl_play_result WHERE user_key = base.user_key AND playerCount = ? AND winLose = 1) AS win, " +
+                    "       (SELECT COUNT(user_key) FROM tbl_play_result WHERE user_key = base.user_key AND playerCount = ? AND winLose = 2) AS lose, " +
+                    "       (SELECT COUNT(user_key) FROM tbl_play_result WHERE user_key = base.user_key AND playerCount = ? AND winLose = -1) AS draw " +
+                    "  FROM tbl_play_result AS base " +
+                    " WHERE user_key = ? " +
+                    " GROUP BY user_key ";
+
+            pstatement = connection.prepareStatement(sql);
+
+            pstatement.setInt(1, playerCount);
+            pstatement.setInt(2, playerCount);
+            pstatement.setInt(3, playerCount);
+            pstatement.setString(4, key);
+
+            rs = pstatement.executeQuery();
+            while (rs.next())
+            {
+                if (ret == null)
+                {
+                    ret = new ArrayList<User>();
+                }
+
+                User user = new User();
+
+                user.setKey(rs.getString("user_key"));
+                user.setName(rs.getString("name"));
+                user.setWinCount(rs.getInt("win"));
+                user.setLoseCount(rs.getInt("lose"));
+                user.setDrawCount(rs.getInt("draw"));
+
+                ret.add(user);
             }
 
             rs.close();

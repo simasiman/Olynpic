@@ -17,6 +17,22 @@
 				<property name="ssl.require" value="false"/>
 			</network-handler>
 		</connection>
+		<virtual-meta-data>
+			<container name="model">
+				<container name="PaneTori">
+					<entity name="tbl_play_result">
+						<constraint name="PRIMARY" type="VIRTUAL KEY">
+							<attribute name="Id"/>
+							<attribute name="user_key"/>
+							<attribute name="playdate"/>
+							<attribute name="winlose"/>
+							<attribute name="score"/>
+							<attribute name="playerCount"/>
+						</constraint>
+					</entity>
+				</container>
+			</container>
+		</virtual-meta-data>
 	</data-source>
 	<filters/>
 </data-sources>
