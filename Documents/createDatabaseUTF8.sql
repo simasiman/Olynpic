@@ -9,13 +9,11 @@ CREATE DATABASE PaneTori;
 # データベースの選択
 USE PaneTori;
 
-# パネルテーブルの作成
+# 競技名単語テーブルの作成
 CREATE TABLE tbl_word_base(
     ath_id  INT  ,
     name    TEXT ,
-    picture TEXT ,
-    original INT ,
-    approval INT
+    picture TEXT
 );
 
 # しりとり単語テーブルの作成
@@ -44,11 +42,11 @@ CREATE TABLE tbl_play_result(
 );
 
 # 競技名単語テーブルにデータを挿入
-LOAD DATA LOCAL INFILE './DB/tbl_word_base_UTF8.csv' 
+LOAD DATA LOCAL INFILE 'DB\tbl_word_base.csv' 
 INTO TABLE tbl_word_base FIELDS TERMINATED BY ',' ENCLOSED BY '"';
 
 # しりとり単語テーブルにデータを挿入
-LOAD DATA LOCAL INFILE './DB/tbl_word_siritori_UTF8.csv' 
+LOAD DATA LOCAL INFILE 'DB\tbl_word_siritori.csv' 
 INTO TABLE tbl_word_siritori FIELDS TERMINATED BY ',' ENCLOSED BY '"';
 
 # 以上

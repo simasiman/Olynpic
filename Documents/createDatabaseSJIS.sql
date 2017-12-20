@@ -1,22 +1,22 @@
 ############################################
-#       ‚µ‚è‚Æ‚è—pƒf[ƒ^ƒx[ƒXì¬ƒpƒbƒ`         #
+#       ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½pï¿½fï¿½[ï¿½^ï¿½xï¿½[ï¿½Xï¿½ì¬ï¿½pï¿½bï¿½`         #
 ############################################
 
-# ƒf[ƒ^ƒx[ƒX‚Ìíœ‚Æì¬(Äì¬)
+# ï¿½fï¿½[ï¿½^ï¿½xï¿½[ï¿½Xï¿½Ìíœï¿½Æì¬(ï¿½Äì¬)
 DROP DATABASE IF EXISTS PaneTori;
 CREATE DATABASE PaneTori;
 
-# ƒf[ƒ^ƒx[ƒX‚Ì‘I‘ð
+# ï¿½fï¿½[ï¿½^ï¿½xï¿½[ï¿½Xï¿½Ì‘Iï¿½ï¿½
 USE PaneTori;
 
-# ƒpƒlƒ‹ƒe[ƒuƒ‹‚Ìì¬
+# ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½Pï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Ìì¬
 CREATE TABLE tbl_word_base(
     ath_id  INT  ,
     name    TEXT ,
-    picture TEXT 
+    picture TEXT
 );
 
-# ‚µ‚è‚Æ‚è’PŒêƒe[ƒuƒ‹‚Ìì¬
+# ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½Pï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Ìì¬
 CREATE TABLE tbl_word_siritori(
     ath_id    INT  ,
     word_id   INT  ,
@@ -25,30 +25,13 @@ CREATE TABLE tbl_word_siritori(
     level     INT
 );
 
-# (ƒ†[ƒU“o˜^—p)ƒpƒlƒ‹ƒe[ƒuƒ‹‚Ìì¬
-CREATE TABLE tbl_word_base_user(
-    ath_id  INT  ,
-    name    TEXT ,
-    picture TEXT ,
-    approval int
-);
-
-# (ƒ†[ƒU“o˜^—p)‚µ‚è‚Æ‚è’PŒêƒe[ƒuƒ‹‚Ìì¬
-CREATE TABLE tbl_word_siritori_user(
-    ath_id    INT  ,
-    word_id   INT  ,
-    word_disp TEXT ,
-    word_read TEXT ,
-    level     INT
-);
-
-# ƒ†[ƒUƒe[ƒuƒ‹‚Ìì¬
+# ï¿½ï¿½ï¿½[ï¿½Uï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Ìì¬
 CREATE TABLE tbl_user(
     user_key  TEXT ,
     name      TEXT
 );
 
-# ƒ}ƒbƒ`ƒ“ƒOƒe[ƒuƒ‹‚Ìì¬
+# ï¿½}ï¿½bï¿½`ï¿½ï¿½ï¿½Oï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Ìì¬
 CREATE TABLE tbl_play_result(
     id          INT  ,
     user_key    TEXT ,
@@ -58,12 +41,12 @@ CREATE TABLE tbl_play_result(
     playerCount INT
 );
 
-# ‹£‹Z–¼’PŒêƒe[ƒuƒ‹‚Éƒf[ƒ^‚ð‘}“ü
+# ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½Pï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Éƒfï¿½[ï¿½^ï¿½ï¿½}ï¿½ï¿½
 LOAD DATA LOCAL INFILE '.\\DB\\tbl_word_base.csv' 
 INTO TABLE tbl_word_base FIELDS TERMINATED BY ',' ENCLOSED BY '"';
 
-# ‚µ‚è‚Æ‚è’PŒêƒe[ƒuƒ‹‚Éƒf[ƒ^‚ð‘}“ü
+# ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½Pï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Éƒfï¿½[ï¿½^ï¿½ï¿½}ï¿½ï¿½
 LOAD DATA LOCAL INFILE '.\\DB\\tbl_word_siritori.csv' 
 INTO TABLE tbl_word_siritori FIELDS TERMINATED BY ',' ENCLOSED BY '"';
 
-# ˆÈã
+# ï¿½Èï¿½
