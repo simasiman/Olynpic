@@ -1,17 +1,17 @@
-ï»¿@import url(https://fonts.googleapis.com/css?family=Lato:400,700);
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700);
 
-/*å…¨ä½“*/
+/*‘S‘Ì*/
 html,body{
 	box-sizing:border-box;
 	height:100%;
 }
 body{
 	font-size:16px;
-	font-family: "æ¸¸ã‚´ã‚·ãƒƒã‚¯ Medium", "æ¸¸ã‚´ã‚·ãƒƒã‚¯ä½“", "Yu Gothic Medium", YuGothic, "ãƒ¡ã‚¤ãƒªã‚ª", Meiryo, Lato, "Noto Sans JP", "ãƒ’ãƒ©ã‚®ãƒè§’ã‚´ ProN", "Hiragino Kaku Gothic ProN", "ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯", "MS PGothic", sans-serif;
+	font-family: "ŸàƒSƒVƒbƒN Medium", "ŸàƒSƒVƒbƒN‘Ì", "Yu Gothic Medium", YuGothic, "ƒƒCƒŠƒI", Meiryo, Lato, "Noto Sans JP", "ƒqƒ‰ƒMƒmŠpƒS ProN", "Hiragino Kaku Gothic ProN", "‚l‚r ‚oƒSƒVƒbƒN", "MS PGothic", sans-serif;
 }
-@media all and (-ms-high-contrast: none) {/*IEã ã¨æ¸¸ã‚´ã‚·ãƒƒã‚¯ã§ä¸‹éƒ¨ã«ç©ºç™½ãŒç™ºç”Ÿã™ã‚‹ãŸã‚ã€å¤–ã—ã¦ã„ã‚‹*/
+@media all and (-ms-high-contrast: none) {/*IE‚¾‚ÆŸàƒSƒVƒbƒN‚Å‰º•”‚É‹ó”’‚ª”­¶‚·‚é‚½‚ßAŠO‚µ‚Ä‚¢‚é*/
 	body {
-	font-family: "Noto Sans JP", "ãƒ’ãƒ©ã‚®ãƒè§’ã‚´ ProN", "Hiragino Kaku Gothic ProN", "ãƒ¡ã‚¤ãƒªã‚ª", Meiryo, Lato, "ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯", "MS PGothic", sans-serif;
+	font-family: "Noto Sans JP", "ƒqƒ‰ƒMƒmŠpƒS ProN", "Hiragino Kaku Gothic ProN", "ƒƒCƒŠƒI", Meiryo, Lato, "‚l‚r ‚oƒSƒVƒbƒN", "MS PGothic", sans-serif;
 	}
 }
 .page{
@@ -20,7 +20,7 @@ body{
 	padding-bottom:30px;
 	min-height: 100%;
 }
-/*ãƒ˜ãƒƒãƒ€ãƒ¼*/
+/*ƒwƒbƒ_[*/
 header{
 	height:36px;
 	background-color:#001F64;
@@ -30,7 +30,7 @@ header img{
 	vertical-align:middle;
 	margin:2px 10px;
 }
-/*ãƒãƒƒãƒãƒ³ã‚°ç”»é¢*/
+/*ƒ}ƒbƒ`ƒ“ƒO‰æ–Ê*/
 .nowMatching{
 	margin:20px auto;
 	padding:10px;
@@ -39,6 +39,21 @@ header img{
 	background-color:#DDD;
 	font-size:22px;
 	font-weight:bold;
+	-webkit-animation: switchtext 0.5s infinite alternate;
+    -moz-animation: switchtext 0.5s infinite alternate;
+    animation: switchtext 0.5s infinite alternate;
+}
+@-webkit-keyframes switchtext {
+	from { color:rgba(0,0,0,1); }
+	to { color:rgba(0,0,0,0); }
+}
+@-moz-keyframes switchtext {
+	from { color:rgba(0,0,0,1); }
+	to { color:rgba(0,0,0,0); }
+}
+@keyframes switchtext {
+	from { color:rgba(0,0,0,1); }
+	to { color:rgba(0,0,0,0); }
 }
 a{
 	display: block;
@@ -71,8 +86,17 @@ a:hover{
 	margin-bottom:60px;
 	text-align:center;
 }
-
-/*ãƒ•ãƒƒã‚¿ãƒ¼*/
+.nowMatching_message_back{
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	width: 100%;
+	height: 50%;
+}
+/*ƒtƒbƒ^[*/
 footer{
 	position:absolute;
 	bottom:0;
@@ -83,5 +107,5 @@ footer{
 	line-height:30px;
 	color:#AAA;
 	font-size:12px;
-	
+
 }
