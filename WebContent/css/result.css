@@ -45,11 +45,11 @@ header img{
 /*大枠*/
 .wapper{
 	margin: 0 auto;
-	width: ;/*あとで入れる*/
+	width: 910px;
 }
 
 /*勝敗*/
-.rank{
+.result{
 	margin: 2px auto 0;
 	width: 100%;
 	height: 200px;
@@ -60,7 +60,7 @@ header img{
 }
 .rankImg1 img{
 	position: absolute;
-	clip: rect(0px,158px,212px,0px);
+
 }
 .rankimg2 img{/*1位と2位で切り替える*/
 
@@ -70,7 +70,7 @@ header img{
 .toTop{
 	margin: 15px;
 	text-align: center;
-	font-size: 15px;
+	font-size: 16px;
 	font-weight: bold;
 }
 .toTop a{
@@ -79,13 +79,18 @@ header img{
 /*獲得したパネル*/
 .getPanel{
 	float:left;
-	margin-right: 10px;
 	padding: 6px 4px 4px 4px;
-	background-color: rgba(0,57,179,0.8);
+	background-color: rgba(0, 53, 186, 0.9);
 }
 .getPanel>p{
 	margin: 5px;
-	font-size: 17px;
+	font-size: 20px;
+	font-weight: bold;
+	color: #000;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.8),
+	 -1px 1px 1px rgba(255,255,255,0.8),
+	 1px -1px 1px rgba(255,255,255,0.8),
+	 -1px -1px 1px rgba(255,255,255,0.8);
 }
 ol{
 	list-style: none;
@@ -95,8 +100,8 @@ ol{
 .getPanelList{
 	position: relative;
 	padding: 5px 0 5px 5px;
-	background-color: rgba(194,202,232,0.85);
-	border-bottom: solid 1px #555;
+	background-color: rgba(223, 230, 255, 0.9);
+	border-bottom: solid 1px #444;
 }
 .getPanelList:last-of-type{
 	border-style: none;
@@ -104,7 +109,7 @@ ol{
 .getPanelList:before{/*獲得した順番*/
 	float: left;
 	margin: 2px 5px;
-	width: 20px;
+	width: 21px;
 	height: 20px;
 	counter-increment: count;
 	content: counter(count);
@@ -171,7 +176,6 @@ ol{
 	height: 45px;
 }
 .score:not(.first)>span:nth-child(1){
-
 	font-size: 20px;
 	font-weight: bold;
 }
@@ -186,55 +190,83 @@ ol{
 
 /*ランキング、ハイスコア*/
 .right{
-	float: right;
-	background-color: #AAA;
+	float: left;
+	margin-left: 10px;
+	width: 300px;
+}
+.right>div:nth-child(1){
+	margin-bottom: 5px;
+	font-size: 19px;
 }
 .highScore{
 	margin-bottom: 20px;
-	background-color: #DDD;
+	background-color: rgba(65, 125, 255, 0.84);
 }
-.highScore>div{
+.highScore>div:nth-child(1){
+	padding: 4px 0 0 4px;
+	font-size: 18px;
 	font-weight: bold;
-}
-.highScore li{
-	margin-left: 5px;
-}
-.rankingWapper{
-	padding-top: 5px;
-	background-color: #CCC;
-}
-.rankingWapper>div:not(.ranking) {
-	font-size: 17px;
-	font-weight: bold;
-}
-.highScore,
-.ranking{
-	padding: 5px 0;
-}
 
-.ranking{
-	margin: 0 0 5px 5px;
-	background-color: #DDD;
 }
-
-.ranking>div{
-	padding: 2px 2px 2px 0;
-	font-weight: bold;
-	background-color: #999;
+.highScore>div:nth-child(1)>span{
+	font-size: 15px;
+	font-weight: normal;
+}
+.highScore>ol{
+	margin-left: 8px;
+	padding: 3px 0 5px 0;
+	background-color: #dfe6ff;
 }
 .highScore li,
 .ranking li{
-	margin: 0 7px 2px 7px;
-	padding: 2px 0;
+	margin: 0 10px 0 10px;
+	padding: 3px 0;
 	border-bottom: solid 1px #666;
 	line-height: 1.2;
 }
-.ranking li:last-of-type{
-	margin-bottom: 0;
+.rankingWapper{
+	padding: 6px 0 0 3px;
+	background-color: #9ec7ff;
 }
-.ranking:last-of-type{
-	margin-bottom: 0;
+.rankingWapper>div:not(.ranking) {
+	font-size: 18px;
+	font-weight: bold;
 }
+.ranking{
+	margin: 5px 0 0 5px;
+	padding-bottom: 5px;
+	background-color: #dfe6ff;
+}
+.ranking>div{
+	box-sizing: border-box;
+	margin-bottom: 2px;
+	padding-left: 3px;
+	height: 24px;
+	background-color: rgb(111, 156, 255);
+	font-weight: bold;
+	line-height: 24px;
+}
+.player{/*プレイヤー自身の（今回の）順位*/
+	background-color: rgba(255, 255, 255, 0.8);
+}
+.rank{
+	float: left;
+	width: 20px;
+}
+.name{
+	float: left;
+	width: 200px;
+	font-weight: bold;
+}
+.num{
+	float: left;
+	width: 50px;
+	font-weight: bold;
+}
+.ranking .num{
+	text-align: right;
+}
+
 /*ロゴ*/
 .logo{
 	margin: 30px auto 5px auto;

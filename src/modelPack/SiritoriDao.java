@@ -279,13 +279,15 @@ public class SiritoriDao
 
         try
         {
-            String sql = ""
-                    + " SELECT user_key, "
-                    + "       (SELECT name FROM tbl_user WHERE user_key = base.user_key) AS name, "
-                    + "       MAX(score) as highScore "
-                    + "  FROM tbl_play_result AS base "
-                    + " WHERE playerCount = ? "
-                    + " GROUP by user_key; ";
+            String sql = "" +
+                    " SELECT user_key, " +
+                    "       (SELECT name FROM tbl_user WHERE user_key = base.user_key) AS name, " +
+                    "       MAX(score) as highScore " +
+                    "  FROM tbl_play_result AS base " +
+                    " WHERE playerCount = ? " +
+                    " GROUP by user_key " +
+                    " ORDER BY highScore desc " +
+                    " LIMIT 0, 3 ";
 
             pstatement = connection.prepareStatement(sql);
             pstatement.setInt(1, playerCount);
@@ -324,14 +326,16 @@ public class SiritoriDao
 
         try
         {
-            String sql = ""
-                    + " SELECT user_key, "
-                    + "       (SELECT name FROM tbl_user WHERE user_key = base.user_key) AS name, "
-                    + "       MAX(score) as highScore "
-                    + "  FROM tbl_play_result AS base "
-                    + " WHERE playerCount = ? "
-                    + "   AND user_key = ? "
-                    + " GROUP by user_key; ";
+            String sql = "" +
+                    " SELECT user_key, " +
+                    "       (SELECT name FROM tbl_user WHERE user_key = base.user_key) AS name, " +
+                    "       MAX(score) as highScore " +
+                    "  FROM tbl_play_result AS base " +
+                    " WHERE playerCount = ? " +
+                    "   AND user_key = ? " +
+                    " GROUP by user_key " +
+                    " ORDER BY highScore desc " +
+                    " LIMIT 0, 3 ";
 
             pstatement = connection.prepareStatement(sql);
             pstatement.setInt(1, playerCount);
@@ -379,7 +383,8 @@ public class SiritoriDao
                     "       (SELECT COUNT(user_key) FROM tbl_play_result WHERE user_key = base.user_key AND playerCount = ? AND winLose = -1) AS draw " +
                     "  FROM tbl_play_result AS base " +
                     " GROUP BY user_key " +
-                    " ORDER BY win desc, draw, lose desc ";
+                    " ORDER BY win desc, draw, lose desc " +
+                    " LIMIT 0, 3 ";
 
             pstatement = connection.prepareStatement(sql);
 
@@ -432,7 +437,9 @@ public class SiritoriDao
                     "       (SELECT COUNT(user_key) FROM tbl_play_result WHERE user_key = base.user_key AND playerCount = ? AND winLose = -1) AS draw " +
                     "  FROM tbl_play_result AS base " +
                     " WHERE user_key = ? " +
-                    " GROUP BY user_key ";
+                    " GROUP BY user_key " +
+                    " ORDER BY win desc, draw, lose desc " +
+                    " LIMIT 0, 3 ";
 
             pstatement = connection.prepareStatement(sql);
 

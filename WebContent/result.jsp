@@ -44,6 +44,8 @@ response.addCookie(cooKey);
 Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
 cooName.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooName);
+
+int playerCount = match.getPlayerCount();
 %>
 <!DOCTYPE html>
 <html>
@@ -56,18 +58,18 @@ response.addCookie(cooName);
 <body>
 <div class="page">
 <header><img src="img/logo/pane-tori-logo_s.png" alt="ゲームのロゴ"></header>
+<div class="wapper">
 
-<%User user = match.getUser(key);%>
+  <%User user = match.getUser(key);%>
     選手名：<%=user.getName()%><br>
     点数　：<%=user.getScoreExam()%><br>
     ミス　：<%=user.getMiss()%><br>
-
-<div class="wapper">
-	<div class="rank">
+    
+	<div class="result">
 		<div class=""><!-- 1位と2位でクラス名か画像を変える -->
 			<img src="" alt="結果">
 		</div>
-	</div><!--rankここまで-->
+	</div><!--resultここまで-->
 
 	<div class="toTop"><a href="">トップページに戻る</a></div>
 
@@ -100,43 +102,77 @@ response.addCookie(cooName);
 	
 	<!--右側のカラム-->
 	<div class="right">
-
+		<div><%=playerCount%>人プレイ ランキング</div>
 		<div class="highScore">
-			<div>ハイスコア（プレイヤー名）</div>
+			<div>ハイスコア<span><%=name%></span></div>
+
 			<ol>
-			<li>1.125</li>
-			<li>2.122</li>
-			<li>3.100</li>
+			<%
+			ArrayList<User> privateHighScore = (ArrayList<User>)request.getAttribute("PrivateHighScore");
+			if (privateHighScore == null)
+			{
+			    privateHighScore = new ArrayList<User>();
+			}
+			for (int i = 0; i < privateHighScore.size(); i++)
+			{
+			    User u = privateHighScore.get(i);
+			%>
+			<li class="player clearfix">
+				<div class="rank"><%=i+1%>.</div>
+				<div class="num"><%=u.getHighScore()%></span>
+			</li>
+			<%}%>
 			</ol>
-		</div>
+		</div><!--highScoreここまで-->
 		
 		<div class="rankingWapper">
 			<div>ランキング（全体）</div>
 			<div class="ranking">
 				<div>ハイスコア</div>
 				<ol>
-				<li>1.ななしさん 125</li>
-				<li>2.ナナチ 122</li>
-				<li>3.名もなきアスリート 100</li>
+				<%
+			    ArrayList<User> totalHighScore = (ArrayList<User>)request.getAttribute("TotalHighScore");
+			    if (totalHighScore == null)
+			    {
+			        totalHighScore = new ArrayList<User>();
+    			}
+    			for (int i = 0; i < totalHighScore.size(); i++)
+    			{
+    			    User u = totalHighScore.get(i);
+    			%>
+				<li class="clearfix">
+					<div class="rank"><%=i+1%>.</div>
+					<div class="name"><%=u.getName()%></div>
+					<div class="num"><%=u.getHighScore()%></div>
+				</li>
+				<%}%>
 				</ol>
-			</div>
+			</div><!--rankingここまで-->
+
 			<div class="ranking">
 				<div>勝敗数</div>
 				<ol>
-				<li>1.ななしさん 125</li>
-				<li>2.ナナチ 122</li>
-				<li>3.名もなきアスリート 100</li>
+				<%
+			    ArrayList<User> totalWinLose = (ArrayList<User>)request.getAttribute("TotalWinLose");
+			    if (totalWinLose == null)
+			    {
+			        totalWinLose = new ArrayList<User>();
+    			}
+    			for (int i = 0; i < totalWinLose.size(); i++)
+    			{
+    			    User u = totalWinLose.get(i);
+    			%>
+				<li class="player clearfix">
+					<div class="rank"><%=i+1%>.</div>
+					<div class="name"><%=u.getName()%></div>
+					<div class="num"><%=u.getWinCount()%></div>
+				</li>
+				<%}%>
 				</ol>
-			</div>
-		<div class="ranking">
-			<div>総スコア</div>
-				<ol>
-				<li>1.ななしさん 125</li>
-				<li>2.ナナチ 122</li>
-				<li>3.名もなきアスリート 100</li>
-				</ol></div>
-		</div>
-	
+			</div><!--rankingここまで-->
+
+		</div><!--rankingWapperここまで-->
+
 	</div><!--rightここまで-->
 	
 </div><!--contentsここまで-->

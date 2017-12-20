@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import modelPack.Match;
 import modelPack.MatchList;
+import modelPack.SiritoriDao;
 import modelPack.User;
 
 /**
@@ -52,6 +53,16 @@ public class ResultServlet extends HttpServlet
             user.setResultWatch(true);
 
             req.setAttribute("matchResult", match);
+
+            int playerCount = match.getPlayerCount();
+            SiritoriDao dao = new SiritoriDao();
+            req.setAttribute("HighScore", dao.getHighScoreRanking(key, playerCount));
+
+            req.setAttribute("PrivateHighScore", dao.getHighScoreRanking(key, playerCount));
+            req.setAttribute("TotalHighScore", dao.getHighScoreRanking(playerCount));
+
+            req.setAttribute("PrivateWinLose", dao.getWinLoseRanking(key, playerCount));
+            req.setAttribute("TotalWinLose", dao.getWinLoseRanking(playerCount));
         }
         catch (Exception e)
         {
