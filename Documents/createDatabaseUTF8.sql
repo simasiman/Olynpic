@@ -1,4 +1,4 @@
-﻿############################################
+﻿﻿############################################
 #       しりとり用データベース作成パッチ         #
 ############################################
 
@@ -9,11 +9,13 @@ CREATE DATABASE PaneTori;
 # データベースの選択
 USE PaneTori;
 
-# 競技名単語テーブルの作成
+# パネルテーブルの作成
 CREATE TABLE tbl_word_base(
     ath_id  INT  ,
     name    TEXT ,
-    picture TEXT
+    picture TEXT ,
+    original INT ,
+    approval INT
 );
 
 # しりとり単語テーブルの作成
@@ -42,11 +44,11 @@ CREATE TABLE tbl_play_result(
 );
 
 # 競技名単語テーブルにデータを挿入
-LOAD DATA LOCAL INFILE 'DB\tbl_word_base.csv' 
+LOAD DATA LOCAL INFILE './DB/tbl_word_base_UTF8.csv' 
 INTO TABLE tbl_word_base FIELDS TERMINATED BY ',' ENCLOSED BY '"';
 
 # しりとり単語テーブルにデータを挿入
-LOAD DATA LOCAL INFILE 'DB\tbl_word_siritori.csv' 
+LOAD DATA LOCAL INFILE './DB/tbl_word_siritori_UTF8.csv' 
 INTO TABLE tbl_word_siritori FIELDS TERMINATED BY ',' ENCLOSED BY '"';
 
 # 以上
