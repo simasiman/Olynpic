@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8"%><%@ page import="java.net.URLDecoder"%><%@ page import="modelPack.*"%><%@ page import="Utility.Utility"%><%@ page import="java.net.*"%><%@ page import="java.util.ArrayList"%><%
+<%@ page contentType="text/html; charset=UTF-8"%><%@ page import="java.net.URLDecoder"%><%@ page import="modelPack.*"%><%@ page import="Utility.*"%><%@ page import="java.net.*"%><%@ page import="java.util.ArrayList"%><%
 Cookie[] aryCookies = request.getCookies();
 
 String key = (String)session.getAttribute("key");
@@ -112,5 +112,8 @@ if (match != null)
 			</p>
 		</footer>
 	</div><!--page終わり-->
+	<%if (GameSetting.DEBUG) {%>
+	<a href="forTester.jsp">デバッグ画面へ</a>
+	<%}%>
 </body>
 </html>

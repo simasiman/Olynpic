@@ -9,8 +9,6 @@ import modelPack.Word;
 
 public class HtmlGame
 {
-    private static final boolean DEBUG = true;
-
     private static final int PANEL_COL = 4;
 
     private static int indentCount = 0;
@@ -33,7 +31,7 @@ public class HtmlGame
             ret.append(Utility.appendLine(makeUserSelectedHtml(match, key, 2)));
         }
 
-        if (!match.isFinish() && DEBUG)
+        if (!match.isFinish() && GameSetting.DEBUG)
         {
             ret.append(Utility.appendLineIndent(indentCount, "<a href=\"javascript:void(0);\" onclick=\"WebSocketDemo.send('" + key + "," + "gameEnd" + "');\">※ゲーム終了</a>"));
         }

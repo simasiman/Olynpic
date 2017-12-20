@@ -119,7 +119,7 @@ int playerCount = match.getPlayerCount();
 			%>
 			<li class="player clearfix">
 				<div class="rank"><%=i+1%>.</div>
-				<div class="num"><%=u.getHighScore()%></span>
+				<div class="num"><%=u.getHighScore()%></div>
 			</li>
 			<%}%>
 			</ol>

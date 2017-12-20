@@ -10,6 +10,11 @@ public class GameSetting
     // ゲームの各設定の固定値一覧
 
     /**
+     * 各デバッグ用表示を切り替える
+     */
+    public static final boolean DEBUG = true;
+
+    /**
      * ゲームにおける１ターンの制限秒数
      */
     public static final int MATCH_TIME = 20;
