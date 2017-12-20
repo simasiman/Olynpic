@@ -65,9 +65,11 @@ window.onload = function() {
 <div class="page">
 	<header><img src="img/logo/pane-tori-logo_s.png" alt="ゲームのロゴ"></header>
 
+  <div class="nowMatching_message_back">
 	<div class="nowMatching">只今マッチング中です</div>
 	<div class="message">マッチングが完了すると、自動的にゲームが開始されます</div>
 	<a href="top" class="back">トップページに戻る</a>
+  </div><!-- nowMatching_message_backここまで -->
 
 	<footer>&copy; 2017&nbsp; ARAI CORPORATION.</footer>
 </div><!--pageここまで-->
