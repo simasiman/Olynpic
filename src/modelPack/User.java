@@ -11,6 +11,8 @@ public class User
 
     private int wishPlayerCount = 0;
 
+    private boolean isOlympic = true;
+
     private int miss;
     private int win;
 
@@ -84,6 +86,16 @@ public class User
         miss = 0;
         win = -1;
         isResultWatch = false;
+    }
+
+    public boolean isOlympic()
+    {
+        return isOlympic;
+    }
+
+    public void setOlympic(boolean isOlympic)
+    {
+        this.isOlympic = isOlympic;
     }
 
     public User(String key, String name)

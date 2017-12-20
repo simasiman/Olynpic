@@ -91,6 +91,9 @@ public class MatchingServlet extends HttpServlet
             String gameMode1 = (String) req.getParameter("mode1");
             String gameMode2 = (String) req.getParameter("mode2");
             String difficulty1 = (String) req.getParameter("difficulty1");
+            String olympic = (String) req.getParameter("olympic");
+
+            boolean isOlympic = olympic != null && !olympic.isEmpty();
 
             int playerCount = 0;
             boolean isShowRedHint = false;
@@ -120,13 +123,15 @@ public class MatchingServlet extends HttpServlet
                 user = new User(key, name);
                 user.setWishPlayerCount(playerCount);
                 user.setShowHint(isShowRedHint);
+                user.setOlympic(isOlympic);
+
                 MatchUserList.add(user);
 
                 if (playerCount == 1)
                 {
                     // 一人用であれば、即座にゲーム画面へと遷移
                     Match match = new Match();
-                    match.createMatch(1);
+                    match.createMatch(1, isOlympic);
                     match.startMatch();
 
                     resp.sendRedirect("game");

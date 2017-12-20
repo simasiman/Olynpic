@@ -30,6 +30,23 @@
 							<attribute name="playerCount"/>
 						</constraint>
 					</entity>
+					<entity name="tbl_word_base">
+						<constraint name="PRIMARY" type="VIRTUAL KEY">
+							<attribute name="ath_id"/>
+							<attribute name="name"/>
+							<attribute name="picture"/>
+							<attribute name="isOriginal"/>
+						</constraint>
+					</entity>
+					<entity name="tbl_word_siritori_user">
+						<constraint name="PRIMARY" type="VIRTUAL KEY">
+							<attribute name="ath_id"/>
+							<attribute name="word_id"/>
+							<attribute name="word_disp"/>
+							<attribute name="word_read"/>
+							<attribute name="level"/>
+						</constraint>
+					</entity>
 				</container>
 			</container>
 		</virtual-meta-data>

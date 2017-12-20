@@ -104,7 +104,16 @@ public class HtmlGame
                 cssClass += "cannotChoose ";
             }
 
-            String panelImage = "<img src=\"img/panel/" + panel.getPicture() + "\" alt=\"" + panel.getBaseWord() + " \" class=\"" + cssClass + "\">";
+            String picture = "";
+            if (panel.isOriginal())
+            {
+                picture = "img/panel/" + panel.getPicture();
+            }
+            else
+            {
+                picture = "img/userUpload/" + panel.getPicture();
+            }
+            String panelImage = "<img src=\"" + picture + "\" alt=\"" + panel.getBaseWord() + " \" class=\"" + cssClass + "\">";
 
             if (isCanSelect)
             {
@@ -374,7 +383,17 @@ public class HtmlGame
             }
 
             ret.append(Utility.appendLineIndent(indentCount++, "<td class=\"" + cssClass + "\">"));
-            ret.append(Utility.appendLineIndent(indentCount, "<img src=\"img/panel/" + panel.getPicture() + "\" alt=\"" + panel.getBaseWord() + "\">"));
+
+            String picture = "";
+            if (panel.isOriginal())
+            {
+                picture = "img/panel/" + panel.getPicture();
+            }
+            else
+            {
+                picture = "img/userUpload/" + panel.getPicture();
+            }
+            ret.append(Utility.appendLineIndent(indentCount, "<img src=\"" + picture + "\" alt=\"" + panel.getBaseWord() + "\">"));
             ret.append(Utility.appendLineIndent(--indentCount, "</td>"));
 
             if (i != 0 && i % col == col - 1 || i == panelList.size() - 1)

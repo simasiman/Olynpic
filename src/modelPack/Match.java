@@ -24,6 +24,8 @@ public class Match
     private int playerCount = 0;
     private int playerTurn = 0;
 
+    private boolean isOlympic = true;
+
     private boolean isStart = false;
     private boolean isFirstPick = true;
     private boolean isFinish = false;
@@ -118,6 +120,16 @@ public class Match
     {
         setPlayerTurn((getPlayerTurn() + 1) % getPlayerCount());
         setSelectedTime(new Date());
+    }
+
+    public boolean isOlympic()
+    {
+        return isOlympic;
+    }
+
+    public void setOlympic(boolean isOlympic)
+    {
+        this.isOlympic = isOlympic;
     }
 
     public boolean isStart()
@@ -357,7 +369,7 @@ public class Match
      * @param playerCount
      *            プレイヤー人数
      */
-    public void createMatch(int playerCount)
+    public void createMatch(int playerCount, boolean isOlympic)
     {
         try
         {
@@ -368,7 +380,9 @@ public class Match
             this.playerCount = playerCount;
             this.playerTurn = (playerCount == 1) ? 0 : new Random().nextInt(playerCount);
 
-            panelList = ((new SiritoriDao()).getRandomPanel(24));
+            this.isOlympic = isOlympic;
+
+            panelList = ((new SiritoriDao()).getRandomPanel(24, isOlympic));
         }
         catch (Exception e)
         {

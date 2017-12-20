@@ -88,9 +88,18 @@ int playerCount = match.getPlayerCount();
         {
         Panel p = user.getSelectedPanel().get(j);
         Word word = p.getSelectedWord();
+        String picture = "";
+        if (p.isOriginal())
+        {
+            picture = "img/panel/" + p.getPicture();
+        }
+        else
+        {
+            picture = "img/userUpload/" + p.getPicture();
+        }
         %>
 		<li class="getPanelList clearfix">
-			<img src="img/panel/<%=p.getPicture()%>" alt="<%=p.getBaseWord()%>" title="<%=p.getBaseWord()%>">
+			<img src="<%=picture%>" alt="<%=p.getBaseWord()%>" title="<%=p.getBaseWord()%>">
 			<div class="resultBlock">
 				<div class="score"><span><%=word.getBaseScore()%></span> ＋ <span><%=word.getBonusScore()%></span></div>
 				<div class="getWord"><span>「<%=word.getWord()%>」</span></div>

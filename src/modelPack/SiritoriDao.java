@@ -43,7 +43,7 @@ public class SiritoriDao
         }
     }
 
-    public int getNextMatchNumber() throws SQLException
+    public int getMaxMatchNumber() throws SQLException
     {
         PreparedStatement pstatement = null;
         ResultSet rs = null;
@@ -52,7 +52,7 @@ public class SiritoriDao
         try
         {
             String sql = ""
-                    + " SELECT MAX(id) + 1 as max"
+                    + " SELECT MAX(id) as max"
                     + "   FROM tbl_play_result ";
 
             pstatement = connection.prepareStatement(sql);
@@ -154,7 +154,7 @@ public class SiritoriDao
         return ret;
     }
 
-    public ArrayList<Panel> getRandomPanel(int panelCount) throws SQLException
+    public ArrayList<Panel> getRandomPanel(int panelCount, boolean isOlynpic) throws SQLException
     {
         PreparedStatement pstatement = null;
         ResultSet rs = null;
@@ -165,10 +165,14 @@ public class SiritoriDao
             String sql = ""
                     + " SELECT ath_id, "
                     + "        name, "
-                    + "        picture "
-                    + "   FROM tbl_word_base "
-                    // + " ORDER BY ath_id "
-                    + "  ORDER BY RAND() "
+                    + "        picture, "
+                    + "        original "
+                    + "   FROM tbl_word_base ";
+            if (isOlynpic)
+            {
+                sql += "WHERE original = 1 ";
+            }
+            sql += "  ORDER BY RAND() "
                     + "  LIMIT 0, ?";
 
             pstatement = connection.prepareStatement(sql);
@@ -186,6 +190,7 @@ public class SiritoriDao
                 p.setId(rs.getInt("ath_id"));
                 p.setBaseWord(rs.getString("name"));
                 p.setPicture(rs.getString("picture"));
+                p.setOriginal(rs.getInt("original") == 1);
 
                 PreparedStatement pStatement2 = null;
                 ResultSet rs2 = null;
@@ -254,7 +259,7 @@ public class SiritoriDao
 
             pstatement = connection.prepareStatement(sql);
 
-            pstatement.setInt(1, getNextMatchNumber());
+            pstatement.setInt(1, getMaxMatchNumber() + 1);
             pstatement.setString(2, result.getKey());
             pstatement.setDate(3, new java.sql.Date(result.getPlayDate().getTime()));
             pstatement.setInt(4, result.getWinLose());
@@ -471,6 +476,98 @@ public class SiritoriDao
         }
         finally
         {
+            pstatement.close();
+        }
+
+        return ret;
+    }
+
+    public int getMaxPanelNumber() throws SQLException
+    {
+        PreparedStatement pstatement = null;
+        ResultSet rs = null;
+        int ret = 0;
+
+        try
+        {
+            String sql = ""
+                    + " SELECT MAX(ath_id) as max"
+                    + "   FROM tbl_word_base ";
+
+            pstatement = connection.prepareStatement(sql);
+            rs = pstatement.executeQuery();
+            if (rs.next())
+            {
+                ret = rs.getInt("max");
+            }
+
+            rs.close();
+        }
+        finally
+        {
+            pstatement.close();
+        }
+
+        return ret;
+    }
+
+    public boolean insertUserPanel(Panel panel) throws SQLException
+    {
+        PreparedStatement pstatement = null;
+        boolean ret = false;
+
+        try
+        {
+            connection.setAutoCommit(false);
+
+            int athId = getMaxPanelNumber() + 1;
+
+            // パネルの基本情報の登録
+            String sql = ""
+                    + " INSERT INTO tbl_word_base "
+                    + "             (ath_id, name, picture, original, approval) "
+                    + "      VALUES (?, ?, ?, ?, ?) ";
+
+            pstatement = connection.prepareStatement(sql);
+
+            pstatement.setInt(1, athId);
+            pstatement.setString(2, panel.getBaseWord());
+            pstatement.setString(3, panel.getPicture());
+            pstatement.setInt(4, 0);
+            pstatement.setInt(5, 0);
+
+            pstatement.execute();
+
+            // 各単語の登録
+            ArrayList<Word> wordList = panel.getWordList();
+            for (int i = 0; i < wordList.size(); i++)
+            {
+                Word word = wordList.get(i);
+
+                pstatement = connection.prepareStatement(sql);
+
+                sql = "" +
+                        "INSERT INTO tbl_word_siritori " +
+                        "            (ath_id, word_id, word_disp, word_read, level)" +
+                        "     VALUES (?, ?, ?, ?, ?) ";
+
+                pstatement = connection.prepareStatement(sql);
+
+                pstatement.setInt(1, athId);
+                pstatement.setInt(2, i + 1);
+                pstatement.setString(3, word.getWord());
+                pstatement.setString(4, word.getWordRead());
+                pstatement.setInt(5, 0);
+
+                pstatement.execute();
+            }
+
+            connection.commit();
+        }
+        finally
+        {
+            connection.rollback();
+            connection.setAutoCommit(true);
             pstatement.close();
         }
 

@@ -27,16 +27,20 @@ if (aryCookies != null)
 }
 
 %>
-
 <!DOCTYPE html>
 <html>
-
 <head>
-    <META charset="UTF-8">
-    <title>テスト用画面</title>
+<meta http-equiv="content-type" charset="utf-8">
+<link rel="stylesheet" href="css/top.css" type="text/css">
+<title>[pane-tori] - デバッグ用</title>
 </head>
-
 <body>
+
+<div class="page">
+	<header>
+	</header>
+
+<div class="wapper">
 
 <table>
 <%for (int i=0;i<aryCookies.length;i++) {%>
@@ -64,7 +68,6 @@ if (aryCookies != null)
           }
     %>
         <tr>
-            <td><%=m.getMatchNo()%></td>
             <%for (User u : m.getUserList()) {%>
                 <td><%=u.getKey()%></td>
                 <td><%=u.getName()%></td>
@@ -95,7 +98,6 @@ if (aryCookies != null)
           }
     %>
     <tr>
-        <td><%=m.getMatchNo()%></td>
         <%for (User u : m.getUserList()) {%>
             <td><%=u.getKey()%></td>
             <td><%=u.getName()%></td>
@@ -124,7 +126,6 @@ if (aryCookies != null)
           }
     %>
     <tr>
-        <td><%=m.getMatchNo()%></td>
         <%for (User u : m.getUserList()) {%>
             <td><%=u.getKey()%></td>
             <td><%=u.getName()%></td>
@@ -153,7 +154,6 @@ if (aryCookies != null)
           }
     %>
         <tr>
-            <td><%=m.getMatchNo()%></td>
             <%for (User u : m.getUserList()) {%>
                 <td><%=u.getKey()%></td>
                 <td><%=u.getName()%></td>
@@ -165,7 +165,13 @@ if (aryCookies != null)
     <%}%>
 </table>
 
-
 <a href="top">トップへ戻る</a>
+
+</div>
+
+<footer>
+</footer>
+
+</div>
 
 </body>

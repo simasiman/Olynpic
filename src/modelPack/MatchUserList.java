@@ -13,13 +13,13 @@ public class MatchUserList
         userList.add(user);
     }
 
-    public static boolean isMatchable(int playerCount)
+    public static boolean isMatchable(int playerCount, boolean isOlympic)
     {
         int count = 0;
 
         for (User user : userList)
         {
-            if (user.getWishPlayerCount() == playerCount)
+            if (user.getWishPlayerCount() == playerCount && user.isOlympic() == isOlympic)
             {
                 count++;
             }

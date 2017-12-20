@@ -6,6 +6,7 @@ public class Panel
 {
     private int id;
     private String baseWord;
+    private boolean isOriginal;
     private String picture;
     private ArrayList<Word> wordList;
     private Word selectedWord;
@@ -31,6 +32,16 @@ public class Panel
     public void setBaseWord(String baseWord)
     {
         this.baseWord = baseWord;
+    }
+
+    public boolean isOriginal()
+    {
+        return isOriginal;
+    }
+
+    public void setOriginal(boolean isOriginal)
+    {
+        this.isOriginal = isOriginal;
     }
 
     public String getPicture()

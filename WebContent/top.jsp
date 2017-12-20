@@ -83,9 +83,10 @@ if (match != null)
 									<input type="hidden" name="key" value="<%=key%>">
 									<input type="text" name="name" size="20" maxlength="20" value="<%=name%>"><br>
 									<input type="submit" name="mode1" value="1人プレイ" />
-									<input type="submit" name="mode2" value="2人プレイ" />
+									<input type="submit" name="mode2" value="2人プレイ" /><br>
 									<input type="reset" value="名前のリセット"><br>
-									<input type="checkbox" name = "difficulty1" value="1" checked="checked">ヒント機能(外すと得点1.2倍)
+									<input type="checkbox" name = "difficulty1" value="1" checked="checked">ヒント機能(外すと得点1.2倍)<br>
+                                    <input type="checkbox" name = "olympic" value="1" checked="checked">オリンピックモード<br>
 								</form>
 
 								<table class="setsumei">
@@ -97,6 +98,11 @@ if (match != null)
 										<th>2人プレイ</th>
 										<td>他のプレイヤーと点数を競う対戦モードです。</td>
 								</table>
+								
+								<%if (GameSetting.DEBUG) {%>
+									<a href="forTester.jsp">デバッグ画面へ</a><br>
+									<a href="panelRegistration.jsp">パネル登録画面へ</a>
+								<%}%>
 
 							</div><!--playStart終わり-->
 						</div><!--formBlock終わり-->
@@ -112,8 +118,6 @@ if (match != null)
 			</p>
 		</footer>
 	</div><!--page終わり-->
-	<%if (GameSetting.DEBUG) {%>
-	<a href="forTester.jsp">デバッグ画面へ</a>
-	<%}%>
+	
 </body>
 </html>

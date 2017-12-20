@@ -53,9 +53,14 @@ public class MatchList
 
     public static void CheckTimer()
     {
-        while (MatchUserList.isMatchable(2))
+        while (MatchUserList.isMatchable(2, true))
         {
-            new Match().createMatch(2);
+            new Match().createMatch(2, true);
+        }
+
+        while (MatchUserList.isMatchable(2, false))
+        {
+            new Match().createMatch(2, false);
         }
 
         for (Match match : matchList)
