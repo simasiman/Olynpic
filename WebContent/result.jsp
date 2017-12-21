@@ -104,7 +104,7 @@ else
 			<div>
 			score : <%=user.getTotalScoreBase()%><br>
 			＋<span>bonus : <%=user.getTotalScoreBonus()%></span><br>
-			＊<span>難易度倍率</span> : <%=user.getScoreMultiple()%>
+			×<span>難易度倍率</span> : <%=user.getScoreMultiple()%>
 			</div>
 		</div><!--resultScoreここまで-->
 
