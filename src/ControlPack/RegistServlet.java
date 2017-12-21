@@ -1,6 +1,7 @@
 package ControlPack;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,47 +42,62 @@ public class RegistServlet extends HttpServlet
         String urlPath = "/panelRegistration.jsp";
         String message = "";
 
-        try
+        if (req.getParameter("isUpload") != null)
         {
-            // パネル用画像のアップロード
-            Part part = req.getPart("panelImage");
-            String name = this.getFileName(part);
-            if (!fileNameCheck(name))
+            try
             {
-                throw new Exception("画像ファイルを指定してください。");
-            }
-            String folderPath = getServletContext().getRealPath("/img/userUpload") + "/";
-            String fileName = createNewFileName(name);
-            part.write(folderPath + fileName);
-
-            // データベースへの登録を行う
-            Panel panel = new Panel();
-            panel.setBaseWord(req.getParameter("panelName"));
-            panel.setPicture(fileName);
-
-            for (int i = 1; i <= 8; i++)
-            {
-                if (req.getParameter("Disp" + i) != null && !req.getParameter("Disp" + i).isEmpty() &&
-                        req.getParameter("Read" + i) != null && !req.getParameter("Read" + i).isEmpty())
+                // パネル用画像のアップロード
+                Part part = req.getPart("panelImage");
+                String name = this.getFileName(part);
+                if (!fileNameCheck(name))
                 {
-                    String disp = req.getParameter("Disp" + i);
-                    String read = convertHirakana(req.getParameter("Read" + i));
+                    throw new Exception("画像ファイルを指定してください。");
+                }
+                String folderPath = getServletContext().getRealPath("/img/userUpload") + "/";
+                String fileName = createNewFileName(name);
+                part.write(folderPath + fileName);
 
-                    Word word = new Word(0, disp, read, "", "");
-                    panel.addWordList(word);
+                // データベースへの登録を行う
+                Panel panel = new Panel();
+                panel.setBaseWord(req.getParameter("panelName"));
+                panel.setPicture(fileName);
+
+                for (int i = 1; i <= 8; i++)
+                {
+                    if (req.getParameter("Disp" + i) != null && !req.getParameter("Disp" + i).isEmpty() &&
+                            req.getParameter("Read" + i) != null && !req.getParameter("Read" + i).isEmpty())
+                    {
+                        String disp = req.getParameter("Disp" + i);
+                        String read = Utility.convertHirakana(req.getParameter("Read" + i));
+
+                        Word word = new Word(0, disp, read, "", "");
+                        panel.addWordList(word);
+                    }
+                }
+
+                if (panel.getWordList().size() >= 8)
+                {
+                    (new SiritoriDao()).insertUserPanel(panel);
+                    message = "パネルの登録に成功しました。";
+
+                    Utility.outputLog(req, "Panel Inserted : " + req.getParameter("panelName"));
                 }
             }
-
-            if (panel.getWordList().size() >= 8)
+            catch (SQLException e)
             {
-                (new SiritoriDao()).insertUserPanel(panel);
+                e.printStackTrace();
+                message = "！！パネルの登録に失敗しました。！！";
             }
-            message = "パネルの登録に成功しました。";
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            message = "！！パネルの登録に失敗しました。！！";
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                message = "！！画像のアップロードに失敗しました。！！";
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                message = "！！原因不明のエラーが発生しました！！";
+            }
         }
 
         req.setAttribute("message", message);
@@ -122,35 +138,4 @@ public class RegistServlet extends HttpServlet
         return Utility.getDefaultKey() + extension;
     }
 
-    /** 濁音 */
-    private static final String DAKUON = "ヴがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ";
-
-    /** 清音 */
-    private static final String SEION = "うかきくけこさしすせそたちつてとはひふへほはひふへほ";
-
-    /** 小文字 */
-    private static final String KOMOZI = "ぁぃぅぇぉっゃゅょ";
-
-    /** 大文字 */
-    private static final String OOMOZI = "あいうえおつやゆよ";
-
-    public static String convertHirakana(String input)
-    {
-        String result = input;
-        for (int i = 0; i < DAKUON.length(); i++)
-        {
-            String s1 = DAKUON.substring(i, i + 1);
-            String s2 = SEION.substring(i, i + 1);
-            result = result.replaceAll(s1, s2);
-        }
-
-        for (int i = 0; i < KOMOZI.length(); i++)
-        {
-            String s1 = KOMOZI.substring(i, i + 1);
-            String s2 = OOMOZI.substring(i, i + 1);
-            result = result.replaceAll(s1, s2);
-        }
-
-        return result;
-    }
 }

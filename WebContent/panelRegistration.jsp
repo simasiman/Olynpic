@@ -133,6 +133,8 @@ function check(){
 	<div class="wapper">
 
     <form action="regist" method="post" enctype="multipart/form-data" onSubmit="return check()">
+        <input type="hidden" name="isUpload" value="1">
+        
         <p class="btn_upload">
             画像ファイルを選択してアップロード
         </p>

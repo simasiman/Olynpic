@@ -94,7 +94,6 @@ public class MatchingServlet extends HttpServlet
             String olympic = (String) req.getParameter("olympic");
 
             int playerCount = 0;
-            boolean isShowRedHint = false;
             if (gameMode1 != null && !gameMode1.isEmpty())
             {
                 playerCount = 1;
@@ -110,19 +109,25 @@ public class MatchingServlet extends HttpServlet
                 return;
             }
 
-            boolean isOlympic = olympic != null && !olympic.isEmpty();
-            if (difficulty1 == null || difficulty1.isEmpty())
+            boolean isOlympic = false;
+            if (olympic == null || olympic.isEmpty())
             {
                 olympic = "-";
             }
-
-            if (difficulty1 != null && !difficulty1.isEmpty())
+            else
             {
-                isShowRedHint = !difficulty1.isEmpty();
+
+                isOlympic = true;
+            }
+
+            boolean isShowRedHint = false;
+            if (difficulty1 == null || difficulty1.isEmpty())
+            {
+                difficulty1 = "-";
             }
             else
             {
-                difficulty1 = "-";
+                isShowRedHint = true;
             }
 
             session.setAttribute("difficulty1", difficulty1);
@@ -138,6 +143,8 @@ public class MatchingServlet extends HttpServlet
                 user.setOlympic(isOlympic);
 
                 MatchUserList.add(user);
+
+                Utility.outputLog(req, "Matching added : " + key + " : " + name);
 
                 if (playerCount == 1)
                 {

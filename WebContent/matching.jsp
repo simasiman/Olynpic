@@ -55,7 +55,7 @@ WebSocketDemo = {};
         d.webSocket = ws;
     };
     d.disconnect = function() {
-    	ws.close();
+    	d.webSocket.close();
     }
 }) (WebSocketDemo);
 
@@ -74,7 +74,7 @@ window.onbeforeunload = function(e) {
 
   <div class="nowMatching_message_back">
 	<div class="nowMatching">只今マッチング中です</div>
-	<div class="message">マッチングが完了すると、自動的にゲームが開始されます</div>
+	<div class="message"><img src="img/logo/running.gif" alt="マッチング中"></div>
 	<a href="top" class="back">トップページに戻る</a>
   </div><!-- nowMatching_message_backここまで -->
 

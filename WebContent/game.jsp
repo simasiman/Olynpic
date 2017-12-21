@@ -102,7 +102,7 @@ WebSocketDemo = {};
     	d.webSocket.send(text);
     };
     d.disconnect = function() {
-    	ws.close();
+    	d.webSocket.close();
     }
 }) (WebSocketDemo);
 

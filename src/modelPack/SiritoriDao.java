@@ -9,8 +9,14 @@ import java.util.ArrayList;
 
 import Utility.GameSetting;
 
+/**
+ * データベース:PaneTori に対して処理を行うDAOクラスです
+ */
 public class SiritoriDao
 {
+    /**
+     * DB接続情報
+     */
     private Connection connection;
 
     public SiritoriDao() throws ClassNotFoundException, SQLException
@@ -43,6 +49,12 @@ public class SiritoriDao
         }
     }
 
+    /**
+     * ゲームIDの最大値を取得します
+     * 
+     * @return ゲームIDの最大値
+     * @throws SQLException
+     */
     public int getMaxMatchNumber() throws SQLException
     {
         PreparedStatement pstatement = null;
@@ -72,6 +84,14 @@ public class SiritoriDao
         return ret;
     }
 
+    /**
+     * ユーザキーを元に、登録されたユーザ情報を取得します
+     * 
+     * @param key
+     *            ユーザキー
+     * @return 取得した情報を収めたUserクラス
+     * @throws SQLException
+     */
     public User selectUser(String key) throws SQLException
     {
         PreparedStatement pstatement = null;
@@ -104,10 +124,16 @@ public class SiritoriDao
         return ret;
     }
 
-    public boolean insertUser(User user) throws SQLException
+    /**
+     * 対象ユーザをDBに登録します
+     * 
+     * @param user
+     *            対象ユーザ
+     * @throws SQLException
+     */
+    public void insertUser(User user) throws SQLException
     {
         PreparedStatement pstatement = null;
-        boolean ret = false;
 
         try
         {
@@ -119,20 +145,24 @@ public class SiritoriDao
             pstatement = connection.prepareStatement(sql);
             pstatement.setString(1, user.getKey());
             pstatement.setString(2, user.getName());
-            ret = pstatement.execute();
+            pstatement.execute();
         }
         finally
         {
             pstatement.close();
         }
-
-        return ret;
     }
 
-    public boolean updateUser(User user) throws SQLException
+    /**
+     * 対象ユーザの情報でDBへ更新をかけます
+     * 
+     * @param user
+     *            対象ユーザ
+     * @throws SQLException
+     */
+    public void updateUser(User user) throws SQLException
     {
         PreparedStatement pstatement = null;
-        boolean ret = false;
 
         try
         {
@@ -144,16 +174,24 @@ public class SiritoriDao
             pstatement = connection.prepareStatement(sql);
             pstatement.setString(1, user.getName());
             pstatement.setString(2, user.getKey());
-            ret = pstatement.execute();
+            pstatement.execute();
         }
         finally
         {
             pstatement.close();
         }
-
-        return ret;
     }
 
+    /**
+     * 指定された枚数、指定された条件でパネルの一覧をランダムに取得します
+     * 
+     * @param panelCount
+     *            パネルの枚数
+     * @param isOlynpic
+     *            オリンピックモード
+     * @return パネルを収めたリスト
+     * @throws SQLException
+     */
     public ArrayList<Panel> getRandomPanel(int panelCount, boolean isOlynpic) throws SQLException
     {
         PreparedStatement pstatement = null;
@@ -162,6 +200,7 @@ public class SiritoriDao
 
         try
         {
+            // パネルの基本となる情報を取得
             String sql = ""
                     + " SELECT ath_id, "
                     + "        name, "
@@ -192,6 +231,7 @@ public class SiritoriDao
                 p.setPicture(rs.getString("picture"));
                 p.setOriginal(rs.getInt("original") == 1);
 
+                // パネルそれぞれに登録された情報を取得
                 PreparedStatement pStatement2 = null;
                 ResultSet rs2 = null;
 
@@ -245,10 +285,15 @@ public class SiritoriDao
         return ret;
     }
 
-    public boolean insertPlayResult(PlayResult result) throws SQLException
+    /**
+     * ゲーム終了後の結果をDBに登録します
+     * 
+     * @param result
+     * @throws SQLException
+     */
+    public void insertPlayResult(PlayResult result) throws SQLException
     {
         PreparedStatement pstatement = null;
-        boolean ret = false;
 
         try
         {
@@ -266,16 +311,22 @@ public class SiritoriDao
             pstatement.setInt(5, result.getScore());
             pstatement.setInt(6, result.getPlayerCount());
 
-            ret = pstatement.execute();
+            pstatement.execute();
         }
         finally
         {
             pstatement.close();
         }
-
-        return ret;
     }
 
+    /**
+     * 指定された人数でプレイされたゲームから、最高得点を出したユーザを一定数取得します
+     * 
+     * @param playerCount
+     *            プレイ人数
+     * @return ユーザ一覧
+     * @throws SQLException
+     */
     public ArrayList<User> getHighScoreRanking(int playerCount) throws SQLException
     {
         PreparedStatement pstatement = null;
@@ -292,7 +343,7 @@ public class SiritoriDao
                     " WHERE playerCount = ? " +
                     " GROUP by user_key " +
                     " ORDER BY highScore desc " +
-                    " LIMIT 0, 3 ";
+                    " LIMIT 0, " + GameSetting.RANKING_COUNT;
 
             pstatement = connection.prepareStatement(sql);
             pstatement.setInt(1, playerCount);
@@ -323,6 +374,16 @@ public class SiritoriDao
         return ret;
     }
 
+    /**
+     * 対象ユーザが過去にプレイしたゲームから、最高得点を出した順番に一定数取得します
+     * 
+     * @param key
+     *            ユーザキー
+     * @param playerCount
+     *            プレイ人数
+     * @return ユーザ一覧(プレイ一覧)
+     * @throws SQLException
+     */
     public ArrayList<User> getHighScoreRanking(String key, int playerCount) throws SQLException
     {
         PreparedStatement pstatement = null;
@@ -340,7 +401,7 @@ public class SiritoriDao
                     "   AND user_key = ? " +
                     " GROUP by user_key " +
                     " ORDER BY highScore desc " +
-                    " LIMIT 0, 3 ";
+                    " LIMIT 0, " + GameSetting.RANKING_COUNT;
 
             pstatement = connection.prepareStatement(sql);
             pstatement.setInt(1, playerCount);
@@ -372,6 +433,14 @@ public class SiritoriDao
         return ret;
     }
 
+    /**
+     * 過去にプレイされた履歴から、勝敗数に応じて優秀な順番で、一定数のユーザを取得します
+     * 
+     * @param playerCount
+     *            プレイ人数
+     * @return ユーザ一覧
+     * @throws SQLException
+     */
     public ArrayList<User> getWinLoseRanking(int playerCount) throws SQLException
     {
         PreparedStatement pstatement = null;
@@ -389,7 +458,7 @@ public class SiritoriDao
                     "  FROM tbl_play_result AS base " +
                     " GROUP BY user_key " +
                     " ORDER BY win desc, draw, lose desc " +
-                    " LIMIT 0, 3 ";
+                    " LIMIT 0, " + GameSetting.RANKING_COUNT;
 
             pstatement = connection.prepareStatement(sql);
 
@@ -426,8 +495,19 @@ public class SiritoriDao
         return ret;
     }
 
+    /**
+     * 対象ユーザの勝敗履歴を取得します
+     * 
+     * @param key
+     *            ユーザキー
+     * @param playerCount
+     *            プレイ人数
+     * @return プレイ結果
+     * @throws SQLException
+     */
     public ArrayList<User> getWinLoseRanking(String key, int playerCount) throws SQLException
     {
+        // TODO : 戻り値がArrayList<User> だが、User にして問題ない(単に時間がなくて対応していないだけです)
         PreparedStatement pstatement = null;
         ResultSet rs = null;
         ArrayList<User> ret = null;
@@ -444,7 +524,7 @@ public class SiritoriDao
                     " WHERE user_key = ? " +
                     " GROUP BY user_key " +
                     " ORDER BY win desc, draw, lose desc " +
-                    " LIMIT 0, 3 ";
+                    " LIMIT 0, " + GameSetting.RANKING_COUNT;
 
             pstatement = connection.prepareStatement(sql);
 
@@ -482,6 +562,12 @@ public class SiritoriDao
         return ret;
     }
 
+    /**
+     * パネル登録用の最大IDを取得します
+     * 
+     * @return 最大ID
+     * @throws SQLException
+     */
     public int getMaxPanelNumber() throws SQLException
     {
         PreparedStatement pstatement = null;
@@ -511,13 +597,21 @@ public class SiritoriDao
         return ret;
     }
 
-    public boolean insertUserPanel(Panel panel) throws SQLException
+    /**
+     * ユーザが登録した内容でもってパネルをDBに登録します
+     * 
+     * @param panel
+     *            登録対象のパネル
+     * @throws SQLException
+     */
+    public void insertUserPanel(Panel panel) throws SQLException
     {
         PreparedStatement pstatement = null;
-        boolean ret = false;
 
         try
         {
+            // 各SQLの実行に際して、即時反映をさせないようにする
+            // ※トランザクション等で検索すると理解が深まるハズ
             connection.setAutoCommit(false);
 
             int athId = getMaxPanelNumber() + 1;
@@ -562,16 +656,17 @@ public class SiritoriDao
                 pstatement.execute();
             }
 
+            // AutoCommit(false)を設定してから、間に実行されたSQL文すべてをDBに反映する
             connection.commit();
         }
         finally
         {
+            // AutoCommit(false)を設定してから、間に実行されたSQL文すべてをDBに反映させず、削除する
             connection.rollback();
+            // SQL実行から即時反映する状態に設定を戻す
             connection.setAutoCommit(true);
             pstatement.close();
         }
-
-        return ret;
     }
 
 }

@@ -2,12 +2,30 @@ package modelPack;
 
 import java.util.Date;
 
+/**
+ * ゲームプレイ後の結果を収める為のクラスです
+ */
 public class PlayResult
 {
+    /**
+     * ユーザキー
+     */
     private String key;
+    /**
+     * ゲーム参加人数
+     */
     private int playerCount;
+    /**
+     * プレイ日
+     */
     private Date playDate;
+    /**
+     * 勝敗結果 (Userクラスが持つ定数を使用)
+     */
     private int winLose;
+    /**
+     * 取得点数
+     */
     private int score;
 
     public String getKey()
