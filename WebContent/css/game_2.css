@@ -25,11 +25,6 @@
 	height: 55px;
 	content: " ";
 }
-#timer{ /*選択中のプレイヤーに表示*/
-	margin-left: 6px;
-	height: 16px;
-	line-height: 16px;
-}
 .nowChoosing{ /*選択中のプレイヤーに表示*/
 	margin: 0 6px 13px 6px;
 	padding: 3px;
