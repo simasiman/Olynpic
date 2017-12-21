@@ -1,0 +1,21 @@
+﻿/*1人用ゲーム画面のCSS*/
+/*大枠*/
+.wapper_1{
+	width:815px;
+}
+
+/*プレイヤーごとの領域*/
+.player_1{
+	width:280px;
+	padding-bottom: 3px;
+}
+.playerName_1{
+	vertical-align: middle;
+	line-height:1.2;
+	font-weight:bold;
+}
+.score_1{
+	width:150px;
+	margin-top:15px;
+	margin-bottom:15px;
+}

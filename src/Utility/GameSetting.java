@@ -12,7 +12,7 @@ public class GameSetting
     /**
      * 各デバッグ用表示を切り替える
      */
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     /**
      * ゲームにおける１ターンの制限秒数

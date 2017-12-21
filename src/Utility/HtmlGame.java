@@ -172,9 +172,9 @@ public class HtmlGame
         ret.append(Utility.appendLineIndent(indentCount++, "<p>"));
 
         // タグを予め作成し、@を対象に文字の置換えを行う
-        String partLeft = "<div class=\"partLeft\">#</div>";
-        String partRight = "<div class=\"partRight\">#</div>";
-        String partCenter = "<div class=\"partCenter\">#</div>";
+        String partLeft = "<div class=\"partLeft\"><div>#</div></div>";
+        String partRight = "<div class=\"partRight\"><div>#</div></div>";
+        String partCenter = "<div class=\"partCenter\"><div>#</div></div>";
 
         String messageWord = "";
         String messageArrow = "";
@@ -233,7 +233,7 @@ public class HtmlGame
                 }
             }
 
-            messageArrow = "<img class=\"" + cssImageArrow + "\" src=\"img/message/arrow01.gif\" width=\"100\">";
+            messageArrow = "<img class=\"" + cssImageArrow + "\" src=\"img/message/arrow.gif\" width=\"100\">";
         }
 
         if (match.getPlayerTurn() == 0)
@@ -248,7 +248,9 @@ public class HtmlGame
         }
         partCenter = partCenter.replace("#", messageArrow);
 
-        ret.append(Utility.appendLineIndent(indentCount, partLeft + partCenter + partRight));
+        ret.append(Utility.appendLineIndent(indentCount, partLeft));
+        ret.append(Utility.appendLineIndent(indentCount, partCenter));
+        ret.append(Utility.appendLineIndent(indentCount, partRight));
 
         ret.append(Utility.appendLineIndent(--indentCount, "</p>"));
         ret.append(Utility.appendLineIndent(--indentCount, "</div>"));

@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" charset="utf-8">
+<link rel="stylesheet" href="css/reset.css" type="text/css">
+<link rel="stylesheet" href="css/game_base.css" type="text/css">
+<link rel="stylesheet" href="css/game_2.css" type="text/css"><!--1人用と2人用でcssを切り替えたい-->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		countDown();
+	});
+	function countDown() {
+	var now = new Date(); //現在時刻
+	var standardTime = new Date(1512978854142); //基準時刻（jsp(ミリ秒をlong型として)で取得）
+	var endTime = new Date(standardTime); //終了時刻（javaで基準時刻に15秒加算したものを取得）
+	var restTime = endTime.getTime() - now.getTime(); //残り時間
+	var second = Math.floor(restTime/ 1000); //ミリ秒を秒に変換
+	var oneTenthSecond = Math.abs(Math.floor((restTime% 1000)/ 100)); //ミリ秒を0.1秒に変換
+
+	$("#timer").text("あと" + second +"."+ oneTenthSecond + '秒');
+		setTimeout('countDown()', 100); //0.1秒ごとに実行
+	}
+</script>
+<script type="text/javascriptt">
+setTimeout("location.reload()",1000*15);
+<!--何もしなくても15秒で自動更新-->
+</SCRIPT>
+<title>pane-tori | ゲーム画面</title>
+</head>
+<body>
+<div class="page">
+<header><img src="img/logo/pane-tori-logo_s.png" alt="ゲームのロゴ"></header>
+<div class="wapper_2 clearfix">
+
+	<div class="player player_2-1">
+	<div class="playerTop">
+		<p class="playerDistinction">プレイヤー1（あなた）</p><!--プレイヤー自身なら（あなた）と表示-->
+		<p class="playerName_2"><!--プレイヤー名-->
+		名もなきアスリート</p>
+		</div>
+		<a href="javascript:location.reload()" class="reload">更新</a><!--相手プレイヤーの領域には非表示-->
+		<div id="timer"></div><!--パネルを選択中のプレイヤーに表示-->
+		<div class="nowChoosing"><!--パネルを選択中のプレイヤーに表示-->
+		<div><span>パネルを選んでいます</span></div></div>
+		
+		<div class="score score_2"><span>score：</span>158</div>
+		
+		<div class="getPanel">取得したパネル</div>
+		<table>
+		<tr>
+			<td class="getPanel getPanelLeft">
+				<img src="img/panel/120x90(1).png">
+			</td>
+			<td class="getPanel getPanelRight">
+				<img src="img/panel/120x90(1).png">
+			</td>
+		</tr>
+		
+		<tr>
+			<td class="getPanel getPanelLeft">
+				<img src="img/panel/120x90(1).png">
+			</td>
+			<td class="getPanel getPanelRight">
+				<img src="img/panel/120x90(1).png">
+			</td>
+		</tr>
+
+		<tr>
+			<td class="getPanel getPanelLeft">
+				<img src="img/panel/120x90(1).png">
+			</td>
+			<td class="getPanel getPanelRight">
+				<img src="img/panel/120x90(1).png">
+			</td>
+		</tr>
+
+		<tr>
+			<td class="getPanel getPanelLeft">
+				<img src="img/panel/120x90(1).png">
+			</td>
+			<td class="getPanel getPanelRight">
+				<img src="img/panel/120x90(1).png">
+			</td>
+		</tr>
+
+		<tr>
+		<td class="getPanel getPanelLeft">
+			<img src="img/panel/120x90(1).png">
+		</td>
+		<td class="getPanel getPanelRight">
+		<img src="img/panel/120x90(1).png">
+		</td>
+		</tr>
+
+		<tr>
+			<td class="getPanel getPanelLeft">
+				<img src="img/panel/120x90(1).png">
+			</td>
+			<td class="getPanel getPanelRight">
+				<img src="img/panel/120x90(1).png">
+			</td>
+		</tr>
+		</table>
+<!--
+別クラスのメソッドで生成したのを取得するやつ（変数名は適当）
+<% if(request.getAttribute("player1_Pannel") != null){
+	String player1_Pannel = request.getAttribute("player1_Pannel").toString();%>
+	<%=player1_Pannel %>
+<%}%>
+-->
+
+	</div><!--class="player" ここまで-->
+
+	<div class="panelWapper"><!--パネル選択する領域-->
+		<table>
+	<!--get遷移でパラメータを送る-->
+	<!--img class　"canChoose":選択可能/"cannotChoose":選択不可/"selected":選択済(aタグ外す)/-->
+		<tr>
+			<td class="panelImg">
+				<a href=""><img class="canChoose" src="img/panel/panel_fencing.png"></a>
+				<div></div>
+			</td>
+			<td class="panelImg">
+				<img class="selected" src="img/panel/panel_canoe.png">
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/panel_horsemanship.png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="canChoose" src="img/panel/panel_volleyball.png"></a>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="panelImg">
+				<a href=""><img class="canChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="panelImg">
+				<a href=""><img class="selected" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<img class="selected" src="img/panel/120x90(1).png"></td>
+		</tr>
+		
+		<tr>
+			<td class="panelImg">
+				<a href=""><img class="canChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="canChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+		</tr>
+		
+		<tr>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+			<td class="panelImg">
+				<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png"></a>
+			</td>
+		</tr>
+		</table>
+
+		<div class="message">
+		<p>プレイヤー2が選んだパネルは「柔道」（しゅうとう）です。<br>
+		プレイヤー1が使える文字は「し」「う」です。
+		</p>
+
+
+		</div>
+	</div><!--panelWapperここまで-->
+
+	<div class="player player_2-2">
+	<div class="playerTop">
+		<p class="playerDistinction">プレイヤー2</p>
+		<p class="playerName_2">プレイヤー名</p>
+		</div><!--playerTopここまで-->
+		<div class="notChoosing"><!--パネルを選択中ではないプレイヤーに表示-->
+		　</div>
+		<div class="score score_2"><span>score：</span>158</div>
+		<div class="getPanel">取得したパネル</div>
+		<table><tr>
+			<tr>
+				<td class="getPanel getPanelLeft">
+					<img src="img/panel/120x90(1).png">
+				</td>
+				<td class="getPanel getPanelRight">
+					<img src="img/panel/120x90(1).png">
+				</td>
+			</tr>
+		</table>
+
+	</div><!--player player_2-2ここまで-->
+</div><!--wapper_2ここまで-->
+<footer><p>&copy 2017&nbsp; ARAI CORPORATION.</p></footer>
+</div><!--pageここまで-->
+</body>
+</html>

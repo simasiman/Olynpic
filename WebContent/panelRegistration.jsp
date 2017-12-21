@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="content-type" charset="utf-8">
 <link rel="stylesheet" href="css/reset.css" type="text/css">
-<link rel="stylesheet" href="css/top.css" type="text/css">
+<link rel="stylesheet" href="css/matching.css" type="text/css">
 <style type="text/css">
 .input-file .preview {
   background-image: url(/img/panel/160x120.png);
@@ -52,6 +52,76 @@ $.addEventListener('DOMContentLoaded', function() {
         reader.readAsDataURL(file);
     }); 
 });
+
+function check(){
+	var flag = 0;
+	
+	var colorSafe = "#FFFFFF";
+	var colorError = "#FF9999";
+
+	var field = document.getElementsByName("panelImage")[0];
+	if(field.value == "")
+	{
+		flag = 1;
+		field.style.backgroundColor = colorError;
+	}
+	else
+	{
+		field.style.backgroundColor = colorSafe;
+	}
+	
+	var field = document.getElementsByName("panelName")[0];
+	if(field.value == "")
+	{
+		flag = 1;
+		field.style.backgroundColor = colorError;
+	}
+	else
+	{
+		field.style.backgroundColor = colorSafe;
+	}
+	
+	var i = 0;
+	for (i = 1; i <= 8; i++)
+	{
+		var field = document.getElementsByName( "Disp" + i)[0];
+		
+		if(field.value == "")
+		{
+			flag = 1;
+			field.style.backgroundColor = colorError;
+		}
+		else
+		{
+			field.style.backgroundColor = colorSafe;
+		}
+	}
+	
+	var i = 0;
+	for (i = 1; i <= 8; i++)
+	{
+		var field = document.getElementsByName( "Read" + i)[0];
+		
+		if(field.value == "")
+		{
+			flag = 1;
+			field.style.backgroundColor = colorError;
+		}
+		else
+		{
+			field.style.backgroundColor = colorSafe;
+		}
+	}
+
+	if(flag){
+		window.alert('パネル名と「表示名＋よみかな」＊８パターンを入力してください');
+		return false;
+	}
+	else{
+		return true;
+	}
+
+}
 </script>
 <title>[pane-tori] - パネル登録</title>
 </head>
@@ -62,7 +132,7 @@ $.addEventListener('DOMContentLoaded', function() {
 	</header>
 	<div class="wapper">
 	
-    <form action="regist" method="post" enctype="multipart/form-data">
+    <form action="regist" method="post" enctype="multipart/form-data" onSubmit="return check()">
         <p class="btn_upload">
             画像ファイルを選択してアップロード
         </p>

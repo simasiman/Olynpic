@@ -93,8 +93,6 @@ public class MatchingServlet extends HttpServlet
             String difficulty1 = (String) req.getParameter("difficulty1");
             String olympic = (String) req.getParameter("olympic");
 
-            boolean isOlympic = olympic != null && !olympic.isEmpty();
-
             int playerCount = 0;
             boolean isShowRedHint = false;
             if (gameMode1 != null && !gameMode1.isEmpty())
@@ -111,10 +109,24 @@ public class MatchingServlet extends HttpServlet
                 resp.sendRedirect("top");
                 return;
             }
-            if (difficulty1 != null)
+
+            boolean isOlympic = olympic != null && !olympic.isEmpty();
+            if (difficulty1 == null || difficulty1.isEmpty())
+            {
+                olympic = "-";
+            }
+
+            if (difficulty1 != null && !difficulty1.isEmpty())
             {
                 isShowRedHint = !difficulty1.isEmpty();
             }
+            else
+            {
+                difficulty1 = "-";
+            }
+
+            session.setAttribute("difficulty1", difficulty1);
+            session.setAttribute("olympic", olympic);
 
             // 初回ゲーム作成時
             User user = MatchUserList.get(key);

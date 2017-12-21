@@ -1,0 +1,82 @@
+JAVAで生成するHTMLのサンプル
+
+◇獲得パネル
+
+一人用サンプル（最小）
+<table>
+	<tr>
+	<td class="getPanel getPanelLeft">
+		<img src="img/panel/120x90(1).png" alt="獲得したパネル">
+	</td>
+	<td class="getPanel getPanelCenter">
+		<img src="img/panel/120x90(1).png" alt="獲得したパネル">
+	</td>
+	<td class="getPanel getPanelRight">
+	</td>
+	</tr>
+</table>
+
+------------------------
+・td
+　class="getPanel" は全てのセルに
+　getPanelLeft　は左のセル
+　getPanelCenter　は中央のセル
+　getPanelRight　は右のセル
+　にそれぞれ、getPanelの直後に半角スペースで挿入
+・img
+　・全ての画像にalt="獲得したパネル"を挿入
+　・該当のセルに入る獲得パネルがあれば、srcにそのパスを挿入
+　　なければimgタグ自体を挿入しない
+
+*****************************************
+二人用サンプル（最小）
+<table>
+	<tr>
+	<td class="getPanel getPanelLeft">
+		<img src="img/panel/120x90(1).png" alt="獲得したパネル">
+	</td>
+	<td class="getPanel getPanelRight">
+		<img src="img/panel/120x90(1).png" alt="獲得したパネル">
+	</td>
+	</tr>
+</table>
+
+-------------------------
+・td
+　class="getPanel" は全てのセルに
+　getPanelLeft　は左のセル
+　getPanelRight　は右のセル
+　にそれぞれ、getPanelの直後に半角スペースで挿入
+・imgは一人用と同じ
+
+///////////////////////////////////////////////////
+◇パネルを選択
+
+サンプル
+<table>
+	<tr>
+	<td class="panelImg">
+		<a href=""><img class="canChoose" src="img/panel/120x90(1).png" alt="選択するパネル"></a>
+	</td>
+	<td class="panelImg">
+		<img class="selected" src="img/panel/120x90(1).png" alt="選択するパネル">
+	</td>
+	<td class="panelImg">
+		<a href=""><img class="cannotChoose" src="img/panel/120x90(1).png" alt="選択するパネル"></a>
+	</td>
+	<td class="panelImg">
+		<a href=""><img class="canChoose" src="img/panel/120x90(1).png" alt="選択するパネル"></a>
+	</td>
+	</tr>
+	<!--<tr>～</tr>のブロックを6行生成する-->
+</table>
+-------------------------
+・td
+　全てのセルにclass="panelImg"を挿入
+・img
+　全ての画像にalt="選択するパネル"を挿入（他にいい文言があったら差し替えてください）
+　class="canChoose":選択可能
+　class="cannotChoose":選択不可
+　class="selected":選択済(aタグ外す)
+・a
+　選択済みの場合のみ外す

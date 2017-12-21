@@ -29,6 +29,11 @@ public class GameWebSocket
     @OnMessage
     public void onMessage(String text, Session session)
     {
+        if (session == null || !session.isOpen())
+        {
+            return;
+        }
+
         // ※不正な情報がWebSocket経由で送信された場合について対応していない
         String[] receive = text.split(",");
         String key = receive[0];

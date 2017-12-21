@@ -28,6 +28,11 @@ public class MatchingWebSocket
     @OnMessage
     public void onMessage(String text, Session session)
     {
+        if (session == null || !session.isOpen())
+        {
+            return;
+        }
+
         // 初回接続時の送信情報であれば、ユーザのセッション情報をセット
         MatchUserList.setUserSession(text, session);
     }

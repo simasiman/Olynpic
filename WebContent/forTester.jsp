@@ -3,9 +3,7 @@
 <%@ page import="Utility.*" %>
 <%@ page import="java.net.*"%>
 <%@ page import="java.util.ArrayList"%>
-
 <%
-
 Cookie[] aryCookies = request.getCookies();
 String key = null;
 String name = null;
@@ -25,13 +23,12 @@ if (aryCookies != null)
         }
     }
 }
-
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="content-type" charset="utf-8">
-<link rel="stylesheet" href="css/top.css" type="text/css">
+<link rel="stylesheet" href="css/matching.css" type="text/css">
 <title>[pane-tori] - デバッグ用</title>
 </head>
 <body>

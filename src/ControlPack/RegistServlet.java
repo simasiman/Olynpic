@@ -76,11 +76,12 @@ public class RegistServlet extends HttpServlet
             {
                 (new SiritoriDao()).insertUserPanel(panel);
             }
+            message = "パネルの登録に成功しました。";
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            message = "パネルの登録に失敗しました。";
+            message = "！！パネルの登録に失敗しました。！！";
         }
 
         req.setAttribute("message", message);

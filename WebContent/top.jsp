@@ -51,6 +51,18 @@ if (match != null)
     response.sendRedirect("result");
     return;
 }
+
+String difficulty = (String)session.getAttribute("difficulty1");
+if (difficulty == null)
+{
+    difficulty = "checked";
+}
+String olympic = (String)session.getAttribute("olympic");
+if (olympic == null)
+{
+    olympic = "checked";
+}
+
 %><!DOCTYPE html>
 <html>
 <head>
@@ -91,8 +103,8 @@ if (match != null)
 									<input type="submit" name="mode1" value="1人プレイ" />
 									<input type="submit" name="mode2" value="2人プレイ" /><br>
 									<input type="reset" value="名前のリセット"><br>
-									<input type="checkbox" name = "difficulty1" value="1" checked="checked">ヒント機能(外すと得点1.2倍)<br>
-                                    <input type="checkbox" name = "olympic" value="1" checked="checked">オリンピックモード<br>
+									<input type="checkbox" name = "difficulty1" value="checked" <%=difficulty%>>ヒント機能(外すと得点1.2倍)<br>
+                                    <input type="checkbox" name = "olympic" value="checked" <%=olympic%>>オリンピックモード<br>
 								</form>
 
 								<table class="setsumei">
@@ -105,9 +117,9 @@ if (match != null)
 										<td>他のプレイヤーと点数を競う対戦モードです。</td>
 								</table>
 								
+								<a href="regist">パネル登録画面へ</a>
 								<%if (GameSetting.DEBUG) {%>
 									<a href="forTester.jsp">デバッグ画面へ</a><br>
-									<a href="panelRegistration.jsp">パネル登録画面へ</a>
 								<%}%>
 
 							</div><!--playStart終わり-->
