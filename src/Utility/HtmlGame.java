@@ -194,7 +194,7 @@ public class HtmlGame
 
             if (match.getPlayerCount() == 1)
             {
-                cssImageArrow = "leftArrow ";
+                cssImageArrow = "rightArrow ";
             }
             else if (match.getPlayerTurn() == 0)
             {
