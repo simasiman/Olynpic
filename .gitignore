@@ -1,1 +1,5 @@
 /build/
+/bin/
+/.settings/
+/.classpath
+/.dbeaver-data-sources.xml

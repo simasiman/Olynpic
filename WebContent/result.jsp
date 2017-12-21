@@ -64,13 +64,13 @@ else
     switch (user.getWin())
     {
         case User.WIN:
-            clsWinLose = "win ";
+            clsWinLose = "win";
             message = "WIN!!";
             image += "win.png";
             imageAlt = "勝った人";
             break;
         case User.LOSE:
-            clsWinLose = "lose ";
+            clsWinLose = "lose";
             message = "LOSE...";
             image += "lose.png";
             imageAlt = "負けた人";
