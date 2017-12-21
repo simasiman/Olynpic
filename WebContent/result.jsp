@@ -64,13 +64,13 @@ else
     switch (user.getWin())
     {
         case User.WIN:
-            clsWinLose = "win";
+            clsWinLose = "win ";
             message = "WIN!!";
             image += "win.png";
             imageAlt = "勝った人";
             break;
         case User.LOSE:
-            clsWinLose = "lose";
+            clsWinLose = "lose ";
             message = "LOSE...";
             image += "lose.png";
             imageAlt = "負けた人";
@@ -107,7 +107,7 @@ else
 			＊<span>ヒントの有無での加算</span> : <%=user.getScoreMultiple()%>
 			</div>
 		</div><!--resultScoreここまで-->
-		
+
 		<img class="figure <%=clsWinLose%>" src="<%=image%>" alt="<%=imageAlt%>">
 		<%if (match.getPlayerCount() == 2) {%>
 		<img class="podium" src="img/result/podium.png" alt="表彰台">
@@ -115,7 +115,7 @@ else
 	</div><!--resultここまで-->
 
 	<div class="toTop">
-	
+
 	<a href="">トップページに戻る</a></div>
 
 	<div class="contents clearfix">
@@ -153,7 +153,7 @@ else
 		<%}%>
 		</ol>
 	</div><!--getPanelここまで-->
-	
+
 	<!--右側のカラム-->
 	<div class="right">
 		<div><%=playerCount%>人プレイ ランキング</div>
@@ -171,14 +171,14 @@ else
 			{
 			    User u = privateHighScore.get(i);
 			%>
-			<li class="player clearfix">
+			<li class="clearfix">
 				<div class="rank"><%=i+1%>.</div>
 				<div class="num"><%=u.getHighScore()%></div>
 			</li>
 			<%}%>
 			</ol>
 		</div><!--highScoreここまで-->
-		
+
 		<div class="rankingWapper">
 			<div>ランキング（全体）</div>
 			<div class="ranking">
@@ -216,7 +216,7 @@ else
     			{
     			    User u = totalWinLose.get(i);
     			%>
-				<li class="player clearfix">
+				<li class="clearfix">
 					<div class="rank"><%=i+1%>.</div>
 					<div class="name"><%=u.getName()%></div>
 					<div class="num"><%=u.getWinCount()%></div>
@@ -228,7 +228,7 @@ else
 		</div><!--rankingWapperここまで-->
 
 	</div><!--rightここまで-->
-	
+
 </div><!--contentsここまで-->
 	<div class="toTop"><a href="">トップページに戻る</a></div>
 	<div class="logo"><img src="img/logo/arai_logo_s.png" alt="企業ロゴ"><img src="img/logo/olympic_logo.png" alt="大会ロゴ"></div>
