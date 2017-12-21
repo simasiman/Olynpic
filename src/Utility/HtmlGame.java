@@ -194,7 +194,7 @@ public class HtmlGame
 
             if (match.getPlayerCount() == 1)
             {
-                cssImageArrow = "rightArrow ";
+                cssImageArrow = "leftArrow ";
             }
             else if (match.getPlayerTurn() == 0)
             {
@@ -238,13 +238,14 @@ public class HtmlGame
 
         if (match.getPlayerTurn() == 0)
         {
-            partLeft = partLeft.replace("#", messageAction);
-            partRight = partRight.replace("#", messageWord);
+            partLeft = partLeft.replace("#", messageWord);
+            partRight = partRight.replace("#", messageAction);
         }
         else
         {
-            partLeft = partLeft.replace("#", messageWord);
-            partRight = partRight.replace("#", messageAction);
+            partLeft = partLeft.replace("#", messageAction);
+            partRight = partRight.replace("#", messageWord);
+
         }
         partCenter = partCenter.replace("#", messageArrow);
 
