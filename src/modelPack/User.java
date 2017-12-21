@@ -11,7 +11,9 @@ public class User
 
     private int wishPlayerCount = 0;
 
+    private boolean isFirst = false;
     private boolean isOlympic = true;
+    private boolean isShowHint = false;
 
     private int miss;
     private int win;
@@ -19,13 +21,10 @@ public class User
     private int winCount;
     private int loseCount;
     private int drawCount;
-
     private int highScore;
-
     private int timeOutCnt = 0;
-    private boolean isResultWatch = false;
 
-    private boolean isShowHint = false;
+    private boolean isResultWatch = false;
 
     private ArrayList<Panel> selectedPanel = new ArrayList<Panel>();
 
@@ -86,6 +85,17 @@ public class User
         miss = 0;
         win = -1;
         isResultWatch = false;
+        isFirst = false;
+    }
+
+    public boolean isFirst()
+    {
+        return isFirst;
+    }
+
+    public void setFirst(boolean isFirst)
+    {
+        this.isFirst = isFirst;
     }
 
     public boolean isOlympic()

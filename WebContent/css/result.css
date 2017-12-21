@@ -1,4 +1,4 @@
-﻿@import url(https://fonts.googleapis.com/css?family=Lato:400,700);
+﻿@import url('https://fonts.googleapis.com/css?family=Lato:400,700|Bungee|PT+Sans');
 
 /*全体*/
 .clearfix:after {
@@ -49,23 +49,140 @@ header img{
 }
 
 /*勝敗*/
+/*背景*/
 .result{
+	position: relative;
 	margin: 2px auto 0;
 	width: 100%;
-	height: 200px;
-	background: #AAA;
+	height: 350px;
+	background-color: #FFF;
 }
-.rankImg1{/*1位と2位で切り替える*/
-	position: relative;
+
+.result[class*="fin"],
+.result[class*="win"]{/*1人用終了と2人用勝ち*/
+	background-image: url(../img/result/win_background.png);
 }
-.rankImg1 img{
+.result[class*="lose"]{/*負け*/
+	background-image: url(../img/result/lose_background.png);
+}
+/*共通部分*/
+.resultText{
 	position: absolute;
-
+	top: 15px;
+	left: 50%;
+	transform: translateX(-50%);
+	-webkit- transform: translateX(-50%);
+	font-family: 'Bungee', cursive;
+	font-size: 50px;
+	color:#FFF;
+	text-shadow: 2px 2px 2px #000,
+	 -2px 2px 2px #000,
+	 2px -2px 2px #000,
+	 -2px -2px 2px #000;
 }
-.rankimg2 img{/*1位と2位で切り替える*/
-
+.resultScore{
+	position: absolute;
+	padding: 5px;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 30px;
+	background-color: rgba(255, 255, 255, 0.8);
 }
-
+.resultScore>div:nth-of-type(2){
+	margin: 5px 0 0 20px;
+	font-size: 20px;
+	color: #4b4b4b;
+	line-height: 20px;
+}
+.resultScore>div:nth-of-type(1)>span{
+	font-weight: bold;
+}
+.resultScore>div:nth-of-type(2)>span:nth-of-type(1) {
+	color: #ff4343;
+}
+.resultScore>div:nth-of-type(2)>span:nth-of-type(2) {
+	font-size: 15px;
+}
+/*1人用*/
+.resultText[class*="fin"]:before {
+	content: attr(title);
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	color:#ff7600;
+	-webkit-mask-image: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.8) 100%);
+}
+.resultScore[class*="fin"]{
+	bottom: 50px;
+	right:50px;
+}
+.figure[class*="fin"]{
+	z-index: 1;
+	position: absolute;
+	bottom: 50px;
+	left: 50%;
+	transform: translateX(-50%);
+	-webkit- transform: translateX(-50%);
+	width: 250px;
+	-webkit-filter: drop-shadow(25px 0 7px rgba(95, 92, 95, 0.2));
+}
+/*2人用*/
+.resultText[class*="win"]:before{/*勝ち*/
+	content: attr(title);
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	color:#d50505;
+	-webkit-mask-image: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.8) 100%);
+}
+.resultText[class*="lose"]:before{/*負け*/
+	content: attr(title);
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	color:#0553d5;
+	-webkit-mask-image: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.8) 100%);
+}
+.resultScore[class*="win"],
+.resultScore[class*="lose"]{
+	top: 50%;
+	right: 70px;
+	transform: translateY(-50%);
+	-webkit- transform: translateY(-50%);
+}
+.resultScore[class*="fin"],
+.resultScore[class*="win"]{/*勝ち*/
+	border: double 5px #fc8c35;
+}
+.resultScore[class*="lose"]{/*負け*/
+	border: double 5px #8db7ff;
+}
+.figure[class*="win"]{/*勝ち*/
+	z-index: 1;
+	position: absolute;
+	bottom: 110px;
+	left: 410px;
+	width: 100px;
+}
+.figure[class*="lose"]{/*負け*/
+	z-index: 1;
+	position: absolute;
+	bottom: 75px;
+	left: 270px;
+	width: 150px;
+}
+.podium{
+	z-index: 0;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	-webkit- transform: translateX(-50%);
+	bottom: 10px;
+	width: 300px;
+	height: 111px;
+}
 /*トップページに戻る*/
 .toTop{
 	margin: 15px;
@@ -203,10 +320,9 @@ ol{
 	background-color: rgba(65, 125, 255, 0.84);
 }
 .highScore>div:nth-child(1){
-	padding: 4px 0 0 4px;
+	padding: 4px;
 	font-size: 18px;
 	font-weight: bold;
-
 }
 .highScore>div:nth-child(1)>span{
 	font-size: 15px;
@@ -223,6 +339,7 @@ ol{
 	padding: 3px 0;
 	border-bottom: solid 1px #666;
 	line-height: 1.2;
+	color: #202020;
 }
 .rankingWapper{
 	padding: 6px 0 0 3px;
@@ -252,16 +369,15 @@ ol{
 .rank{
 	float: left;
 	width: 20px;
+	font-weight: bold;
 }
 .name{
 	float: left;
 	width: 200px;
-	font-weight: bold;
 }
 .num{
 	float: left;
 	width: 50px;
-	font-weight: bold;
 }
 .ranking .num{
 	text-align: right;

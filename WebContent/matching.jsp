@@ -54,11 +54,18 @@ WebSocketDemo = {};
         }
         d.webSocket = ws;
     };
+    d.disconnect = function() {
+    	ws.close();
+    }
 }) (WebSocketDemo);
 
 window.onload = function() {
 	WebSocketDemo.connect();
 }
+
+window.onbeforeunload = function(e) {
+	WebSocketDemo.disconnect();
+};
 </script>
 </head>
 <body>

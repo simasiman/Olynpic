@@ -379,6 +379,7 @@ public class Match
             }
             this.playerCount = playerCount;
             this.playerTurn = (playerCount == 1) ? 0 : new Random().nextInt(playerCount);
+            this.getUserList().get(playerTurn).setFirst(true);
 
             this.isOlympic = isOlympic;
 
@@ -453,17 +454,22 @@ public class Match
             User user1 = userList.get(0);
             User user2 = userList.get(1);
 
-            if ((user1.session == null && user2.session == null) || user1.isTimeOut() && user2.isTimeOut())
+            // 2017.12.21 リザルト画面が引き分け表示に対応していない為、引き分け＝敗北の解釈で修正
+            if (user1.session == null || user1.isTimeOutTwice())
             {
-                // 両者タイムアウトの場合
-                user1.setWin(User.DRAW);
-                user2.setWin(User.DRAW);
-            }
-            else if (user1.session == null || user1.isTimeOutTwice())
-            {
-                // 片方がセッション喪失、あるいは２連続タイムアウトである場合
-                user1.setWin(User.LOSE);
-                user2.setWin(User.WIN);
+                if (user2.session == null || user2.isTimeOutTwice())
+                {
+                    // 両者タイムアウトの場合
+                    user1.setWin(User.LOSE);
+                    user2.setWin(User.LOSE);
+                }
+                else
+                {
+                    // 片方がセッション喪失、あるいは２連続タイムアウトである場合
+                    user1.setWin(User.LOSE);
+                    user2.setWin(User.WIN);
+                }
+
             }
             else if (user2.session == null || user2.isTimeOutTwice())
             {
@@ -473,6 +479,7 @@ public class Match
             }
             else if (user1.getScore() > user1.getScore())
             {
+                // 合計点が多い方を勝利とする
                 user1.setWin(User.WIN);
                 user2.setWin(User.LOSE);
             }
@@ -481,10 +488,38 @@ public class Match
                 user1.setWin(User.LOSE);
                 user2.setWin(User.WIN);
             }
+            else if (user1.getTotalScoreBonus() < user2.getTotalScoreBonus())
+            {
+                // ボーナス点が多い方を勝利とする
+                user1.setWin(User.WIN);
+                user2.setWin(User.LOSE);
+            }
+            else if (user1.getTotalScoreBonus() > user2.getTotalScoreBonus())
+            {
+                user1.setWin(User.LOSE);
+                user2.setWin(User.WIN);
+            }
+            else if (user1.getScoreMultiple() < user2.getScoreMultiple())
+            {
+                // 点数倍率が低い方を勝利とする
+                user1.setWin(User.WIN);
+                user2.setWin(User.LOSE);
+            }
+            else if (user1.getScoreMultiple() > user2.getScoreMultiple())
+            {
+                user1.setWin(User.LOSE);
+                user2.setWin(User.WIN);
+            }
+            else if (user1.isFirst())
+            {
+                // 先行を勝利とする
+                user1.setWin(User.WIN);
+                user2.setWin(User.LOSE);
+            }
             else
             {
-                user1.setWin(User.DRAW);
-                user2.setWin(User.DRAW);
+                user1.setWin(User.LOSE);
+                user2.setWin(User.WIN);
             }
         }
     }
@@ -504,19 +539,7 @@ public class Match
         // 参加人数を満たした場合、ゲームスタート
         if (isCanMatchStart())
         {
-            while (sendSessionMatchingComplete())
-            {
-                // 対戦相手同士のセッションが確認できるまで繰り返し処理
-                try
-                {
-                    System.out.println("a");
-                }
-                catch (Exception e)
-                {
-                    System.out.println("matchingCheck error");
-                }
-            }
-
+            sendSessionMatchingComplete();
             startMatch();
         }
     }
@@ -568,23 +591,12 @@ public class Match
 
     public boolean sendSessionMatchingComplete()
     {
-        String ret = "<!--complete-->";
-
-        for (User user : userList)
-        {
-            Session session = user.session;
-            if (session == null || !session.isOpen())
-            {
-                return false;
-            }
-        }
-
         for (User user : userList)
         {
             Session session = user.session;
             if (session != null && session.isOpen())
             {
-                session.getAsyncRemote().sendText(ret);
+                session.getAsyncRemote().sendText("<!--complete-->");
             }
         }
 

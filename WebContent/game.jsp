@@ -101,11 +101,18 @@ WebSocketDemo = {};
     d.send = function(text) {
     	d.webSocket.send(text);
     };
+    d.disconnect = function() {
+    	ws.close();
+    }
 }) (WebSocketDemo);
 
 window.onload = function() {
 	WebSocketDemo.connect();
 }
+
+window.onbeforeunload = function(e) {
+	WebSocketDemo.disconnect();
+};
 </script>
 <title>[pane-tori] - ゲーム</title>
 </head>

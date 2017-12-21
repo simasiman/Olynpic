@@ -233,7 +233,7 @@ public class HtmlGame
                 }
             }
 
-            messageArrow = "<img class=\"" + cssImageArrow + "\" src=\"img/message/arrow.jpg\" width=\"100\">";
+            messageArrow = "<img class=\"" + cssImageArrow + "\" src=\"img/message/arrow01.gif\" width=\"100\">";
         }
 
         if (match.getPlayerTurn() == 0)

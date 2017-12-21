@@ -45,7 +45,44 @@ Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
 cooName.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooName);
 
+User user = match.getUser(key);
 int playerCount = match.getPlayerCount();
+
+String clsWinLose = "";
+String message = "";
+String imageAlt = "";
+String image = "img/result/";
+if (match.getPlayerCount() == 1)
+{
+    clsWinLose = "fin ";
+    message = "CONGRATULATIONS!!";
+    image += "fin.png";
+    imageAlt = "勝った人";
+}
+else
+{
+    switch (user.getWin())
+    {
+        case User.WIN:
+            clsWinLose = "win ";
+            message = "WIN!!";
+            image += "win.png";
+            imageAlt = "勝った人";
+            break;
+        case User.LOSE:
+            clsWinLose = "lose ";
+            message = "LOSE...";
+            image += "lose.png";
+            imageAlt = "負けた人";
+            break;
+        case User.DRAW:
+            // 引き分け処理については未実装
+            clsWinLose = "";
+            message = "";
+            image += "";
+            break;
+    }
+}
 %>
 <!DOCTYPE html>
 <html>
@@ -60,18 +97,26 @@ int playerCount = match.getPlayerCount();
 <header><img src="img/logo/pane-tori-logo_s.png" alt="ゲームのロゴ"></header>
 <div class="wapper">
 
-  <%User user = match.getUser(key);%>
-    選手名：<%=user.getName()%><br>
-    点数　：<%=user.getScoreExam()%><br>
-    ミス　：<%=user.getMiss()%><br>
-    
-	<div class="result">
-		<div class=""><!-- 1位と2位でクラス名か画像を変える -->
-			<img src="" alt="結果">
-		</div>
+	<div class="result <%=clsWinLose%>">
+		<div class="resultText <%=clsWinLose%>" title="<%=message%>"><%=message%></div>
+		<div class="resultScore <%=clsWinLose%> clearfix">
+			<div>Total score : <span><%=user.getScore()%></span></div>
+			<div>
+			score : <%=user.getTotalScoreBase()%><br>
+			＋<span>bonus : <%=user.getTotalScoreBonus()%></span><br>
+			＊<span>ヒントの有無での加算</span> : <%=user.getScoreMultiple()%>
+			</div>
+		</div><!--resultScoreここまで-->
+		
+		<img class="figure <%=clsWinLose%>" src="<%=image%>" alt="<%=imageAlt%>">
+		<%if (match.getPlayerCount() == 2) {%>
+		<img class="podium" src="img/result/podium.png" alt="表彰台">
+		<%}%>
 	</div><!--resultここまで-->
 
-	<div class="toTop"><a href="">トップページに戻る</a></div>
+	<div class="toTop">
+	
+	<a href="">トップページに戻る</a></div>
 
 	<div class="contents clearfix">
 	<div class="getPanel">
@@ -86,17 +131,17 @@ int playerCount = match.getPlayerCount();
 		</li>
 		<%for (int j = 0; j < user.getSelectedPanel().size(); j++)
         {
-        Panel p = user.getSelectedPanel().get(j);
-        Word word = p.getSelectedWord();
-        String picture = "";
-        if (p.isOriginal())
-        {
-            picture = "img/panel/" + p.getPicture();
-        }
-        else
-        {
+            Panel p = user.getSelectedPanel().get(j);
+            Word word = p.getSelectedWord();
+            String picture = "";
+            if (p.isOriginal())
+            {
+                picture = "img/panel/" + p.getPicture();
+            }
+            else
+            {
             picture = "img/userUpload/" + p.getPicture();
-        }
+            }
         %>
 		<li class="getPanelList clearfix">
 			<img src="<%=picture%>" alt="<%=p.getBaseWord()%>" title="<%=p.getBaseWord()%>">
