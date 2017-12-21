@@ -15,7 +15,7 @@
 </style>
 <script>
 //documentと毎回書くのがだるいので$に置き換え
-var $ = document; 
+var $ = document;
 var $form = $.querySelector('form');// jQueryの $("form")相当
 
 //jQueryの$(function() { 相当(ただし厳密には違う)
@@ -46,16 +46,16 @@ $.addEventListener('DOMContentLoaded', function() {
             img.setAttribute('title',  file.name);
             // imgタグを$previeの中に追加
             $preview.appendChild(img);
-          }; 
+          };
         })(file);
 
         reader.readAsDataURL(file);
-    }); 
+    });
 });
 
 function check(){
 	var flag = 0;
-	
+
 	var colorSafe = "#FFFFFF";
 	var colorError = "#FF9999";
 
@@ -69,7 +69,7 @@ function check(){
 	{
 		field.style.backgroundColor = colorSafe;
 	}
-	
+
 	var field = document.getElementsByName("panelName")[0];
 	if(field.value == "")
 	{
@@ -80,12 +80,12 @@ function check(){
 	{
 		field.style.backgroundColor = colorSafe;
 	}
-	
+
 	var i = 0;
 	for (i = 1; i <= 8; i++)
 	{
 		var field = document.getElementsByName( "Disp" + i)[0];
-		
+
 		if(field.value == "")
 		{
 			flag = 1;
@@ -96,12 +96,12 @@ function check(){
 			field.style.backgroundColor = colorSafe;
 		}
 	}
-	
+
 	var i = 0;
 	for (i = 1; i <= 8; i++)
 	{
 		var field = document.getElementsByName( "Read" + i)[0];
-		
+
 		if(field.value == "")
 		{
 			flag = 1;
@@ -131,16 +131,16 @@ function check(){
 	<header>
 	</header>
 	<div class="wapper">
-	
+
     <form action="regist" method="post" enctype="multipart/form-data" onSubmit="return check()">
         <p class="btn_upload">
             画像ファイルを選択してアップロード
         </p>
-        
+
         <input type="file" name="panelImage">
-        
+
         <div class="preview"></div>
-        
+
         パネル名：<input type="text" name="panelName">
         <table border="1">
             <tr>
@@ -184,11 +184,11 @@ function check(){
             <input type="submit" value="送信">
         </p>
     </form>
-    
+
     <p><%=request.getAttribute("message")%></p>
-	
-	<a href="top">トップへ戻る</a>
-	
+
+	<a href="top" class="back">トップへ戻る</a>
+
 	</div>
 	<footer>
 	</footer>
