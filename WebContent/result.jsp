@@ -7,81 +7,74 @@
 Match match = (Match)request.getAttribute("matchResult");
 if (match == null)
 {
-    response.sendRedirect("index.jsp");
-    return;
+	response.sendRedirect("index.jsp");
+	return;
 }
-
 Cookie[] aryCookies = request.getCookies();
-
 String key = (String)session.getAttribute("key");
 String name = (String)session.getAttribute("name");
-
 if (aryCookies != null)
 {
-    for (Cookie cookie : aryCookies)
-    {
-        String ckName = cookie.getName();
-        if (ckName.equals("key") && (key == null || key.isEmpty()))
-        {
-            key = cookie.getValue();
-        }
-        else if (ckName.equals("name") && (name == null || name.isEmpty()))
-        {
-            name = URLDecoder.decode(cookie.getValue(), "UTF-8");
-        }
-    }
+	for (Cookie cookie : aryCookies)
+	{
+		String ckName = cookie.getName();
+		if (ckName.equals("key") && (key == null || key.isEmpty()))
+		{
+			key = cookie.getValue();
+		}
+		else if (ckName.equals("name") && (name == null || name.isEmpty()))
+		{
+			name = URLDecoder.decode(cookie.getValue(), "UTF-8");
+		}
+	}
 }
-
 if (key == null || key.isEmpty())
 {
-    response.sendRedirect("index");
-    return;
+	response.sendRedirect("index");
+	return;
 }
-
 Cookie cooKey = new Cookie("key", key);
 cooKey.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooKey);
 Cookie cooName = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
 cooName.setMaxAge(60 * 60 * 24 * 90);
 response.addCookie(cooName);
-
 User user = match.getUser(key);
 int playerCount = match.getPlayerCount();
-
 String clsWinLose = "";
 String message = "";
 String imageAlt = "";
 String image = "img/result/";
 if (match.getPlayerCount() == 1)
 {
-    clsWinLose = "fin ";
-    message = "CONGRATULATIONS!!";
-    image += "fin.png";
-    imageAlt = "勝った人";
+	clsWinLose = "fin ";
+	message = "CONGRATULATIONS!!";
+	image += "fin.png";
+	imageAlt = "勝った人";
 }
 else
 {
-    switch (user.getWin())
-    {
-        case User.WIN:
-            clsWinLose = "win ";
-            message = "WIN!!";
-            image += "win.png";
-            imageAlt = "勝った人";
-            break;
-        case User.LOSE:
-            clsWinLose = "lose ";
-            message = "LOSE...";
-            image += "lose.png";
-            imageAlt = "負けた人";
-            break;
-        case User.DRAW:
-            // 引き分け処理については未実装
-            clsWinLose = "";
-            message = "";
-            image += "";
-            break;
-    }
+	switch (user.getWin())
+	{
+		case User.WIN:
+			clsWinLose = "win ";
+			message = "WIN!!";
+			image += "win.png";
+			imageAlt = "勝った人";
+			break;
+		case User.LOSE:
+			clsWinLose = "lose ";
+			message = "LOSE...";
+			image += "lose.png";
+			imageAlt = "負けた人";
+			break;
+		case User.DRAW:
+			// 引き分け処理については未実装
+			clsWinLose = "";
+			message = "";
+			image += "";
+			break;
+	}
 }
 %>
 <!DOCTYPE html>
@@ -119,122 +112,122 @@ else
 	<a href="">トップページに戻る</a></div>
 
 	<div class="contents clearfix">
-	<div class="getPanel">
-		<p>詳細結果</p>
-		<ol>
-		<li class="clearfix">
-			<div>獲得したパネル</div>
-			<div class="resultBlock first">
-				<div class="score first">score + <span>bonus</span></div>
-				<div class="getWord first">獲得した言葉</div>
-			</div>
-		</li>
-		<%for (int j = 0; j < user.getSelectedPanel().size(); j++)
-        {
-            Panel p = user.getSelectedPanel().get(j);
-            Word word = p.getSelectedWord();
-            String picture = "";
-            if (p.isOriginal())
-            {
-                picture = "img/panel/" + p.getPicture();
-            }
-            else
-            {
-            picture = "img/userUpload/" + p.getPicture();
-            }
-        %>
-		<li class="getPanelList clearfix">
-			<img src="<%=picture%>" alt="<%=p.getBaseWord()%>" title="<%=p.getBaseWord()%>">
-			<div class="resultBlock">
-				<div class="score"><span><%=word.getBaseScore()%></span> ＋ <span><%=word.getBonusScore()%></span></div>
-				<div class="getWord"><span>「<%=word.getWord()%>」</span></div>
-			</div>
-		</li>
-		<%}%>
-		</ol>
-	</div><!--getPanelここまで-->
-
-	<!--右側のカラム-->
-	<div class="right">
-		<div><%=playerCount%>人プレイ ランキング</div>
-		<div class="highScore">
-			<div>ハイスコア<span><%=name%></span></div>
-
+		<div class="getPanel">
+			<p>詳細結果</p>
 			<ol>
-			<%
-			ArrayList<User> privateHighScore = (ArrayList<User>)request.getAttribute("PrivateHighScore");
-			if (privateHighScore == null)
-			{
-			    privateHighScore = new ArrayList<User>();
-			}
-			for (int i = 0; i < privateHighScore.size(); i++)
-			{
-			    User u = privateHighScore.get(i);
-			%>
 			<li class="clearfix">
-				<div class="rank"><%=i+1%>.</div>
-				<div class="num"><%=u.getHighScore()%></div>
+				<div>獲得したパネル</div>
+				<div class="resultBlock first">
+					<div class="score first">score + <span>bonus</span></div>
+					<div class="getWord first">獲得した言葉</div>
+				</div>
+			</li>
+			<%for (int j = 0; j < user.getSelectedPanel().size(); j++)
+			{
+				Panel p = user.getSelectedPanel().get(j);
+				Word word = p.getSelectedWord();
+				String picture = "";
+				if (p.isOriginal())
+				{
+					picture = "img/panel/" + p.getPicture();
+				}
+				else
+				{
+					picture = "img/userUpload/" + p.getPicture();
+				}
+			%>
+			<li class="getPanelList clearfix">
+				<img src="<%=picture%>" alt="<%=p.getBaseWord()%>" title="<%=p.getBaseWord()%>">
+				<div class="resultBlock">
+					<div class="score"><span><%=word.getBaseScore()%></span> ＋ <span><%=word.getBonusScore()%></span></div>
+					<div class="getWord"><span>「<%=word.getWord()%>」</span></div>
+				</div>
 			</li>
 			<%}%>
 			</ol>
-		</div><!--highScoreここまで-->
+		</div><!--getPanelここまで-->
 
-		<div class="rankingWapper">
-			<div>ランキング（全体）</div>
-			<div class="ranking">
-				<div>ハイスコア</div>
+		<!--右側のカラム-->
+		<div class="right">
+			<div><%=playerCount%>人プレイ ランキング</div>
+			<div class="highScore">
+				<div>ハイスコア<span><%=name%></span></div>
+
 				<ol>
 				<%
-			    ArrayList<User> totalHighScore = (ArrayList<User>)request.getAttribute("TotalHighScore");
-			    if (totalHighScore == null)
-			    {
-			        totalHighScore = new ArrayList<User>();
-    			}
-    			for (int i = 0; i < totalHighScore.size(); i++)
-    			{
-    			    User u = totalHighScore.get(i);
-    			%>
+				ArrayList<User> privateHighScore = (ArrayList<User>)request.getAttribute("PrivateHighScore");
+				if (privateHighScore == null)
+				{
+					privateHighScore = new ArrayList<User>();
+				}
+				for (int i = 0; i < privateHighScore.size(); i++)
+				{
+					User u = privateHighScore.get(i);
+				%>
 				<li class="clearfix">
 					<div class="rank"><%=i+1%>.</div>
-					<div class="name"><%=u.getName()%></div>
 					<div class="num"><%=u.getHighScore()%></div>
 				</li>
 				<%}%>
 				</ol>
-			</div><!--rankingここまで-->
+			</div><!--highScoreここまで-->
 
-			<div class="ranking">
-				<div>勝敗数</div>
-				<ol>
-				<%
-			    ArrayList<User> totalWinLose = (ArrayList<User>)request.getAttribute("TotalWinLose");
-			    if (totalWinLose == null)
-			    {
-			        totalWinLose = new ArrayList<User>();
-    			}
-    			for (int i = 0; i < totalWinLose.size(); i++)
-    			{
-    			    User u = totalWinLose.get(i);
-    			%>
-				<li class="clearfix">
-					<div class="rank"><%=i+1%>.</div>
-					<div class="name"><%=u.getName()%></div>
-					<div class="num"><%=u.getWinCount()%></div>
-				</li>
-				<%}%>
-				</ol>
-			</div><!--rankingここまで-->
+			<div class="rankingWapper">
+				<div>ランキング（全体）</div>
+				<div class="ranking">
+					<div>ハイスコア</div>
+					<ol>
+					<%
+					ArrayList<User> totalHighScore = (ArrayList<User>)request.getAttribute("TotalHighScore");
+					if (totalHighScore == null)
+					{
+						totalHighScore = new ArrayList<User>();
+					}
+					for (int i = 0; i < totalHighScore.size(); i++)
+					{
+						User u = totalHighScore.get(i);
+					%>
+					<li class="clearfix">
+						<div class="rank"><%=i+1%>.</div>
+						<div class="name"><%=u.getName()%></div>
+						<div class="num"><%=u.getHighScore()%></div>
+					</li>
+					<%}%>
+					</ol>
+				</div><!--rankingここまで-->
 
-		</div><!--rankingWapperここまで-->
+				<div class="ranking">
+					<div>勝敗数</div>
+					<ol>
+					<%
+					ArrayList<User> totalWinLose = (ArrayList<User>)request.getAttribute("TotalWinLose");
+					if (totalWinLose == null)
+					{
+						totalWinLose = new ArrayList<User>();
+					}
+					for (int i = 0; i < totalWinLose.size(); i++)
+					{
+						User u = totalWinLose.get(i);
+					%>
+					<li class="clearfix">
+						<div class="rank"><%=i+1%>.</div>
+						<div class="name"><%=u.getName()%></div>
+						<div class="num"><%=u.getWinCount()%></div>
+					</li>
+					<%}%>
+					</ol>
+				</div><!--rankingここまで-->
 
-	</div><!--rightここまで-->
+			</div><!--rankingWapperここまで-->
 
-</div><!--contentsここまで-->
+		</div><!--rightここまで-->
+
+	</div><!--contentsここまで-->
 	<div class="toTop"><a href="">トップページに戻る</a></div>
 	<div class="logo"><img src="img/logo/arai_logo_s.png" alt="企業ロゴ"><img src="img/logo/olympic_logo.png" alt="大会ロゴ"></div>
 	<div>ARAIはTOKYO2020を応援しています</div>
 </div><!--wapperここまで-->
 <footer><p>&copy; 2017 ARAI CORPORATION.</p></footer>
-</div>
+</div><!--pageここまで-->
 </body>
 </html>
