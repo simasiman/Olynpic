@@ -360,7 +360,7 @@ public class Match
     {
         // ユーザのTimeOutフラグを解除
         User user = getUser(key);
-        user.resetTimeOutCnt();
+        user.resetTimeOut();
 
         selectedTime = new Date();
 
@@ -644,7 +644,7 @@ public class Match
                 user1.setWin(User.WIN);
                 user2.setWin(User.LOSE);
             }
-            else if (user1.getScore() > user1.getScore())
+            else if (user1.getScore() > user2.getScore())
             {
                 // 合計点が多い方を勝利とする
                 user1.setWin(User.WIN);
@@ -655,13 +655,13 @@ public class Match
                 user1.setWin(User.LOSE);
                 user2.setWin(User.WIN);
             }
-            else if (user1.getTotalScoreBonus() < user2.getTotalScoreBonus())
+            else if (user1.getTotalScoreBonus() > user2.getTotalScoreBonus())
             {
                 // ボーナス点が多い方を勝利とする
                 user1.setWin(User.WIN);
                 user2.setWin(User.LOSE);
             }
-            else if (user1.getTotalScoreBonus() > user2.getTotalScoreBonus())
+            else if (user1.getTotalScoreBonus() < user2.getTotalScoreBonus())
             {
                 user1.setWin(User.LOSE);
                 user2.setWin(User.WIN);

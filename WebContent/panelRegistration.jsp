@@ -54,15 +54,17 @@ $.addEventListener('DOMContentLoaded', function() {
 });
 
 function check(){
-	var flag = 0;
+	var inputFlg = 0;
+	var lengthFlg = 0;
 
 	var colorSafe = "#FFFFFF";
 	var colorError = "#FF9999";
+	var colorErrorLength = "#99FF99";
 
 	var field = document.getElementsByName("panelImage")[0];
 	if(field.value == "")
 	{
-		flag = 1;
+		inputFlg = 1;
 		field.style.backgroundColor = colorError;
 	}
 	else
@@ -73,7 +75,7 @@ function check(){
 	var field = document.getElementsByName("panelName")[0];
 	if(field.value == "")
 	{
-		flag = 1;
+		inputFlg = 1;
 		field.style.backgroundColor = colorError;
 	}
 	else
@@ -88,7 +90,7 @@ function check(){
 
 		if(field.value == "")
 		{
-			flag = 1;
+			inputFlg = 1;
 			field.style.backgroundColor = colorError;
 		}
 		else
@@ -104,17 +106,32 @@ function check(){
 
 		if(field.value == "")
 		{
-			flag = 1;
+			inputFlg = 1;
 			field.style.backgroundColor = colorError;
 		}
 		else
 		{
 			field.style.backgroundColor = colorSafe;
 		}
+		
+		if (field.value.length > 30)
+	    {
+			lengthFlg = 1;
+			field.style.backgroundColor = colorErrorLength
+		}
+		else
+		{
+			field.style.backgroundColor = colorSafe;
+		}
+		
 	}
 
-	if(flag){
+	if(inputFlg){
 		window.alert('パネル名と「表示名＋よみかな」＊８パターンを入力してください');
+		return false;
+	}
+	else if (lengthFlg){
+		window.alert('「よみかな」の文字数は30字以内にしてください');
 		return false;
 	}
 	else{
@@ -133,56 +150,72 @@ function check(){
 	<h1>パネル登録</h1>
 	<form action="regist" method="post" enctype="multipart/form-data" onSubmit="return check();">
         <input type="hidden" name="isUpload" value="1">
+        <br>
 		<p class="btn_upload">
 			画像ファイルを選択してアップロード
 		</p>
-
+        <br>
 		<input type="file" name="panelImage">
-
 		<div class="preview"></div>
-
-		パネル名：<input type="text" name="panelName">
+        <br>
+		パネル名：<input type="text" name="panelName"><br>
+		<br>
 		<table border="1">
 			<tr>
+			    <th>
 				<th>表示
 				<th>よみ(ひらかな)
 			</tr>
 			<tr>
+			    <td>1.
 				<td><input type="text" name="Disp1">
 				<td><input type="text" name="Read1">
 			</tr>
 			<tr>
+			    <td>2.
 				<td><input type="text" name="Disp2">
 				<td><input type="text" name="Read2">
 			</tr>
 			<tr>
+			    <td>3.
 				<td><input type="text" name="Disp3">
 				<td><input type="text" name="Read3">
 			</tr>
 			<tr>
+			    <td>4.
 				<td><input type="text" name="Disp4">
 				<td><input type="text" name="Read4">
 			</tr>
 			<tr>
+			    <td>5.
 				<td><input type="text" name="Disp5">
 				<td><input type="text" name="Read5">
 			</tr>
 			<tr>
+			    <td>6.
 				<td><input type="text" name="Disp6">
 				<td><input type="text" name="Read6">
 			</tr>
 			<tr>
+			    <td>7.
 				<td><input type="text" name="Disp7">
 				<td><input type="text" name="Read7">
 			</tr>
 			<tr>
+			    <td>8.
 				<td><input type="text" name="Disp8">
 				<td><input type="text" name="Read8">
 			</tr>
 		</table>
+		<br>
+		<p>
+		    画像を指定し、８つ全ての単語「表示名：よみかな」を入力してください。
+		</p>
+		<br>
 		<p>
 			<input type="submit" value="送信">
 		</p>
+		<br>
 	</form>
 
 	<p class="uploadMessage"><%=request.getAttribute("message")%></p>

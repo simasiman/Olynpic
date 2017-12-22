@@ -234,6 +234,11 @@ public class User
         this.isShowHint = isShowHint;
     }
 
+    public void resetTimeOut()
+    {
+        timeOutCnt = 0;
+    }
+
     public boolean isTimeOut()
     {
         return timeOutCnt >= 1;
@@ -242,11 +247,6 @@ public class User
     public boolean isTimeOutTwice()
     {
         return timeOutCnt >= 2;
-    }
-
-    public void resetTimeOutCnt()
-    {
-        this.timeOutCnt = 0;
     }
 
     public void addTimeOutCnt()
