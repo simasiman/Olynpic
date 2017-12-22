@@ -131,7 +131,8 @@ function check(){
 <header><img src="img/logo/pane-tori-logo_s.png" alt="ゲームのロゴ"></header>
 <div class="wapper">
 	<h1>パネル登録</h1>
-	<form action="regist" method="post" enctype="multipart/form-data" onSubmit="return check()">
+	<form action="regist" method="post" enctype="multipart/form-data" onSubmit="return check();">
+        <input type="hidden" name="isUpload" value="1">
 		<p class="btn_upload">
 			画像ファイルを選択してアップロード
 		</p>
