@@ -70,12 +70,6 @@ a:hover{
 	background-color:rgba(146,192,255,1);;
 	transition-duration:0.5s;
 }
-.reload{
-	margin-bottom:10px;
-	width:70px;
-	height:30px;
-	line-height:30px;
-}
 .back{
 	margin-bottom:10px;
 	width:160px;
