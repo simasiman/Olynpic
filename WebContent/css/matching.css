@@ -40,8 +40,8 @@ header img{
 	font-size:22px;
 	font-weight:bold;
 	-webkit-animation: switchtext 0.5s infinite alternate;
-    -moz-animation: switchtext 0.5s infinite alternate;
-    animation: switchtext 0.5s infinite alternate;
+	-moz-animation: switchtext 0.5s infinite alternate;
+	animation: switchtext 0.5s infinite alternate;
 }
 @-webkit-keyframes switchtext {
 	from { color:rgba(0,0,0,1); }
@@ -96,6 +96,29 @@ a:hover{
 	width: 100%;
 	height: 50%;
 }
+/*パネル登録画面*/
+.wapper{
+	margin: 10px 0 0 10px;
+	width: 346px;
+}
+h1{
+	margin-bottom: 5px;
+	font-size: 20px;
+	font-weight: bold;
+}
+input{
+	margin-bottom: 2px;
+}
+td{
+	padding: 2px 2px 0 0;
+}
+.preview{
+	margin: 5px 0;
+}
+.uploadMessage{
+	margin: 7px 0;
+	text-align: center;
+}
 /*フッター*/
 footer{
 	position:absolute;
@@ -107,5 +130,4 @@ footer{
 	line-height:30px;
 	color:#AAA;
 	font-size:12px;
-
 }
