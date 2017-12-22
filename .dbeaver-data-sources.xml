@@ -35,7 +35,8 @@
 							<attribute name="ath_id"/>
 							<attribute name="name"/>
 							<attribute name="picture"/>
-							<attribute name="isOriginal"/>
+							<attribute name="original"/>
+							<attribute name="approval"/>
 						</constraint>
 					</entity>
 					<entity name="tbl_word_siritori_user">

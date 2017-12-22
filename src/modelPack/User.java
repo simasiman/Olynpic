@@ -65,9 +65,9 @@ public class User
     {
         double scoreMulti = 1.0;
 
-        if (!isShowHint)
+        if (isShowHint)
         {
-            scoreMulti *= 1.2;
+            scoreMulti *= 0.5;
         }
 
         return scoreMulti;

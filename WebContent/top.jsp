@@ -55,7 +55,7 @@ if (match != null)
 String difficulty = (String)session.getAttribute("difficulty1");
 if (difficulty == null)
 {
-    difficulty = "checked";
+    difficulty = "";
 }
 String olympic = (String)session.getAttribute("olympic");
 if (olympic == null)
@@ -103,7 +103,7 @@ if (olympic == null)
 									<input type="submit" name="mode1" value="1人プレイ" />
 									<input type="submit" name="mode2" value="2人プレイ" /><br>
 									<input type="reset" value="名前のリセット"><br>
-									<input type="checkbox" name = "difficulty1" value="checked" <%=difficulty%>>ヒント機能(外すと得点1.2倍)<br>
+									<input type="checkbox" name = "difficulty1" value="checked" <%=difficulty%>>ヒント機能(得点0.5倍)<br>
                                     <input type="checkbox" name = "olympic" value="checked" <%=olympic%>>オリンピックモード<br>
 								</form>
 
